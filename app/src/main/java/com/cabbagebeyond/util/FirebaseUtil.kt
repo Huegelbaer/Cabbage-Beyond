@@ -1,12 +1,17 @@
 package com.cabbagebeyond.util
 
+import android.content.Intent
+import android.util.Log
+import com.cabbagebeyond.R
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import io.grpc.android.BuildConfig
 
 object FirebaseUtil {
 
+    private const val TAG = "FirebaseUtil"
     private const val USE_EMULATORS = BuildConfig.DEBUG
 
     val firestore: FirebaseFirestore by lazy {
@@ -43,5 +48,26 @@ object FirebaseUtil {
             ui.useEmulator("10.0.2.2", 9099)
         }
         return ui
+    }
+
+    fun loginIntent(): Intent {
+        val providers = mutableListOf(
+            AuthUI.IdpConfig.EmailBuilder().build()
+        )
+
+        return authUI
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .setLogo(R.drawable.ic_launcher_foreground)
+            .build()
+    }
+
+    fun isUserAlreadyLoggedIn(): Boolean {
+        return auth.currentUser != null
+    }
+
+    fun logLoginError(data: Intent?) {
+        val response = IdpResponse.fromResultIntent(data)
+        Log.i(TAG, "Sign in failed: ${response?.error?.errorCode}")
     }
 }
