@@ -2,6 +2,7 @@ package com.cabbagebeyond.util
 
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.util.Log
 import com.cabbagebeyond.BuildConfig
 import com.cabbagebeyond.R
@@ -53,8 +54,14 @@ object FirebaseUtil {
     }
 
     fun loginIntent(): Intent {
+        val emailProvider = AuthUI.IdpConfig.EmailBuilder()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            // Workaround for PendingIntent missing MUTABLE FLAG crash
+            emailProvider.setDefaultEmail("@")
+        }
+
         val providers = mutableListOf(
-            AuthUI.IdpConfig.EmailBuilder().build()
+            emailProvider.build()
         )
 
         return authUI
