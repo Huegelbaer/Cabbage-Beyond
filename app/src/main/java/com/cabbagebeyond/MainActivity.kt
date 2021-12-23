@@ -1,5 +1,6 @@
 package com.cabbagebeyond
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -12,6 +13,9 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.cabbagebeyond.databinding.ActivityMainBinding
+import com.cabbagebeyond.ui.auth.AuthenticationActivity
+import com.cabbagebeyond.util.FirebaseUtil
+import com.google.android.gms.tasks.OnCompleteListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,10 +30,15 @@ class MainActivity : AppCompatActivity() {
 
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
+        binding.appBarMain.fab.setOnClickListener {
+            FirebaseUtil.logout(this, OnCompleteListener {
+                val intent = Intent(this, AuthenticationActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
+                startActivity(intent)
+                finish()
+            })
         }
+        
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
