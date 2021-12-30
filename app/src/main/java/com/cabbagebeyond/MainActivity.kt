@@ -14,7 +14,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.cabbagebeyond.databinding.ActivityMainBinding
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
-import com.cabbagebeyond.util.FirebaseUtil
+import com.cabbagebeyond.util.AuthenticationService
 import com.google.android.gms.tasks.OnCompleteListener
 
 class MainActivity : AppCompatActivity() {
@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         binding.appBarMain.fab.setOnClickListener {
-            FirebaseUtil.logout(this, OnCompleteListener {
+            AuthenticationService.logout(this, OnCompleteListener {
                 val intent = Intent(this, AuthenticationActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
                 startActivity(intent)

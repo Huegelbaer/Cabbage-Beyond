@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.cabbagebeyond.MainActivity
 import com.cabbagebeyond.databinding.ActivityAuthenticationBinding
+import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
 
 class AuthenticationActivity : AppCompatActivity() {
@@ -23,10 +24,10 @@ class AuthenticationActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.loginButton.setOnClickListener {
-            startActivityForResult(FirebaseUtil.loginIntent(), SIGN_IN_REQUEST_CODE)
+            startActivityForResult(AuthenticationService.loginIntent(), SIGN_IN_REQUEST_CODE)
         }
 
-        if (FirebaseUtil.isUserAlreadyLoggedIn()) {
+        if (AuthenticationService.isUserAlreadyLoggedIn()) {
             navigateIntoApp()
         }
     }
@@ -38,7 +39,7 @@ class AuthenticationActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK) {
                 navigateIntoApp()
             } else {
-                FirebaseUtil.logLoginError(data)
+                AuthenticationService.logLoginError(data)
             }
         }
     }
