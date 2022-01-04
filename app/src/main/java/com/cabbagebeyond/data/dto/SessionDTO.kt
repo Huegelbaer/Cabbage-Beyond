@@ -12,7 +12,7 @@ data class SessionDTO(
 ) {
 
     companion object {
-        const val COLLECTION = "sessions"
+        const val COLLECTION_TITLE = "sessions"
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_PLAYER = "player"
@@ -20,5 +20,17 @@ data class SessionDTO(
         const val FIELD_INVITED_PLAYERS = "invited_players"
         const val FIELD_OWNER = "owner"
         const val FIELD_STORY = "story"
+    }
+
+    fun toHashMap(): HashMap<String, Any> {
+        return hashMapOf(
+            FIELD_NAME to name,
+            FIELD_DESCRIPTION to description,
+            FIELD_PLAYER to player,
+            FIELD_STATUS to status,
+            FIELD_INVITED_PLAYERS to invitedPlayers,
+            FIELD_OWNER to owner,
+            FIELD_STORY to story,
+        )
     }
 }

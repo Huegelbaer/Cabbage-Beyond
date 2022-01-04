@@ -7,8 +7,15 @@ data class RoleDTO(
 ) {
 
     companion object {
-        const val COLLECTION = "roles"
+        const val COLLECTION_TITLE = "roles"
         const val FIELD_NAME = "name"
         const val FIELD_FEATURES = "features"
+    }
+
+    fun toHashMap(): HashMap<String, Any> {
+        return hashMapOf(
+            FIELD_NAME to name,
+            FIELD_FEATURES to features
+        )
     }
 }

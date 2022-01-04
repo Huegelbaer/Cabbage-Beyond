@@ -28,7 +28,7 @@ data class CharacterDTO(
 ) {
 
     companion object {
-        const val COLLECTION = "sw_characters"
+        const val COLLECTION_TITLE = "sw_characters"
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_CHARISMA = "charisma"
@@ -52,6 +52,33 @@ data class CharacterDTO(
         const val FIELD_TYPE = "type"
         const val FIELD_OWNER = "owner"
         const val FIELD_WORLD = "world"
-        const val FIELD_ID = "id"
+    }
+
+    fun toHashMap(): HashMap<String, Any> {
+        return hashMapOf(
+            FIELD_NAME to name,
+            FIELD_DESCRIPTION to description,
+            FIELD_CHARISMA to charisma,
+            FIELD_CONSTITUTION to constitution,
+            FIELD_DECEPTION to deception,
+            FIELD_DEXTERITY to dexterity,
+            FIELD_INTELLIGENCE to intelligence,
+            FIELD_INVESTIGATION to investigation,
+            FIELD_PERCEPTION to perception,
+            FIELD_STEALTH to stealth,
+            FIELD_STRENGTH to strength,
+            FIELD_WILLPOWER to willpower,
+            FIELD_MOVEMENT to movement,
+            FIELD_PARRY to parry,
+            FIELD_TOUGHNESS to toughness,
+            FIELD_ABILITIES to abilities,
+            FIELD_EQUIPMENTS to equipments,
+            FIELD_FORCES to forces,
+            FIELD_HANDICAPS to handicaps,
+            FIELD_TALENTS to talents,
+            FIELD_TYPE to type,
+            FIELD_OWNER to owner,
+            FIELD_WORLD to world
+        )
     }
 }

@@ -10,10 +10,19 @@ data class UserDTO(
 ) {
 
     companion object {
-        const val COLLECTION = "users"
+        const val COLLECTION_TITLE = "users"
         const val FIELD_NAME = "name"
         const val FIELD_EMAIL = "email"
         const val FIELD_FEATURES = "features"
         const val FIELD_ROLES = "roles"
+    }
+
+    fun toHashMap(): HashMap<String, Any> {
+        return hashMapOf(
+            FIELD_NAME to name,
+            FIELD_EMAIL to email,
+            FIELD_FEATURES to features,
+            FIELD_ROLES to roles
+        )
     }
 }

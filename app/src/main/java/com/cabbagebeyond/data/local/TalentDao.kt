@@ -1,0 +1,68 @@
+package com.cabbagebeyond.data.local
+
+import android.util.Log
+import com.cabbagebeyond.data.dto.TalentDTO
+import com.cabbagebeyond.util.FirebaseUtil
+import kotlinx.coroutines.tasks.await
+
+class TalentDao {
+
+    companion object {
+        private const val COLLECTION_TITLE = TalentDTO.COLLECTION_TITLE
+        private const val TAG = "TalentDao"
+    }
+
+    suspend fun getTalents(): Result<List<TalentDTO>> {
+        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .get()
+            .addOnSuccessListener { task ->
+                val talents = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(TalentDTO::class.java)
+                }
+                result = Result.success(talents)
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
+    suspend fun getTalent(id: String): Result<TalentDTO> {
+        var result: Result<TalentDTO> = Result.failure(Throwable())
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .document(id)
+            .get()
+            .addOnSuccessListener { task ->
+                task.toObject(TalentDTO::class.java)?.let {
+                    result = Result.success(it)
+                    return@addOnSuccessListener
+                }
+                result = Result.failure(Throwable())
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
+    suspend fun saveTalent(talent: TalentDTO) {
+        val entity = talent.toHashMap()
+
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .document(talent.id)
+            .set(entity)
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+    }
+
+    suspend fun deleteTalent(id: String) {
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .document(id)
+            .delete()
+            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
+            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+}

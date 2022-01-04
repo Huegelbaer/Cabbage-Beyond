@@ -11,13 +11,24 @@ data class EquipmentDTO(
 ) {
 
     companion object {
-        const val COLLECTION = "sw_equipments"
+        const val COLLECTION_TITLE = "sw_equipments"
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_COST = "cost"
         const val FIELD_REQUIREMENTS = "requirements"
         const val FIELD_TYPE = "type"
         const val FIELD_WORLD = "world"
+    }
+
+    fun toHashMap(): HashMap<String, Any> {
+        return hashMapOf(
+            FIELD_NAME to name,
+            FIELD_DESCRIPTION to description,
+            FIELD_COST to cost,
+            FIELD_REQUIREMENTS to requirements,
+            FIELD_TYPE to type,
+            FIELD_WORLD to world
+        )
     }
 }
 
