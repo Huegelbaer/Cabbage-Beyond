@@ -18,6 +18,12 @@ class WorldDao {
             .get()
             .addOnSuccessListener { task ->
                 val worlds = task.documents.mapNotNull { documentSnapshot ->
+                  /*  val name = documentSnapshot.get(WorldDTO.FIELD_NAME, String::class.java)
+                    val description = documentSnapshot.get(WorldDTO.FIELD_DESCRIPTION, String::class.java)
+                    val rulebook = documentSnapshot.get(WorldDTO.FIELD_RULEBOOK, String::class.java)
+
+                    WorldDTO(name!!, description, rulebook!!, documentSnapshot.id)
+                    */
                     documentSnapshot.toObject(WorldDTO::class.java)
                 }
                 result = Result.success(worlds)
