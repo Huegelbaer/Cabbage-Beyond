@@ -1,8 +1,10 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.UserDataSource
-import com.cabbagebeyond.data.dto.UserDTO
 import com.cabbagebeyond.data.dao.UserDao
+import com.cabbagebeyond.data.dto.asDatabaseModel
+import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.model.User
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -12,16 +14,16 @@ class UserRepository(
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : UserDataSource {
 
-    override suspend fun getUsers(): Result<List<UserDTO>> = withContext(ioDispatcher) {
-        return@withContext userDao.getUsers()
+    override suspend fun getUsers(): Result<List<User>> = withContext(ioDispatcher) {
+        return@withContext userDao.getUsers().mapCatching { it.asDomainModel() }
     }
 
-    override suspend fun getUser(id: String): Result<UserDTO> = withContext(ioDispatcher) {
-        return@withContext userDao.getUser(id)
+    override suspend fun getUser(id: String): Result<User> = withContext(ioDispatcher) {
+        return@withContext userDao.getUser(id).mapCatching { it.asDomainModel() }
     }
 
-    override suspend fun saveUser(user: UserDTO) = withContext(ioDispatcher) {
-        userDao.saveUser(user)
+    override suspend fun saveUser(user: User) = withContext(ioDispatcher) {
+        userDao.saveUser(user.asDatabaseModel())
     }
 
     override suspend fun deleteUser(id: String) = withContext(ioDispatcher) {
