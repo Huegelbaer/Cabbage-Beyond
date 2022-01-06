@@ -1,7 +1,8 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.RoleDataSource
 import com.cabbagebeyond.data.dto.RoleDTO
+import com.cabbagebeyond.data.dao.RoleDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

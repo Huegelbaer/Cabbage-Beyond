@@ -1,7 +1,8 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.data.dto.UserDTO
+import com.cabbagebeyond.data.dao.UserDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

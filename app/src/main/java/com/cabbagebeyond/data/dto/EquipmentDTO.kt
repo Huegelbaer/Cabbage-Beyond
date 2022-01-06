@@ -1,13 +1,26 @@
 package com.cabbagebeyond.data.dto
 
+import com.cabbagebeyond.model.Equipment
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.PropertyName
+import java.util.*
+import kotlin.collections.HashMap
+
 data class EquipmentDTO(
-    var name: String,
-    var description: String,
-    var cost: String,
-    var requirements: List<String>,
-    var type: String,
-    var world: String,
-    val id: String
+    @PropertyName(FIELD_NAME)
+    var name: String = "",
+    @PropertyName(FIELD_DESCRIPTION)
+    var description: String = "",
+    @PropertyName(FIELD_COST)
+    var cost: String = "",
+    @PropertyName(FIELD_REQUIREMENTS)
+    var requirements: List<String> = listOf(),
+    @PropertyName(FIELD_TYPE)
+    var type: String = "",
+    @PropertyName(FIELD_WORLD)
+    var world: String = "",
+    @DocumentId
+    val id: String = UUID.randomUUID().toString()
 ) {
 
     companion object {
@@ -32,3 +45,22 @@ data class EquipmentDTO(
     }
 }
 
+fun List<EquipmentDTO>.asDomainModel(): List<Equipment> {
+    return map {
+        it.asDomainModel()
+    }
+}
+
+fun EquipmentDTO.asDomainModel(): Equipment {
+    return Equipment(name, description, cost, requirements, type, world, id)
+}
+
+fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun Equipment.asDatabaseModel(): EquipmentDTO {
+    return EquipmentDTO(name, description, cost, requirements, type, world, id)
+}

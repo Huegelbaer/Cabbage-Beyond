@@ -1,26 +1,26 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.RaceDTO
+import com.cabbagebeyond.data.dto.ForceDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import kotlinx.coroutines.tasks.await
 
-class RaceDao {
+class ForceDao {
 
     companion object {
-        private const val COLLECTION_TITLE = RaceDTO.COLLECTION_TITLE
-        private const val TAG = "RaceDao"
+        private const val COLLECTION_TITLE = ForceDTO.COLLECTION_TITLE
+        private const val TAG = "ForceDao"
     }
 
-    suspend fun getRaces(): Result<List<RaceDTO>> {
-        var result: Result<List<RaceDTO>> = Result.success(mutableListOf())
+    suspend fun getForces(): Result<List<ForceDTO>> {
+        var result: Result<List<ForceDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get()
             .addOnSuccessListener { task ->
-                val races = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(RaceDTO::class.java)
+                val forces = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(ForceDTO::class.java)
                 }
-                result = Result.success(races)
+                result = Result.success(forces)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -29,13 +29,13 @@ class RaceDao {
         return result
     }
 
-    suspend fun getRace(id: String): Result<RaceDTO> {
-        var result: Result<RaceDTO> = Result.failure(Throwable())
+    suspend fun getForce(id: String): Result<ForceDTO> {
+        var result: Result<ForceDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(RaceDTO::class.java)?.let {
+                task.toObject(ForceDTO::class.java)?.let {
                     result = Result.success(it)
                     return@addOnSuccessListener
                 }
@@ -48,17 +48,17 @@ class RaceDao {
         return result
     }
 
-    suspend fun saveRace(race: RaceDTO) {
-        val entity = race.toHashMap()
+    suspend fun saveForce(force: ForceDTO) {
+        val entity = force.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(race.id)
+            .document(force.id)
             .set(entity)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteRace(id: String) {
+    suspend fun deleteForce(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()

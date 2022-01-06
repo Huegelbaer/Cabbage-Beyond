@@ -1,15 +1,30 @@
 package com.cabbagebeyond.data.dto
 
+import com.cabbagebeyond.model.Force
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.PropertyName
+import java.util.*
+import kotlin.collections.HashMap
+
 data class ForceDTO(
-    var name: String,
-    var description: String,
-    var cost: String,
-    var duration: String,
-    var rangRequirement: String,
-    var range: String,
-    var shaping: String,
-    var world: String,
-    val id: String
+    @PropertyName(FIELD_NAME)
+    var name: String = "",
+    @PropertyName(FIELD_DESCRIPTION)
+    var description: String = "",
+    @PropertyName(FIELD_COST)
+    var cost: String = "",
+    @PropertyName(FIELD_DURATION)
+    var duration: String = "",
+    @PropertyName(FIELD_RANG_REQUIREMENT)
+    var rangRequirement: String = "",
+    @PropertyName(FIELD_RANGE)
+    var range: String = "",
+    @PropertyName(FIELD_SHAPING)
+    var shaping: String = "",
+    @PropertyName(FIELD_WORLD)
+    var world: String = "",
+    @DocumentId
+    val id: String = UUID.randomUUID().toString()
 ) {
 
     companion object {
@@ -36,4 +51,24 @@ data class ForceDTO(
             FIELD_WORLD to world
         )
     }
+}
+
+fun List<ForceDTO>.asDomainModel(): List<Force> {
+    return map {
+        it.asDomainModel()
+    }
+}
+
+fun ForceDTO.asDomainModel(): Force {
+    return Force(name, description, cost, duration, rangRequirement, range, shaping, world, id)
+}
+
+fun List<Force>.asDatabaseModel(): List<ForceDTO> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun Force.asDatabaseModel(): ForceDTO {
+    return ForceDTO(name, description, cost, duration, rangRequirement, range, shaping, world, id)
 }

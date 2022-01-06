@@ -1,7 +1,8 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.data.dto.HandicapDTO
+import com.cabbagebeyond.data.dao.HandicapDao
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

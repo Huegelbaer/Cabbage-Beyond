@@ -1,11 +1,23 @@
 package com.cabbagebeyond.data.dto
 
+import com.cabbagebeyond.model.Ability
+import com.cabbagebeyond.model.User
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.PropertyName
+import java.util.*
+import kotlin.collections.HashMap
+
 data class AbilityDTO(
-    var name: String,
-    var description: String,
-    var attribute: String,
-    var world: String,
-    var id: String,
+    @PropertyName(FIELD_NAME)
+    var name: String = "",
+    @PropertyName(FIELD_DESCRIPTION)
+    var description: String = "",
+    @PropertyName(FIELD_ATTRIBUTE)
+    var attribute: String = "",
+    @PropertyName(FIELD_WORLD)
+    var world: String = "",
+    @DocumentId
+    var id: String = UUID.randomUUID().toString(),
 ) {
 
     companion object {
@@ -24,4 +36,23 @@ data class AbilityDTO(
             FIELD_WORLD to world
         )
     }
+}
+fun List<AbilityDTO>.asDomainModel(): List<Ability> {
+    return map {
+        it.asDomainModel()
+    }
+}
+
+fun AbilityDTO.asDomainModel(): Ability {
+    return Ability(name, description, attribute, world, id)
+}
+
+fun List<Ability>.asDatabaseModel(): List<AbilityDTO> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun Ability.asDatabaseModel(): AbilityDTO {
+    return AbilityDTO(name, description, attribute, world, id)
 }

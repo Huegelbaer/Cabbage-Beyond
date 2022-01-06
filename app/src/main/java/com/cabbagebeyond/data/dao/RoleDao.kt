@@ -1,26 +1,26 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.StoryDTO
+import com.cabbagebeyond.data.dto.RoleDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import kotlinx.coroutines.tasks.await
 
-class StoryDao {
+class RoleDao {
 
     companion object {
-        private const val COLLECTION_TITLE = StoryDTO.COLLECTION_TITLE
-        private const val TAG = "StoryDao"
+        private const val COLLECTION_TITLE = RoleDTO.COLLECTION_TITLE
+        private const val TAG = "RoleDao"
     }
 
-    suspend fun getStories(): Result<List<StoryDTO>> {
-        var result: Result<List<StoryDTO>> = Result.success(mutableListOf())
+    suspend fun getRoles(): Result<List<RoleDTO>> {
+        var result: Result<List<RoleDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get()
             .addOnSuccessListener { task ->
-                val stories = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(StoryDTO::class.java)
+                val roles = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(RoleDTO::class.java)
                 }
-                result = Result.success(stories)
+                result = Result.success(roles)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -29,13 +29,13 @@ class StoryDao {
         return result
     }
 
-    suspend fun getStory(id: String): Result<StoryDTO> {
-        var result: Result<StoryDTO> = Result.failure(Throwable())
+    suspend fun getRole(id: String): Result<RoleDTO> {
+        var result: Result<RoleDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(StoryDTO::class.java)?.let {
+                task.toObject(RoleDTO::class.java)?.let {
                     result = Result.success(it)
                     return@addOnSuccessListener
                 }
@@ -48,17 +48,17 @@ class StoryDao {
         return result
     }
 
-    suspend fun saveStory(story: StoryDTO) {
-        val entity = story.toHashMap()
+    suspend fun saveRole(role: RoleDTO) {
+        val entity = role.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(story.id)
+            .document(role.id)
             .set(entity)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteStory(id: String) {
+    suspend fun deleteRole(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
