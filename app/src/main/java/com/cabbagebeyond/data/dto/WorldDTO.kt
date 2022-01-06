@@ -3,6 +3,8 @@ package com.cabbagebeyond.data.dto
 import com.cabbagebeyond.model.World
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
+import java.util.*
+import kotlin.collections.HashMap
 
 data class WorldDTO(
     @PropertyName(FIELD_NAME)
@@ -12,7 +14,7 @@ data class WorldDTO(
     @PropertyName(FIELD_RULEBOOK)
     var rulebook: String = "",
     @DocumentId
-    val id: String = ""
+    val id: String = UUID.randomUUID().toString()
 ) {
 
     companion object {

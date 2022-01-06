@@ -1,26 +1,26 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.SessionDTO
+import com.cabbagebeyond.data.dto.AbilityDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import kotlinx.coroutines.tasks.await
 
-class SessionDao {
+class AbilityDao {
 
     companion object {
-        private const val COLLECTION_TITLE = SessionDTO.COLLECTION_TITLE
-        private const val TAG = "SessionDao"
+        private const val COLLECTION_TITLE = AbilityDTO.COLLECTION_TITLE
+        private const val TAG = "AbilityDao"
     }
 
-    suspend fun getSessions(): Result<List<SessionDTO>> {
-        var result: Result<List<SessionDTO>> = Result.success(mutableListOf())
+    suspend fun getAbilities(): Result<List<AbilityDTO>> {
+        var result: Result<List<AbilityDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get()
             .addOnSuccessListener { task ->
-                val sessions = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(SessionDTO::class.java)
+                val abilities = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(AbilityDTO::class.java)
                 }
-                result = Result.success(sessions)
+                result = Result.success(abilities)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -29,13 +29,13 @@ class SessionDao {
         return result
     }
 
-    suspend fun getSession(id: String): Result<SessionDTO> {
-        var result: Result<SessionDTO> = Result.failure(Throwable())
+    suspend fun getAbility(id: String): Result<AbilityDTO> {
+        var result: Result<AbilityDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(SessionDTO::class.java)?.let {
+                task.toObject(AbilityDTO::class.java)?.let {
                     result = Result.success(it)
                     return@addOnSuccessListener
                 }
@@ -48,17 +48,17 @@ class SessionDao {
         return result
     }
 
-    suspend fun saveSession(session: SessionDTO) {
-        val entity = session.toHashMap()
+    suspend fun saveAbility(ability: AbilityDTO) {
+        val entity = ability.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(session.id)
+            .document(ability.id)
             .set(entity)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteSession(id: String) {
+    suspend fun deleteAbility(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()

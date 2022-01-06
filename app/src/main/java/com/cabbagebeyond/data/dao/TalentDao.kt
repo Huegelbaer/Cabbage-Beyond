@@ -1,25 +1,26 @@
-package com.cabbagebeyond.data.local
+package com.cabbagebeyond.data.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.EquipmentDTO
+import com.cabbagebeyond.data.dto.TalentDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import kotlinx.coroutines.tasks.await
 
-class EquipmentDao {
+class TalentDao {
+
     companion object {
-        private const val COLLECTION_TITLE = EquipmentDTO.COLLECTION_TITLE
-        private const val TAG = "EquipmentDao"
+        private const val COLLECTION_TITLE = TalentDTO.COLLECTION_TITLE
+        private const val TAG = "TalentDao"
     }
 
-    suspend fun getEquipments(): Result<List<EquipmentDTO>> {
-        var result: Result<List<EquipmentDTO>> = Result.success(mutableListOf())
+    suspend fun getTalents(): Result<List<TalentDTO>> {
+        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get()
             .addOnSuccessListener { task ->
-                val equipments = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(EquipmentDTO::class.java)
+                val talents = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(TalentDTO::class.java)
                 }
-                result = Result.success(equipments)
+                result = Result.success(talents)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -28,13 +29,13 @@ class EquipmentDao {
         return result
     }
 
-    suspend fun getEquipment(id: String): Result<EquipmentDTO> {
-        var result: Result<EquipmentDTO> = Result.failure(Throwable())
+    suspend fun getTalent(id: String): Result<TalentDTO> {
+        var result: Result<TalentDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(EquipmentDTO::class.java)?.let {
+                task.toObject(TalentDTO::class.java)?.let {
                     result = Result.success(it)
                     return@addOnSuccessListener
                 }
@@ -47,17 +48,17 @@ class EquipmentDao {
         return result
     }
 
-    suspend fun saveEquipment(equipment: EquipmentDTO) {
-        val entity = equipment.toHashMap()
+    suspend fun saveTalent(talent: TalentDTO) {
+        val entity = talent.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(equipment.id)
+            .document(talent.id)
             .set(entity)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteEquipment(id: String) {
+    suspend fun deleteTalent(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()

@@ -1,14 +1,28 @@
 package com.cabbagebeyond.data.dto
 
+import com.cabbagebeyond.model.Session
+import com.google.firebase.firestore.DocumentId
+import com.google.firebase.firestore.PropertyName
+import java.util.*
+import kotlin.collections.HashMap
+
 data class SessionDTO(
-    var name: String,
-    var description: String,
-    var player: String,
-    var status: String,
-    var invitedPlayers: List<String>,
-    var owner: String,
-    var story: String,
-    val id: String
+    @PropertyName(FIELD_NAME)
+    var name: String = "",
+    @PropertyName(FIELD_DESCRIPTION)
+    var description: String = "",
+    @PropertyName(FIELD_PLAYER)
+    var player: String = "",
+    @PropertyName(FIELD_STATUS)
+    var status: String = "",
+    @PropertyName(FIELD_INVITED_PLAYERS)
+    var invitedPlayers: List<String> = listOf(),
+    @PropertyName(FIELD_OWNER)
+    var owner: String = "",
+    @PropertyName(FIELD_STORY)
+    var story: String = "",
+    @DocumentId
+    val id: String= UUID.randomUUID().toString()
 ) {
 
     companion object {
@@ -33,4 +47,23 @@ data class SessionDTO(
             FIELD_STORY to story,
         )
     }
+}
+fun List<SessionDTO>.asDomainModel(): List<Session> {
+    return map {
+        it.asDomainModel()
+    }
+}
+
+fun SessionDTO.asDomainModel(): Session {
+    return Session(name, description, player, status, invitedPlayers, owner, story, id)
+}
+
+fun List<Session>.asDatabaseModel(): List<SessionDTO> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun Session.asDatabaseModel(): SessionDTO {
+    return SessionDTO(name, description, player, status, invitedPlayers, owner, story, id)
 }
