@@ -19,9 +19,17 @@ class WorldRepository(
         return@withContext result.mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun refreshWorlds() = withContext(ioDispatcher) {
+        worldDao.refreshWorlds()
+    }
+
     override suspend fun getWorld(id: String): Result<World> = withContext(ioDispatcher) {
         val result = worldDao.getWorld(id)
         return@withContext result.mapCatching { it.asDomainModel() }
+    }
+
+    override suspend fun refreshWorld(id: String) {
+        worldDao.refreshWorld(id)
     }
 
     override suspend fun saveWorld(world: World) = withContext(ioDispatcher) {

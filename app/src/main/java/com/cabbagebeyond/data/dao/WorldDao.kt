@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.WorldDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class WorldDao {
@@ -15,15 +16,9 @@ class WorldDao {
     suspend fun getWorlds(): Result<List<WorldDTO>> {
         var result: Result<List<WorldDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val worlds = task.documents.mapNotNull { documentSnapshot ->
-                  /*  val name = documentSnapshot.get(WorldDTO.FIELD_NAME, String::class.java)
-                    val description = documentSnapshot.get(WorldDTO.FIELD_DESCRIPTION, String::class.java)
-                    val rulebook = documentSnapshot.get(WorldDTO.FIELD_RULEBOOK, String::class.java)
-
-                    WorldDTO(name!!, description, rulebook!!, documentSnapshot.id)
-                    */
                     documentSnapshot.toObject(WorldDTO::class.java)
                 }
                 result = Result.success(worlds)
@@ -35,11 +30,18 @@ class WorldDao {
         return result
     }
 
+    fun refreshWorlds() {
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .get(Source.SERVER)
+            .addOnSuccessListener { }
+            .addOnFailureListener { }
+    }
+
     suspend fun getWorld(id: String): Result<WorldDTO> {
         var result: Result<WorldDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(WorldDTO::class.java)?.let {
                     result = Result.success(it)
@@ -52,6 +54,14 @@ class WorldDao {
             }
             .await()
         return result
+    }
+
+    fun refreshWorld(id: String) {
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .document(id)
+            .get(Source.SERVER)
+            .addOnSuccessListener { }
+            .addOnFailureListener { }
     }
 
     suspend fun saveWorld(world: WorldDTO) {
