@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+
+    <data>
+        <variable
+            name="user"
+            type="com.cabbagebeyond.model.User" />
+
+        <variable
+            name="clickListener"
+            type="com.cabbagebeyond.ui.admin.users.UserClickListener" />
+    </data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:onClick="@{() -> clickListener.onClick(user)}">
+
+        <TextView
+            android:id="@+id/user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@{user.name}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="me@test.com" />
+
+        <TextView
+            android:id="@+id/roles"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@{user.roles.toString()}"
+            android:textAppearance="?attr/textAppearanceListItem"
+            tools:text="ADMIN, READER" />
+    </LinearLayout>
+</layout>

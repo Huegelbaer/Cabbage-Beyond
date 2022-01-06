@@ -2,6 +2,7 @@ package com.cabbagebeyond.ui.admin
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.cabbagebeyond.ui.admin.users.UserManagementFragment
 
 class AdminPanelAdapter(fragment: Fragment, private val itemsCount: Int): FragmentStateAdapter(fragment) {
 
@@ -10,11 +11,11 @@ class AdminPanelAdapter(fragment: Fragment, private val itemsCount: Int): Fragme
     }
 
     override fun createFragment(position: Int): Fragment {
-        /*return if (position == 1) {
-            RoleManagmentFragment()
+        return if (position == 1) {
+            UserManagementFragment()
+            //RoleManagmentFragment()
         } else {
-            UserManagmentFragment()
-        }*/
-        return Fragment()
+            UserManagementFragment()
+        }
     }
 }
