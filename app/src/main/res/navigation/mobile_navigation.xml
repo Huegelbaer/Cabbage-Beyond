@@ -37,4 +37,9 @@
             android:name="world"
             app:argType="com.cabbagebeyond.model.World" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_admin_panel"
+        android:name="com.cabbagebeyond.ui.admin.AdminPanelFragment"
+        android:label="fragment_admin_panel"
+        tools:layout="@layout/fragment_admin_panel" />
 </navigation>
