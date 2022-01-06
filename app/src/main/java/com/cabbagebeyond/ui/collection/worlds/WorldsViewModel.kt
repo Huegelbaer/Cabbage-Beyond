@@ -14,14 +14,15 @@ import java.util.ArrayList
 
 class WorldsViewModel: ViewModel() {
 
-    private val _text = MutableLiveData<String>().apply {
-        value = "This is home Fragment"
-    }
-    val text: LiveData<String> = _text
-
     private val _items = MutableLiveData<List<WorldDTO>>()
     val items: LiveData<List<WorldDTO>>
         get() = _items
+
+
+    private val _selectedWorld = MutableLiveData<WorldDTO>()
+    val selectedWorld: LiveData<WorldDTO>
+        get() = _selectedWorld
+
 
     private lateinit var repository: WorldRepository
 

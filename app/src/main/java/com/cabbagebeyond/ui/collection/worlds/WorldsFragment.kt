@@ -7,6 +7,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,7 +21,8 @@ import com.cabbagebeyond.ui.home.HomeViewModel
 class WorldsFragment : Fragment() {
 
 
-    private lateinit var _viewModel: WorldsViewModel
+    private val _viewModel: WorldsViewModel by activityViewModels()
+
     private var columnCount = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,8 +38,6 @@ class WorldsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val view = inflater.inflate(R.layout.fragment_worlds_list, container, false)
-
-        _viewModel = ViewModelProvider(this).get(WorldsViewModel::class.java)
 
         val worldsAdapter = WorldRecyclerViewAdapter()
 
