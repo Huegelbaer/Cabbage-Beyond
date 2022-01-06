@@ -1,54 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="world"
             type="com.cabbagebeyond.data.dto.WorldDTO" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_margin="8dp"
+        app:cardElevation="2dp">
 
-        <ImageView
-            android:id="@+id/world_logo"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:srcCompat="@tools:sample/avatars" />
+            android:orientation="vertical"
+            android:padding="16dp">
 
-        <TextView
-            android:id="@+id/world_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@{world.name}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-            app:layout_constraintBottom_toBottomOf="@id/world_logo"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/world_logo"
-            app:layout_constraintTop_toTopOf="@id/world_logo"
-            tools:text="Deadlands Reloaded" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/world_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:maxLines="4"
-            android:text="@{world.description}"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/world_logo"
-            tools:text="Gürte deinen Sechsschüsser und sattel auf, Partner. Es steht eine Abrechnung bevor, die mit heißem Blei zu begleichen ist." />
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    tools:srcCompat="@tools:sample/avatars" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{world.name}"
+                    android:textAppearance="?attr/textAppearanceHeadline6"
+                    tools:text="Deadlands Reloaded" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/world_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="@{world.description}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                tools:text="Gürte deinen Sechsschüsser und sattel auf, Partner. Es steht eine Abrechnung bevor, die mit heißem Blei zu begleichen ist." />
+            <!--
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/action_2"
+                    style="?attr/borderlessButtonStyle"
+                    />
+            -->
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
 
 </layout>
