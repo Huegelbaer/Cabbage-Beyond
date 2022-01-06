@@ -1,22 +1,22 @@
 package com.cabbagebeyond.data
 
-import com.cabbagebeyond.data.dto.HandicapDTO
+import com.cabbagebeyond.model.Handicap
 
 interface HandicapDataSource {
     
-    //fun observeHandicaps(): LiveData<Result<List<HandicapDTO>>>
+    //fun observeHandicaps(): LiveData<Result<List<Handicap>>>
 
-    suspend fun getHandicaps(): Result<List<HandicapDTO>>
+    suspend fun getHandicaps(): Result<List<Handicap>>
 
     //suspend fun refreshHandicaps()
 
-    //fun observeHandicap(id: String): LiveData<Result<HandicapDTO>>
+    //fun observeHandicap(id: String): LiveData<Result<Handicap>>
 
-    suspend fun getHandicap(id: String): Result<HandicapDTO>
+    suspend fun getHandicap(id: String): Result<Handicap>
 
     //suspend fun refreshHandicap(id: String)
 
-    suspend fun saveHandicap(handicap: HandicapDTO)
+    suspend fun saveHandicap(handicap: Handicap)
 
     //suspend fun deleteAllHandicaps()
 

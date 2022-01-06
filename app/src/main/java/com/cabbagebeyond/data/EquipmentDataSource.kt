@@ -1,22 +1,22 @@
 package com.cabbagebeyond.data
 
-import com.cabbagebeyond.data.dto.EquipmentDTO
+import com.cabbagebeyond.model.Equipment
 
 interface EquipmentDataSource {
 
-    //fun observeEquipments(): LiveData<Result<List<EquipmentDTO>>>
+    //fun observeEquipments(): LiveData<Result<List<Equipment>>>
 
-    suspend fun getEquipments(): Result<List<EquipmentDTO>>
+    suspend fun getEquipments(): Result<List<Equipment>>
 
     //suspend fun refreshEquipments()
 
-    //fun observeEquipment(id: String): LiveData<Result<EquipmentDTO>>
+    //fun observeEquipment(id: String): LiveData<Result<Equipment>>
 
-    suspend fun getEquipment(id: String): Result<EquipmentDTO>
+    suspend fun getEquipment(id: String): Result<Equipment>
 
     //suspend fun refreshEquipment(id: String)
 
-    suspend fun saveEquipment(equipment: EquipmentDTO)
+    suspend fun saveEquipment(equipment: Equipment)
 
     //suspend fun deleteAllEquipments()
 
