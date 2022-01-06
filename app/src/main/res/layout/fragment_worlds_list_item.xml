@@ -7,7 +7,7 @@
 
         <variable
             name="world"
-            type="com.cabbagebeyond.data.dto.WorldDTO" />
+            type="com.cabbagebeyond.model.World" />
     </data>
 
     <com.google.android.material.card.MaterialCardView

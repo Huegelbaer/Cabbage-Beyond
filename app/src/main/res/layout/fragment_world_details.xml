@@ -5,7 +5,7 @@
     <data>
         <variable
             name="world"
-            type="com.cabbagebeyond.data.dto.WorldDTO" />
+            type="com.cabbagebeyond.model.World" />
     </data>
 
     <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"

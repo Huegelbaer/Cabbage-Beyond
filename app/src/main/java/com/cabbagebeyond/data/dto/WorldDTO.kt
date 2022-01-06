@@ -1,5 +1,6 @@
 package com.cabbagebeyond.data.dto
 
+import com.cabbagebeyond.model.World
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
 
@@ -28,4 +29,25 @@ data class WorldDTO(
             FIELD_RULEBOOK to rulebook
         )
     }
+
+}
+
+fun List<WorldDTO>.asDomainModel(): List<World> {
+    return map {
+        it.asDomainModel()
+    }
+}
+
+fun WorldDTO.asDomainModel(): World {
+    return World(name, description, rulebook, id)
+}
+
+fun List<World>.asDatabaseModel(): List<WorldDTO> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun World.asDatabaseModel(): WorldDTO {
+    return WorldDTO(name, description, rulebook, id)
 }

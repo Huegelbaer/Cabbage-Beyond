@@ -5,11 +5,11 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
-import com.cabbagebeyond.data.dto.WorldDTO
 import com.cabbagebeyond.databinding.FragmentWorldsListItemBinding
+import com.cabbagebeyond.model.World
 
 
-class WorldRecyclerViewAdapter : ListAdapter<WorldDTO, WorldRecyclerViewAdapter.WorldViewHolder>(DiffCallback) {
+class WorldRecyclerViewAdapter : ListAdapter<World, WorldRecyclerViewAdapter.WorldViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: WorldViewHolder, position: Int) {
         val item = getItem(position)
@@ -23,7 +23,7 @@ class WorldRecyclerViewAdapter : ListAdapter<WorldDTO, WorldRecyclerViewAdapter.
     class WorldViewHolder(private val binding: FragmentWorldsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(world: WorldDTO) {
+        fun bind(world: World) {
             binding.world = world
             binding.executePendingBindings()
         }
@@ -37,12 +37,12 @@ class WorldRecyclerViewAdapter : ListAdapter<WorldDTO, WorldRecyclerViewAdapter.
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<WorldDTO>() {
-        override fun areItemsTheSame(oldItem: WorldDTO, newItem: WorldDTO): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<World>() {
+        override fun areItemsTheSame(oldItem: World, newItem: World): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: WorldDTO, newItem: WorldDTO): Boolean {
+        override fun areContentsTheSame(oldItem: World, newItem: World): Boolean {
             return oldItem.id == newItem.id
         }
     }

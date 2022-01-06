@@ -1,22 +1,22 @@
 package com.cabbagebeyond.data
 
-import com.cabbagebeyond.data.dto.WorldDTO
+import com.cabbagebeyond.model.World
 
 interface WorldDataSource {
 
-    //fun observeWorlds(): LiveData<Result<List<WorldDTO>>>
+    //fun observeWorlds(): LiveData<Result<List<World>>>
 
-    suspend fun getWorlds(): Result<List<WorldDTO>>
+    suspend fun getWorlds(): Result<List<World>>
 
     //suspend fun refreshWorlds()
 
-    //fun observeWorld(id: String): LiveData<Result<WorldDTO>>
+    //fun observeWorld(id: String): LiveData<Result<World>>
 
-    suspend fun getWorld(id: String): Result<WorldDTO>
+    suspend fun getWorld(id: String): Result<World>
 
     //suspend fun refreshWorld(id: String)
 
-    suspend fun saveWorld(world: WorldDTO)
+    suspend fun saveWorld(world: World)
 
     //suspend fun deleteAllWorlds()
 

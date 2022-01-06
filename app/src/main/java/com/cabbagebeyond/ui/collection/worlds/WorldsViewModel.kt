@@ -4,23 +4,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cabbagebeyond.data.dto.WorldDTO
-import com.cabbagebeyond.data.local.WorldDao
-import com.cabbagebeyond.data.local.WorldRepository
-import kotlinx.coroutines.Dispatchers
+import com.cabbagebeyond.data.dao.WorldDao
+import com.cabbagebeyond.data.repository.WorldRepository
+import com.cabbagebeyond.model.World
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import java.util.ArrayList
 
 class WorldsViewModel: ViewModel() {
 
-    private val _items = MutableLiveData<List<WorldDTO>>()
-    val items: LiveData<List<WorldDTO>>
+    private val _items = MutableLiveData<List<World>>()
+    val items: LiveData<List<World>>
         get() = _items
 
 
-    private val _selectedWorld = MutableLiveData<WorldDTO>()
-    val selectedWorld: LiveData<WorldDTO>
+    private val _selectedWorld = MutableLiveData<World>()
+    val selectedWorld: LiveData<World>
         get() = _selectedWorld
 
 
