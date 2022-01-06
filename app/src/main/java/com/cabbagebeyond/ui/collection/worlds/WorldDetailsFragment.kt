@@ -30,7 +30,8 @@ class WorldDetailsFragment : Fragment() {
             false
         )
 
-        _binding.world = _viewModel.selectedWorld.value
+        val world = WorldDetailsFragmentArgs.fromBundle(requireArguments()).world
+        _binding.world = world
 
         return _binding.root
     }

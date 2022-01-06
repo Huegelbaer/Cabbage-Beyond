@@ -9,7 +9,15 @@
         android:id="@+id/nav_home"
         android:name="com.cabbagebeyond.ui.collection.worlds.WorldsFragment"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_worlds_list" />
+        tools:layout="@layout/fragment_worlds_list" >
+        <action
+            android:id="@+id/action_home_to_world_details"
+            app:destination="@id/worldDetailsFragment"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim" />
+    </fragment>
 
     <fragment
         android:id="@+id/nav_gallery"
@@ -22,4 +30,11 @@
         android:name="com.cabbagebeyond.ui.slideshow.SlideshowFragment"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_slideshow" />
+    <fragment
+        android:id="@+id/worldDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.worlds.WorldDetailsFragment">
+        <argument
+            android:name="world"
+            app:argType="com.cabbagebeyond.model.World" />
+    </fragment>
 </navigation>

@@ -11,8 +11,12 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavDestination
+import androidx.navigation.NavDirections
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
+import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.home.HomeViewModel
 
 /**
@@ -39,7 +43,11 @@ class WorldsFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_worlds_list, container, false)
 
-        val worldsAdapter = WorldRecyclerViewAdapter()
+        val clickListener = WorldClickListener {
+            _viewModel.onSelectWorld(it)
+        }
+
+        val worldsAdapter = WorldRecyclerViewAdapter(clickListener)
 
         // Set the adapter
         if (view is RecyclerView) {
@@ -55,7 +63,18 @@ class WorldsFragment : Fragment() {
             }
         })
 
+        _viewModel.selectedWorld.observe(viewLifecycleOwner, Observer { world ->
+            world?.let {
+                navigateToDetails(it)
+            }
+        })
+
         return view
+    }
+
+    private fun navigateToDetails(world: World) {
+        findNavController().navigate(WorldsFragmentDirections.actionHomeToWorldDetails(world))
+        _viewModel.onNavigationCompleted()
     }
 
     companion object {

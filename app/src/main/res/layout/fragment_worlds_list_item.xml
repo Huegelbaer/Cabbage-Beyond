@@ -8,6 +8,10 @@
         <variable
             name="world"
             type="com.cabbagebeyond.model.World" />
+
+        <variable
+            name="clickListener"
+            type="com.cabbagebeyond.ui.collection.worlds.WorldClickListener" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -15,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="8dp"
+        android:onClick="@{() -> clickListener.onClick(world)}"
         app:cardElevation="2dp">
 
         <LinearLayout

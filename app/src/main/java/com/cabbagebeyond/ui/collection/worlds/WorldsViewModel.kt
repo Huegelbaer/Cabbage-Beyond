@@ -16,10 +16,12 @@ class WorldsViewModel: ViewModel() {
         get() = _items
 
 
-    private val _selectedWorld = MutableLiveData<World>()
-    val selectedWorld: LiveData<World>
+    private val _selectedWorld = MutableLiveData<World?>()
+    val selectedWorld: LiveData<World?>
         get() = _selectedWorld
 
+    lateinit var world: World
+        private set
 
     private lateinit var repository: WorldRepository
 
@@ -30,5 +32,14 @@ class WorldsViewModel: ViewModel() {
             val result = repository.getWorlds()
             _items.value = result.getOrNull() ?: listOf()
         }
+    }
+
+    fun onSelectWorld(world: World) {
+        this.world = world
+        _selectedWorld.value = world
+    }
+
+    fun onNavigationCompleted() {
+        _selectedWorld.value = null
     }
 }

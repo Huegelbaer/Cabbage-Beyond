@@ -9,11 +9,12 @@ import com.cabbagebeyond.databinding.FragmentWorldsListItemBinding
 import com.cabbagebeyond.model.World
 
 
-class WorldRecyclerViewAdapter : ListAdapter<World, WorldRecyclerViewAdapter.WorldViewHolder>(DiffCallback) {
+class WorldRecyclerViewAdapter(private val clickListener: WorldClickListener) :
+    ListAdapter<World, WorldRecyclerViewAdapter.WorldViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: WorldViewHolder, position: Int) {
         val item = getItem(position)
-        holder.bind(item)
+        holder.bind(item, clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WorldViewHolder {
@@ -23,8 +24,9 @@ class WorldRecyclerViewAdapter : ListAdapter<World, WorldRecyclerViewAdapter.Wor
     class WorldViewHolder(private val binding: FragmentWorldsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(world: World) {
+        fun bind(world: World, clickListener: WorldClickListener) {
             binding.world = world
+            binding.clickListener = clickListener
             binding.executePendingBindings()
         }
 
@@ -46,4 +48,8 @@ class WorldRecyclerViewAdapter : ListAdapter<World, WorldRecyclerViewAdapter.Wor
             return oldItem.id == newItem.id
         }
     }
+}
+
+class WorldClickListener(val clickListener: (world: World) -> Unit) {
+    fun onClick(world: World) = clickListener(world)
 }
