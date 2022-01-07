@@ -14,7 +14,7 @@ data class EquipmentDTO(
     @PropertyName(FIELD_COST)
     var cost: String = "",
     @PropertyName(FIELD_REQUIREMENTS)
-    var requirements: List<String> = listOf(),
+    var requirements: String = "",
     @PropertyName(FIELD_TYPE)
     var type: String = "",
     @PropertyName(FIELD_WORLD)
@@ -30,7 +30,7 @@ data class EquipmentDTO(
         const val FIELD_COST = "cost"
         const val FIELD_REQUIREMENTS = "requirements"
         const val FIELD_TYPE = "type"
-        const val FIELD_WORLD = "world"
+        const val FIELD_WORLD = "world_id"
     }
 
     fun toHashMap(): HashMap<String, Any> {
@@ -52,7 +52,7 @@ fun List<EquipmentDTO>.asDomainModel(): List<Equipment> {
 }
 
 fun EquipmentDTO.asDomainModel(): Equipment {
-    return Equipment(name, description, cost, requirements, type, world, id)
+    return Equipment(name, description, cost, requirements.split(", "), type, world, id)
 }
 
 fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
@@ -62,5 +62,5 @@ fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
 }
 
 fun Equipment.asDatabaseModel(): EquipmentDTO {
-    return EquipmentDTO(name, description, cost, requirements, type, world, id)
+    return EquipmentDTO(name, description, cost, requirements.joinToString(", "), type, world, id)
 }

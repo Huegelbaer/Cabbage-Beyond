@@ -16,7 +16,7 @@ data class Character(
     var willpower: String,
     var movement: Int,
     var parry: Int,
-    var toughness: Int,
+    var toughness: String,
     var abilities: List<String>,
     var equipments: List<String>,
     var forces: List<String>,

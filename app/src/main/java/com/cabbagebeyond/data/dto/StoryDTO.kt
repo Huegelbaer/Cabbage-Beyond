@@ -18,6 +18,8 @@ data class StoryDTO(
     var owner: String = "",
     @PropertyName(FIELD_WORLD)
     var world: String = "",
+    @PropertyName(FIELD_RULEBOOK)
+    var rulebook: String = "",
     @DocumentId
     val id: String = UUID.randomUUID().toString()
 ) {
@@ -28,7 +30,8 @@ data class StoryDTO(
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_STORY = "story"
         const val FIELD_OWNER = "owner"
-        const val FIELD_WORLD = "world"
+        const val FIELD_WORLD = "world_id"
+        const val FIELD_RULEBOOK = "ruleset"
     }
 
     fun toHashMap(): HashMap<String, String> {
