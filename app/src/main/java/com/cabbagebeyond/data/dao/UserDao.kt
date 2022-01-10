@@ -56,6 +56,7 @@ class UserDao {
             .set(entity)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .await()
     }
 
     suspend fun deleteUser(id: String) {
@@ -64,5 +65,6 @@ class UserDao {
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .await()
     }
 }

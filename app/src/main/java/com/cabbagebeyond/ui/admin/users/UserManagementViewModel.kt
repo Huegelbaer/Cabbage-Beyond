@@ -71,4 +71,28 @@ class UserManagementViewModel: ViewModel() {
         }
     }
 
+    fun change(roles: List<Role>, data: Data) {
+        val user = data.user
+        user.roles = roles.map { it.id }
+        save(user)
+    }
+
+    private fun save(user: User) {
+        viewModelScope.launch {
+            userRepository.saveUser(user)
+            reloadUsers()
+        }
+    }
+
+    fun delete(user: Data) {
+        viewModelScope.launch {
+            userRepository.deleteUser(user.user.id)
+            reloadUsers()
+        }
+        _users.value = _users.value?.filterNot { it.id == user.user.id}
+    }
+    
+    private suspend fun reloadUsers() {
+        _users.value = userRepository.getUsers().getOrDefault(listOf())
+    }
 }
