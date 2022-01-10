@@ -62,5 +62,5 @@ fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
 }
 
 fun Equipment.asDatabaseModel(): EquipmentDTO {
-    return EquipmentDTO(name, description, cost, requirements.joinToString(", "), type, world, id)
+    return EquipmentDTO(name, description, cost, requirements.joinToString(), type, world, id)
 }

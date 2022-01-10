@@ -6,10 +6,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.cabbagebeyond.databinding.FragmentUserManagmentListItemBinding
-import com.cabbagebeyond.model.User
 
 class UserManagementAdapter(private val clickListener: UserClickListener) :
-    ListAdapter<User, UserManagementAdapter.UserViewHolder>(DiffCallback) {
+    ListAdapter<UserManagementViewModel.Data, UserManagementAdapter.UserViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val item = getItem(position)
@@ -23,8 +22,8 @@ class UserManagementAdapter(private val clickListener: UserClickListener) :
     class UserViewHolder(private val binding: FragmentUserManagmentListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(user: User, clickListener: UserClickListener) {
-            binding.user = user
+        fun bind(user: UserManagementViewModel.Data, clickListener: UserClickListener) {
+            binding.data = user
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -38,17 +37,17 @@ class UserManagementAdapter(private val clickListener: UserClickListener) :
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<User>() {
-        override fun areItemsTheSame(oldItem: User, newItem: User): Boolean {
+    companion object DiffCallback : DiffUtil.ItemCallback<UserManagementViewModel.Data>() {
+        override fun areItemsTheSame(oldItem: UserManagementViewModel.Data, newItem: UserManagementViewModel.Data): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: User, newItem: User): Boolean {
-            return oldItem.id == newItem.id
+        override fun areContentsTheSame(oldItem: UserManagementViewModel.Data, newItem: UserManagementViewModel.Data): Boolean {
+            return oldItem.user.id == newItem.user.id
         }
     }
 }
 
-class UserClickListener(val clickListener: (user: User) -> Unit) {
-    fun onClick(user: User) = clickListener(user)
+class UserClickListener(val clickListener: (user: UserManagementViewModel.Data) -> Unit) {
+    fun onClick(user: UserManagementViewModel.Data) = clickListener(user)
 }

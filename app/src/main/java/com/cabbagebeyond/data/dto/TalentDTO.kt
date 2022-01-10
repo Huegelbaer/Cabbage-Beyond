@@ -63,5 +63,5 @@ fun List<Talent>.asDatabaseModel(): List<TalentDTO> {
 }
 
 fun Talent.asDatabaseModel(): TalentDTO {
-    return TalentDTO(name, description, rangRequirement, requirements.joinToString(", "), type, world, id)
+    return TalentDTO(name, description, rangRequirement, requirements.joinToString(), type, world, id)
 }
