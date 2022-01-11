@@ -24,4 +24,5 @@
     <string name="dialog_button_delete">Remove</string>
     <string name="dialog_title_attention">Attention</string>
     <string name="dialog_message_delete_user">Do you really want to delete %s?\nNote: Firebase account can be deleted only from the console.</string>
+    <string name="edit_description">Edit %s</string>
 </resources>
