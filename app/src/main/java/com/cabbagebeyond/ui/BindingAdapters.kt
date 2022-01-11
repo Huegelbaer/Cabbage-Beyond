@@ -11,6 +11,11 @@ fun bindTextViewToRoleList(textView: TextView, roles: List<Role>) {
     textView.text = roles.joinToString("\n") { it.name }
 }
 
+@BindingAdapter("textAsList")
+fun bindTextViewToListOfStrings(textView: TextView, roles: List<String>) {
+    textView.text = roles.joinToString("\n")
+}
+
 @BindingAdapter("descriptionContent", "descriptionParameter")
 fun bindContentDescription(button: ImageButton, content: String, parameter: String) {
     button.contentDescription = String.format(content, parameter)
