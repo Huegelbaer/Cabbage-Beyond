@@ -48,7 +48,7 @@
             android:onClick="@{() -> clickListener.onClick(data)}"
             app:descriptionContent="@{@string/edit_description}"
             app:descriptionParameter="@{data.user.name}"
-            app:srcCompat="@android:drawable/ic_menu_edit" />
+            app:srcCompat="@drawable/ic_edit" />
 
     </LinearLayout>
 </layout>

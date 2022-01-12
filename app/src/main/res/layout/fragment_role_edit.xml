@@ -43,14 +43,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/add_feature_button" />
 
-        <ImageView
+        <ImageButton
             android:id="@+id/add_feature_button"
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
             android:layout_marginTop="16dp"
             android:src="@android:drawable/ic_menu_add"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_role_name" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_role_name"
+            app:srcCompat="@drawable/ic_add" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/feature_list"
