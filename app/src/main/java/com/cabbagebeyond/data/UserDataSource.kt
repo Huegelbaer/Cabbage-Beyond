@@ -14,6 +14,8 @@ interface UserDataSource {
 
     suspend fun getUser(id: String): Result<User>
 
+    suspend fun getUserByEmail(email: String): Result<User>
+
     //suspend fun refreshUser(id: String)
 
     suspend fun saveUser(user: User)

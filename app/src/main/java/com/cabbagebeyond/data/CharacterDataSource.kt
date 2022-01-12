@@ -8,6 +8,8 @@ interface CharacterDataSource {
 
     suspend fun getCharacters(): Result<List<Character>>
 
+    suspend fun getCharactersOfUser(id: String): Result<List<Character>>
+
     //suspend fun refreshCharacters()
 
     //fun observeCharacter(id: String): LiveData<Result<Character>>

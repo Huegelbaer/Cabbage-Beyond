@@ -11,6 +11,7 @@
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_admin_panel">Admin</string>
+    <string name="menu_account">Account</string>
 
     <string name="action_sign_in">Sign in</string>
     <string name="welcome">"Welcome !"</string>
@@ -25,4 +26,8 @@
     <string name="dialog_title_attention">Attention</string>
     <string name="dialog_message_delete_user">Do you really want to delete %s?\nNote: Firebase account can be deleted only from the console.</string>
     <string name="edit_description">Edit %s</string>
+    <string name="nickname_title">Nickname</string>
+    <string name="email_title">Email</string>
+    <string name="account_active_world_title">Active world</string>
+    <string name="account_own_characters">Own characters</string>
 </resources>

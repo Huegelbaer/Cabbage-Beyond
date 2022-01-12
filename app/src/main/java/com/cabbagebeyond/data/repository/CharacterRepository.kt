@@ -18,6 +18,10 @@ class CharacterRepository(
         return@withContext characterDao.getCharacters().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getCharactersOfUser(id: String): Result<List<Character>> = withContext(ioDispatcher) {
+        return@withContext characterDao.getCharactersOfUser(id).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getCharacter(id: String): Result<Character> = withContext(ioDispatcher) {
         return@withContext characterDao.getCharacter(id).mapCatching { it.asDomainModel() }
     }

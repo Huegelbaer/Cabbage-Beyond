@@ -29,6 +29,24 @@ class CharacterDao {
         return result
     }
 
+    suspend fun getCharactersOfUser(id: String): Result<List<CharacterDTO>> {
+        var result: Result<List<CharacterDTO>> = Result.success(mutableListOf())
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .whereEqualTo(CharacterDTO.FIELD_OWNER, id)
+            .get()
+            .addOnSuccessListener { task ->
+                val characters = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(CharacterDTO::class.java)
+                }
+                result = Result.success(characters)
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
     suspend fun getCharacter(id: String): Result<CharacterDTO> {
         var result: Result<CharacterDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
