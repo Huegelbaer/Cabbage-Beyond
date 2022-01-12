@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="role"
+            type="com.cabbagebeyond.model.Role" />
+
+        <variable
+            name="clickListener"
+            type="com.cabbagebeyond.ui.admin.roles.RoleClickListener" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/role_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:text="@{role.name}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            app:layout_constraintEnd_toStartOf="@+id/imageButton"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Admin" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:onClick="@{() -> clickListener.onClick(role)}"
+            app:descriptionContent="@{@string/edit_description}"
+            app:descriptionParameter="@{role.name}"
+            app:layout_constraintBottom_toTopOf="@+id/features"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_edit" />
+
+        <TextView
+            android:id="@+id/features"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/text_margin"
+            android:textAppearance="?attr/textAppearanceListItem"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/role_name"
+            app:textAsList="@{role.features}"
+            tools:text="CONFIGURE_APP\nLIST_WORLD\nLIST_WORLD_SAVAGEWORLDS\nLIST_WORLD_SHADOWRUN\nLIST_WORLD_DND5E\nDETAIL_WORLD_SAVAGEWORLDS\nDETAIL_WORLD_SHADOWRUN\nDETAIL_WORLD_DND5E" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -17,7 +17,7 @@ data class RoleDTO(
 
     companion object {
         const val COLLECTION_TITLE = "roles"
-        const val FIELD_NAME = "name"
+        const val FIELD_NAME = "role"
         const val FIELD_FEATURES = "features"
     }
 

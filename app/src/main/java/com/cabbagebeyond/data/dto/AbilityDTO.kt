@@ -25,7 +25,7 @@ data class AbilityDTO(
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_ATTRIBUTE = "attribute"
-        const val FIELD_WORLD = "id"
+        const val FIELD_WORLD = "world_id"
     }
 
     fun toHashMap(): HashMap<String, String> {

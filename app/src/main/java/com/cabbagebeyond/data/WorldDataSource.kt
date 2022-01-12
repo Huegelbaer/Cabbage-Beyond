@@ -8,13 +8,13 @@ interface WorldDataSource {
 
     suspend fun getWorlds(): Result<List<World>>
 
-    //suspend fun refreshWorlds()
+    suspend fun refreshWorlds()
 
     //fun observeWorld(id: String): LiveData<Result<World>>
 
     suspend fun getWorld(id: String): Result<World>
 
-    //suspend fun refreshWorld(id: String)
+    suspend fun refreshWorld(id: String)
 
     suspend fun saveWorld(world: World)
 

@@ -18,7 +18,10 @@ class RoleDao {
             .get()
             .addOnSuccessListener { task ->
                 val roles = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(RoleDTO::class.java)
+                    val title = documentSnapshot.get(RoleDTO.FIELD_NAME, String::class.java)
+                    val features = documentSnapshot.get(RoleDTO.FIELD_FEATURES)
+//                    documentSnapshot.toObject(RoleDTO::class.java)
+                    RoleDTO(title!!, features!! as List<String>, documentSnapshot.id)
                 }
                 result = Result.success(roles)
             }

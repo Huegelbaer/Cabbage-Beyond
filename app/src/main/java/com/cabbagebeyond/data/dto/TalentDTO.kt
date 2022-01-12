@@ -15,7 +15,7 @@ data class TalentDTO(
     @PropertyName(FIELD_RANG_REQUIREMENT)
     var rangRequirement: String = "",
     @PropertyName(FIELD_REQUIREMENTS)
-    var requirements: List<String> = listOf(),
+    var requirements: String = "",
     @PropertyName(FIELD_TYPE)
     var type: String = "",
     @PropertyName(FIELD_WORLD)
@@ -28,10 +28,10 @@ data class TalentDTO(
         const val COLLECTION_TITLE = "sw_talents"
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
-        const val FIELD_RANG_REQUIREMENT = "rang_requirement"
+        const val FIELD_RANG_REQUIREMENT = "rangRequirement"
         const val FIELD_REQUIREMENTS = "requirements"
         const val FIELD_TYPE = "type"
-        const val FIELD_WORLD = "world"
+        const val FIELD_WORLD = "world_id"
     }
 
     fun toHashMap(): HashMap<String, Any> {
@@ -53,7 +53,7 @@ fun List<TalentDTO>.asDomainModel(): List<Talent> {
 }
 
 fun TalentDTO.asDomainModel(): Talent {
-    return Talent(name, description, rangRequirement, requirements, type, world, id)
+    return Talent(name, description, rangRequirement, requirements.split(", "), type, world, id)
 }
 
 fun List<Talent>.asDatabaseModel(): List<TalentDTO> {
@@ -63,5 +63,5 @@ fun List<Talent>.asDatabaseModel(): List<TalentDTO> {
 }
 
 fun Talent.asDatabaseModel(): TalentDTO {
-    return TalentDTO(name, description, rangRequirement, requirements, type, world, id)
+    return TalentDTO(name, description, rangRequirement, requirements.joinToString(), type, world, id)
 }

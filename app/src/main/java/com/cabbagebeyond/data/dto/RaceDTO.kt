@@ -24,8 +24,8 @@ data class RaceDTO(
         const val COLLECTION_TITLE = "sw_races"
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
-        const val FIELD_RACE_FEATURES = "race_features"
-        const val FIELD_WORLD = "world"
+        const val FIELD_RACE_FEATURES = "racefeats"
+        const val FIELD_WORLD = "world_id"
     }
 
     fun toHashMap(): HashMap<String, Any> {

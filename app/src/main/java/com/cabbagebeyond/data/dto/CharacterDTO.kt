@@ -36,7 +36,7 @@ data class CharacterDTO(
     @PropertyName(FIELD_PARRY)
     var parry : Int = 0,
     @PropertyName(FIELD_TOUGHNESS)
-    var toughness : Int = 0,
+    var toughness : String = "",
     @PropertyName(FIELD_ABILITIES)
     var abilities : List<String> = listOf(),
     @PropertyName(FIELD_EQUIPMENTS)
@@ -74,14 +74,14 @@ data class CharacterDTO(
         const val FIELD_MOVEMENT = "movement"
         const val FIELD_PARRY = "parry"
         const val FIELD_TOUGHNESS = "toughness"
-        const val FIELD_ABILITIES = "abilities"
-        const val FIELD_EQUIPMENTS = "equipments"
-        const val FIELD_FORCES = "forces"
-        const val FIELD_HANDICAPS = "handicaps"
-        const val FIELD_TALENTS = "talents"
+        const val FIELD_ABILITIES = "abilities_ids"
+        const val FIELD_EQUIPMENTS = "equipments_ids"
+        const val FIELD_FORCES = "forces_ids"
+        const val FIELD_HANDICAPS = "handicaps_ids"
+        const val FIELD_TALENTS = "talents_ids"
         const val FIELD_TYPE = "type"
         const val FIELD_OWNER = "owner"
-        const val FIELD_WORLD = "world"
+        const val FIELD_WORLD = "world_id"
     }
 
     fun toHashMap(): HashMap<String, Any> {

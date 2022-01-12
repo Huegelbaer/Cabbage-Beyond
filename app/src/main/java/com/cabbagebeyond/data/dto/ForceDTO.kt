@@ -33,10 +33,10 @@ data class ForceDTO(
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_COST = "cost"
         const val FIELD_DURATION = "duration"
-        const val FIELD_RANG_REQUIREMENT = "rang_requirement"
+        const val FIELD_RANG_REQUIREMENT = "rangRequirement"
         const val FIELD_RANGE = "range"
         const val FIELD_SHAPING = "shaping"
-        const val FIELD_WORLD = "world"
+        const val FIELD_WORLD = "world_id"
     }
 
     fun toHashMap(): HashMap<String, String> {

@@ -21,6 +21,8 @@ data class SessionDTO(
     var owner: String = "",
     @PropertyName(FIELD_STORY)
     var story: String = "",
+    @PropertyName(FIELD_RULEBOOK)
+    var rulebook: String = "",
     @DocumentId
     val id: String= UUID.randomUUID().toString()
 ) {
@@ -31,9 +33,10 @@ data class SessionDTO(
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_PLAYER = "player"
         const val FIELD_STATUS = "status"
-        const val FIELD_INVITED_PLAYERS = "invited_players"
+        const val FIELD_INVITED_PLAYERS = "invitedUsers"
         const val FIELD_OWNER = "owner"
-        const val FIELD_STORY = "story"
+        const val FIELD_STORY = "story_id"
+        const val FIELD_RULEBOOK = "ruleset"
     }
 
     fun toHashMap(): HashMap<String, Any> {
