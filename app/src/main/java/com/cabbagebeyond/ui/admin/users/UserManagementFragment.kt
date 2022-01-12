@@ -12,32 +12,29 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.cabbagebeyond.R
+import com.cabbagebeyond.databinding.FragmentUserManagmentListBinding
 
-/**
- * A fragment representing a list of Items.
- */
 class UserManagementFragment : Fragment() {
 
     private val _viewModel: UserManagementViewModel by activityViewModels()
+
+    private lateinit var _binding: FragmentUserManagmentListBinding
     private lateinit var _adapter: UserManagementAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_user_managment_list, container, false)
+    ): View {
+        _binding = FragmentUserManagmentListBinding.inflate(inflater)
 
         val clickListener = UserClickListener {
             editUser(it)
         }
         _adapter = UserManagementAdapter(clickListener)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = _adapter
-            }
+        _binding.list.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = _adapter
         }
 
         _viewModel.users.observe(viewLifecycleOwner, Observer { users ->
@@ -46,7 +43,7 @@ class UserManagementFragment : Fragment() {
             }
         })
 
-        return view
+        return _binding.root
     }
 
     private fun editUser(user: UserManagementViewModel.Data) {

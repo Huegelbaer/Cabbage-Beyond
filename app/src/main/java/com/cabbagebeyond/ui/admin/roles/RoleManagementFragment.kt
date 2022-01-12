@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
+import com.cabbagebeyond.databinding.FragmentRoleManagementListBinding
 import com.cabbagebeyond.model.Role
 import com.cabbagebeyond.ui.admin.users.UserClickListener
 import com.cabbagebeyond.ui.admin.users.UserManagementViewModel
@@ -22,25 +23,24 @@ import com.cabbagebeyond.ui.admin.users.UserManagementViewModel
 class RoleManagementFragment : Fragment() {
 
     private val _viewModel: RoleManagementViewModel by activityViewModels()
+
+    private lateinit var _binding: FragmentRoleManagementListBinding
     private lateinit var _adapter: RoleManagementAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_role_management_list, container, false)
+    ): View {
+        _binding = FragmentRoleManagementListBinding.inflate(inflater)
 
         val clickListener = RoleClickListener {
             editRole(it)
         }
         _adapter = RoleManagementAdapter(clickListener)
 
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = _adapter
-            }
+        _binding.list.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = _adapter
         }
 
         _viewModel.roles.observe(viewLifecycleOwner, Observer { roles ->
@@ -49,7 +49,7 @@ class RoleManagementFragment : Fragment() {
             }
         })
 
-        return view
+        return _binding.root
     }
 
     private fun editRole(role: Role) {
