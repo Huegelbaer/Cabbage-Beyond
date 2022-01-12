@@ -44,6 +44,11 @@ class RoleManagementFragment : Fragment() {
             }
         })
 
+        _binding.addRole.setOnClickListener {
+            val role = Role("", listOf())
+            editRole(role)
+        }
+
         return _binding.root
     }
 
