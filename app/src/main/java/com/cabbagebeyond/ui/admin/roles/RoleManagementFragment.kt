@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
 import com.cabbagebeyond.databinding.FragmentRoleManagementListBinding
 import com.cabbagebeyond.model.Role
-import com.cabbagebeyond.ui.admin.users.UserClickListener
-import com.cabbagebeyond.ui.admin.users.UserManagementViewModel
+import com.cabbagebeyond.ui.admin.roles.edit.RoleEditDialogFragment
 
-/**
- * A fragment representing a list of Items.
- */
 class RoleManagementFragment : Fragment() {
 
     private val _viewModel: RoleManagementViewModel by activityViewModels()
@@ -53,33 +48,17 @@ class RoleManagementFragment : Fragment() {
     }
 
     private fun editRole(role: Role) {
-        /*val selectedRoles = user.roles.toMutableList()
-        val roles = _viewModel.roles.value ?: listOf()
-        val titles = roles.map { it.name }
-        val checked = roles.map { user.roles.contains(it) }.toBooleanArray()
-*/
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.dialog_title_edit_user)
-            .setMessage(role.name)
-                /*
-            .setMultiChoiceItems(titles.toTypedArray(), checked) { _, which, isChecked ->
-                val item = roles[which]
-                if (isChecked) {
-                    selectedRoles.add(item)
-                } else if (selectedRoles.contains(item)) {
-                    selectedRoles.remove(item)
-                }
-            }.setPositiveButton(R.string.dialog_button_save) { _, _ ->
-                _viewModel.change(selectedRoles, user)
-            }*/
-            .setNeutralButton(R.string.dialog_button_cancel) { _, _ -> }
-       /*     .setNegativeButton(R.string.dialog_button_delete) { _, _ ->
-                showConfirmDialog(user.user.email) { _, _ ->
-                    _viewModel.delete(user)
-                }
-            }*/
-            .create()
-            .show()
+        val dialog = RoleEditDialogFragment.newInstance(role.name, role.features)
+        dialog.onSave = { name, selectedFeatures ->
+            _viewModel.change(selectedFeatures, role, name)
+        }
+        dialog.onDelete = {
+            showConfirmDialog(role.name) { _, _ ->
+                _viewModel.delete(role)
+            }
+        }
+
+        dialog.show(childFragmentManager, RoleEditDialogFragment.TAG)
     }
 
     private fun showConfirmDialog(name: String, listener: DialogInterface.OnClickListener) {
