@@ -8,7 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cabbagebeyond.databinding.FragmentCharacterDetailsListHeaderItemBinding
 import com.cabbagebeyond.databinding.FragmentCharacterDetailsListItemBinding
 
-class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffCallback) {
+class CharacterDetailsAdapter(
+    private val expandHeader: ((headerItem: HeaderItem) -> Unit),
+    private val collapseHeader: ((headerItem: HeaderItem) -> Unit),
+    private val showItem: ((listItem: ListItem) -> Unit)
+) : ListAdapter<Item, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
@@ -20,7 +24,11 @@ class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffC
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is HeaderItem -> (holder as HeaderViewHolder).bind(item)
+            is HeaderItem -> (holder as HeaderViewHolder).bind(item, {
+                expandHeader(it)
+            }, {
+                collapseHeader(it)
+            })
             is ListItem -> (holder as ListItemViewHolder).bind(item)
         }
     }
@@ -34,12 +42,26 @@ class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffC
         }
     }
 
-    class HeaderViewHolder(private val binding: FragmentCharacterDetailsListHeaderItemBinding):
+    class HeaderViewHolder(
+        private val binding: FragmentCharacterDetailsListHeaderItemBinding
+    ) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: HeaderItem) {
+        fun bind(
+            item: HeaderItem,
+            checkedAction: ((item: HeaderItem) -> Unit),
+            uncheckedAction: ((item: HeaderItem) -> Unit)
+        ) {
             binding.item = item
             binding.executePendingBindings()
+
+            binding.toggle.setOnCheckedChangeListener { _, isChecked ->
+                if (isChecked) {
+                    checkedAction(item)
+                } else {
+                    uncheckedAction(item)
+                }
+            }
         }
 
         companion object {
@@ -55,7 +77,7 @@ class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffC
         }
     }
 
-    class ListItemViewHolder(private val binding: FragmentCharacterDetailsListItemBinding):
+    class ListItemViewHolder(private val binding: FragmentCharacterDetailsListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: ListItem) {

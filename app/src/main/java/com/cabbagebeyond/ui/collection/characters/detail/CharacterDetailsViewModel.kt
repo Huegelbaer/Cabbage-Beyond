@@ -64,4 +64,21 @@ class CharacterDetailsViewModel(val character: Character) : ViewModel() {
             _items.value = itemList
         }
     }
+
+    fun expandHeader(headerItem: HeaderItem) {
+        val list = _items.value ?: return
+        val position = list.indexOf(headerItem) + 1
+        list.addAll(position, headerItem.items)
+        _items.value = list
+    }
+
+    fun collapseHeader(headerItem: HeaderItem) {
+        val list = _items.value ?: return
+        list.removeAll(headerItem.items)
+        _items.value = list
+    }
+
+    fun show(listItem: ListItem) {
+
+    }
 }

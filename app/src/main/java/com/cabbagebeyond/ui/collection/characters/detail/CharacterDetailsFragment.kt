@@ -29,7 +29,13 @@ class CharacterDetailsFragment : Fragment() {
         val character = CharacterDetailsFragmentArgs.fromBundle(requireArguments()).character
         _binding.character = character
 
-        _adapter = CharacterDetailsAdapter()
+        _adapter = CharacterDetailsAdapter({
+            viewModel.expandHeader(it)
+        }, {
+            viewModel.collapseHeader(it)
+        }, {
+            viewModel.show(it)
+        })
         _binding.list.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = _adapter
@@ -39,7 +45,7 @@ class CharacterDetailsFragment : Fragment() {
 
         viewModel.items.observe(viewLifecycleOwner, Observer {
             it?.let {
-                _adapter.submitList(it)
+                _adapter.submitList(ArrayList(it))
             }
         })
 
