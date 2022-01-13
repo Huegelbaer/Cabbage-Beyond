@@ -23,6 +23,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:padding="@dimen/default_margin"
                 tools:context=".ui.collection.characters.detail.CharacterDetailsFragment">
 
                 <androidx.constraintlayout.widget.Guideline
@@ -33,98 +34,103 @@
                     app:layout_constraintGuide_percent="0.25" />
 
                 <TextView
-                    android:id="@+id/name_title"
+                    android:id="@+id/name_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Name"
-                    app:layout_constraintEnd_toStartOf="@id/guideline"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/name_value"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:text="@{character.name}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@id/guideline"
-                    app:layout_constraintTop_toTopOf="@id/name_title" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Thunderbeast" />
 
                 <TextView
                     android:id="@+id/race_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Race"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/character_race"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toStartOf="@id/guideline"
-                    app:layout_constraintTop_toBottomOf="@id/name_title" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/name_value" />
 
                 <TextView
                     android:id="@+id/race_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{character.id}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/guideline"
                     app:layout_constraintTop_toTopOf="@id/race_title" />
 
                 <TextView
                     android:id="@+id/type_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Type"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/character_type"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/race_title" />
 
                 <TextView
                     android:id="@+id/type_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{character.type}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/guideline"
-                    app:layout_constraintTop_toTopOf="@id/type_title" />
+                    app:layout_constraintTop_toTopOf="@id/type_title"
+                    tools:text="Monster" />
 
                 <TextView
                     android:id="@+id/world_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="World"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:text="@string/character_world"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toStartOf="@id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/type_title" />
 
                 <TextView
                     android:id="@+id/world_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{character.world}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/guideline"
                     app:layout_constraintTop_toTopOf="@id/world_title" />
 
                 <TextView
                     android:id="@+id/description_title"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="Description"
-                    app:layout_constraintStart_toStartOf="parent"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/character_description"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/world_title" />
 
                 <TextView
                     android:id="@+id/description_value"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:text="@{character.description}"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/description_title" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/default_margin"
                     app:layout_constrainedHeight="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
