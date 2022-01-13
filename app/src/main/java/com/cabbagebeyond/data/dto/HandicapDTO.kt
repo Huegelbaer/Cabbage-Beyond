@@ -8,13 +8,13 @@ import kotlin.collections.HashMap
 
 data class HandicapDTO(
     @PropertyName(FIELD_NAME)
-    var name: String,
+    var name: String = "",
     @PropertyName(FIELD_DESCRIPTION)
-    var description: String,
+    var description: String = "",
     @PropertyName(FIELD_TYPE)
-    var type: String,
+    var type: String = "",
     @PropertyName(FIELD_WORLD)
-    var world: String,
+    var world: String = "",
     @DocumentId
     val id: String = UUID.randomUUID().toString()
 ) {
