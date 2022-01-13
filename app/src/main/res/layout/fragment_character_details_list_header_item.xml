@@ -7,7 +7,7 @@
     <data>
         <variable
             name="item"
-            type="com.cabbagebeyond.ui.collection.characters.detail.CharacterDetailsViewModel.CharacterDetailsItem" />
+            type="com.cabbagebeyond.ui.collection.characters.detail.CharacterDetailsViewModel.HeaderItem" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

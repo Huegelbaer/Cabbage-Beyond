@@ -6,22 +6,38 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.cabbagebeyond.databinding.FragmentCharacterDetailsListHeaderItemBinding
+import com.cabbagebeyond.databinding.FragmentCharacterDetailsListItemBinding
 
 class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        return HeaderViewHolder.from(parent)
+        return when (viewType) {
+            0 -> HeaderViewHolder.from(parent)
+            1 -> ListItemViewHolder.from(parent)
+            else -> ListItemViewHolder.from(parent)
+        }
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val item = getItem(position)
-        (holder as HeaderViewHolder).bind(item)
+        when (val item = getItem(position)) {
+            is HeaderItem -> (holder as HeaderViewHolder).bind(item)
+            is ListItem -> (holder as ListItemViewHolder).bind(item)
+        }
     }
 
-    class HeaderViewHolder(private val binding: FragmentCharacterDetailsListHeaderItemBinding) :
+    override fun getItemViewType(position: Int): Int {
+        val item = getItem(position)
+        return when (item::class.java) {
+            CharacterDetailsViewModel.HeaderItem::class.java -> 0
+            CharacterDetailsViewModel.ListItem::class.java -> 1
+            else -> 2
+        }
+    }
+
+    class HeaderViewHolder(private val binding: FragmentCharacterDetailsListHeaderItemBinding):
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Item) {
+        fun bind(item: HeaderItem) {
             binding.item = item
             binding.executePendingBindings()
         }
@@ -29,12 +45,33 @@ class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffC
         companion object {
             fun from(parent: ViewGroup): HeaderViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FragmentCharacterDetailsListHeaderItemBinding.inflate(layoutInflater, parent, false)
+                val binding = FragmentCharacterDetailsListHeaderItemBinding.inflate(
+                    layoutInflater,
+                    parent,
+                    false
+                )
                 return HeaderViewHolder(binding)
             }
         }
     }
 
+    class ListItemViewHolder(private val binding: FragmentCharacterDetailsListItemBinding):
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(item: ListItem) {
+            binding.item = item
+            binding.executePendingBindings()
+        }
+
+        companion object {
+            fun from(parent: ViewGroup): ListItemViewHolder {
+                val layoutInflater = LayoutInflater.from(parent.context)
+                val binding =
+                    FragmentCharacterDetailsListItemBinding.inflate(layoutInflater, parent, false)
+                return ListItemViewHolder(binding)
+            }
+        }
+    }
 
     companion object DiffCallback : DiffUtil.ItemCallback<Item>() {
         override fun areItemsTheSame(oldItem: Item, newItem: Item): Boolean {
@@ -47,4 +84,6 @@ class CharacterDetailsAdapter : ListAdapter<Item, RecyclerView.ViewHolder>(DiffC
     }
 }
 
-typealias Item = CharacterDetailsViewModel.CharacterDetailsItem
+typealias Item = CharacterDetailsViewModel.Item
+typealias HeaderItem = CharacterDetailsViewModel.HeaderItem
+typealias ListItem = CharacterDetailsViewModel.ListItem
