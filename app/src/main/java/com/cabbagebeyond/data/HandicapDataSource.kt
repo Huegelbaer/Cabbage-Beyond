@@ -8,6 +8,8 @@ interface HandicapDataSource {
 
     suspend fun getHandicaps(): Result<List<Handicap>>
 
+    suspend fun getHandicaps(ids: List<String>): Result<List<Handicap>>
+
     //suspend fun refreshHandicaps()
 
     //fun observeHandicap(id: String): LiveData<Result<Handicap>>

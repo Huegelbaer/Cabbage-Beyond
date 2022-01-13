@@ -18,6 +18,10 @@ class EquipmentRepository(
         return@withContext equipmentDao.getEquipments().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getEquipments(ids: List<String>): Result<List<Equipment>> = withContext(ioDispatcher) {
+        return@withContext equipmentDao.getEquipments(ids).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getEquipment(id: String): Result<Equipment> = withContext(ioDispatcher) {
         return@withContext equipmentDao.getEquipment(id).mapCatching { it.asDomainModel() }
     }

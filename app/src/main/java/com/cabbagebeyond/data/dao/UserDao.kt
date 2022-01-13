@@ -48,6 +48,25 @@ class UserDao {
         return result
     }
 
+    suspend fun getUserByEmail(email: String): Result<UserDTO> {
+        var result: Result<UserDTO> = Result.failure(Throwable())
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .whereEqualTo(UserDTO.FIELD_EMAIL, email)
+            .get()
+            .addOnSuccessListener { task ->
+                task.documents.firstOrNull()?.toObject(UserDTO::class.java)?.let {
+                    result = Result.success(it)
+                    return@addOnSuccessListener
+                }
+                result = Result.failure(Throwable())
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
     suspend fun saveUser(user: UserDTO) {
         val entity = user.toHashMap()
 

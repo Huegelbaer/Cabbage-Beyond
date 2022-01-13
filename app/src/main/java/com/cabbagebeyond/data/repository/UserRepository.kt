@@ -22,6 +22,10 @@ class UserRepository(
         return@withContext userDao.getUser(id).mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getUserByEmail(email: String): Result<User> = withContext(ioDispatcher) {
+        return@withContext userDao.getUserByEmail(email).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun saveUser(user: User) = withContext(ioDispatcher) {
         userDao.saveUser(user.asDatabaseModel())
     }

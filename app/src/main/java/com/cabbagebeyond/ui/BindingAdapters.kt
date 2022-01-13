@@ -4,6 +4,8 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.cabbagebeyond.model.Role
+import android.graphics.drawable.Drawable
+import android.widget.ImageView
 
 
 @BindingAdapter("roleList")
@@ -19,4 +21,9 @@ fun bindTextViewToListOfStrings(textView: TextView, roles: List<String>) {
 @BindingAdapter("descriptionContent", "descriptionParameter")
 fun bindContentDescription(button: ImageButton, content: String, parameter: String) {
     button.contentDescription = String.format(content, parameter)
+}
+
+@BindingAdapter("srcCompat")
+fun bindSrcCompat(imageView: ImageView, resource: Int) {
+    imageView.setImageResource(resource)
 }

@@ -7,15 +7,12 @@
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Drawer Menu -->
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
     <string name="menu_admin_panel">Admin</string>
-
-    <string name="action_sign_in">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="menu_account">Account</string>
 
     <!-- Dialog -->
     <string name="dialog_title_edit_user">Edit</string>
@@ -24,5 +21,24 @@
     <string name="dialog_button_delete">Remove</string>
     <string name="dialog_title_attention">Attention</string>
     <string name="dialog_message_delete_user">Do you really want to delete %s?\nNote: Firebase account can be deleted only from the console.</string>
+
+    <!-- Edit Account -->
     <string name="edit_description">Edit %s</string>
+    <string name="nickname_title">Nickname</string>
+    <string name="email_title">Email</string>
+    <string name="account_active_world_title">Active world</string>
+    <string name="account_own_characters">Own characters</string>
+
+    <!-- Character Details -->
+    <string name="character_race">Race</string>
+    <string name="character_type">Type</string>
+    <string name="character_world">World</string>
+    <string name="character_description">Description</string>
+
+    <!-- -->
+    <string name="action_sign_in">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

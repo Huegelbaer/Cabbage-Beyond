@@ -18,6 +18,10 @@ class AbilityRepository(
         return@withContext abilityDao.getAbilities().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getAbilities(ids: List<String>): Result<List<Ability>> = withContext(ioDispatcher) {
+        return@withContext abilityDao.getAbilities(ids).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getAbility(id: String): Result<Ability> = withContext(ioDispatcher){
         return@withContext abilityDao.getAbility(id).mapCatching { it.asDomainModel() }
     }

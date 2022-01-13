@@ -18,6 +18,10 @@ class HandicapRepository(
         return@withContext handicapDao.getHandicaps().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getHandicaps(ids: List<String>): Result<List<Handicap>> = withContext(ioDispatcher) {
+        return@withContext handicapDao.getHandicaps(ids).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getHandicap(id: String): Result<Handicap> = withContext(ioDispatcher) {
         return@withContext handicapDao.getHandicap(id).mapCatching { it.asDomainModel() }
     }

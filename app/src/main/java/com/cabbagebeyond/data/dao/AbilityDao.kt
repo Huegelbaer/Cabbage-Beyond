@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.AbilityDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.FieldPath
 import kotlinx.coroutines.tasks.await
 
 class AbilityDao {
@@ -15,6 +16,28 @@ class AbilityDao {
     suspend fun getAbilities(): Result<List<AbilityDTO>> {
         var result: Result<List<AbilityDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .get()
+            .addOnSuccessListener { task ->
+                val abilities = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(AbilityDTO::class.java)
+                }
+                result = Result.success(abilities)
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
+    suspend fun getAbilities(ids: List<String>): Result<List<AbilityDTO>> {
+        var result: Result<List<AbilityDTO>> = Result.success(mutableListOf())
+        if (ids.isEmpty()) {
+            return result
+        }
+
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .whereIn(FieldPath.documentId(), ids)
             .get()
             .addOnSuccessListener { task ->
                 val abilities = task.documents.mapNotNull { documentSnapshot ->

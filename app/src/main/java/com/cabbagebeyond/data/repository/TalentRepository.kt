@@ -18,6 +18,10 @@ class TalentRepository(
         return@withContext talentDao.getTalents().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getTalents(ids: List<String>): Result<List<Talent>> = withContext(ioDispatcher) {
+        return@withContext talentDao.getTalents(ids).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getTalent(id: String): Result<Talent> = withContext(ioDispatcher) {
         return@withContext talentDao.getTalent(id).mapCatching { it.asDomainModel() }
     }

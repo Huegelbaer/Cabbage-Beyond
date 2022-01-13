@@ -18,6 +18,10 @@ class ForceRepository(
         return@withContext forceDao.getForces().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getForces(ids: List<String>): Result<List<Force>> = withContext(ioDispatcher) {
+        return@withContext forceDao.getForces(ids).mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getForce(id: String): Result<Force> = withContext(ioDispatcher) {
         return@withContext forceDao.getForce(id).mapCatching { it.asDomainModel() }
     }
