@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/nav_worlds">
 
     <fragment
-        android:id="@+id/nav_home"
+        android:id="@+id/nav_worlds"
         android:name="com.cabbagebeyond.ui.collection.worlds.WorldsFragment"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_worlds_list" >
+        android:label="@string/menu_worlds"
+        tools:layout="@layout/fragment_worlds_list">
         <action
             android:id="@+id/action_home_to_world_details"
             app:destination="@id/worldDetailsFragment"
@@ -20,16 +20,15 @@
     </fragment>
 
     <fragment
-        android:id="@+id/nav_gallery"
+        android:id="@+id/nav_characters"
         android:name="com.cabbagebeyond.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
+        android:label="@string/menu_characters"
+        tools:layout="@layout/fragment_gallery" >
+        <action
+            android:id="@+id/action_characters_list_to_details"
+            app:destination="@id/characterDetailsFragment" />
+    </fragment>
 
-    <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.cabbagebeyond.ui.slideshow.SlideshowFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_slideshow" />
     <fragment
         android:id="@+id/worldDetailsFragment"
         android:name="com.cabbagebeyond.ui.collection.worlds.WorldDetailsFragment">

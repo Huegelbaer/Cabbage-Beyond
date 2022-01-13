@@ -8,9 +8,18 @@
     <string name="action_settings">Settings</string>
 
     <!-- Drawer Menu -->
-    <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_collection">Data</string>
+    <string name="menu_worlds">Worlds</string>
+    <string name="menu_characters">Characters</string>
+    <string name="menu_talents">Talents</string>
+    <string name="menu_handicaps">Handicaps</string>
+    <string name="menu_abilities">Abilities</string>
+    <string name="menu_forces">Forces</string>
+    <string name="menu_equipments">Equipments</string>
+    <string name="menu_races">Races</string>
+    <string name="menu_content">Content</string>
+    <string name="menu_stories">Stories</string>
+    <string name="menu_sessions">Sessions</string>
     <string name="menu_admin_panel">Admin</string>
     <string name="menu_account">Account</string>
 
