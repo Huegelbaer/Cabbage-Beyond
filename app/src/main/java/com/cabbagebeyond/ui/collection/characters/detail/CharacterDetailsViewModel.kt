@@ -37,25 +37,25 @@ class CharacterDetailsViewModel(val character: Character) : ViewModel() {
 
         viewModelScope.launch {
             val itemList = mutableListOf<Item>()
-            val talents = talentRepository.getTalents().getOrDefault(listOf()).map {
+            val talents = talentRepository.getTalents(character.talents).getOrDefault(listOf()).map {
                 ListItem(it.name, it)
             }.toMutableList()
             val talentItem = HeaderItem("Talents", R.drawable.ic_thumb_up, talents)
             itemList.add(talentItem)
 
-            val handicaps = handicapRepository.getHandicaps().getOrDefault(listOf()).map {
+            val handicaps = handicapRepository.getHandicaps(character.handicaps).getOrDefault(listOf()).map {
                 ListItem(it.name, it)
             }.toMutableList()
             val handicapItem = HeaderItem("Handicaps", R.drawable.ic_thumb_down, handicaps)
             itemList.add(handicapItem)
 
-            val forces = forceRepository.getForces().getOrDefault(listOf()).map {
+            val forces = forceRepository.getForces(character.forces).getOrDefault(listOf()).map {
                 ListItem(it.name, it)
             }.toMutableList()
             val forceItem = HeaderItem("Forces", R.drawable.ic_local_library, forces)
             itemList.add(forceItem)
 
-            val equipments = equipmentRepository.getEquipments().getOrDefault(listOf()).map {
+            val equipments = equipmentRepository.getEquipments(character.equipments).getOrDefault(listOf()).map {
                 ListItem(it.name, it)
             }.toMutableList()
             val equipmentItem = HeaderItem("Equipments", R.drawable.ic_security, equipments)

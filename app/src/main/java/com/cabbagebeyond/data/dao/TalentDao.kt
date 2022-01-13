@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.TalentDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.FieldPath
 import kotlinx.coroutines.tasks.await
 
 class TalentDao {
@@ -15,6 +16,28 @@ class TalentDao {
     suspend fun getTalents(): Result<List<TalentDTO>> {
         var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .get()
+            .addOnSuccessListener { task ->
+                val talents = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject(TalentDTO::class.java)
+                }
+                result = Result.success(talents)
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
+    suspend fun getTalents(ids: List<String>): Result<List<TalentDTO>> {
+        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
+        if (ids.isEmpty()) {
+            return result
+        }
+
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .whereIn(FieldPath.documentId(), ids)
             .get()
             .addOnSuccessListener { task ->
                 val talents = task.documents.mapNotNull { documentSnapshot ->

@@ -8,6 +8,8 @@ interface EquipmentDataSource {
 
     suspend fun getEquipments(): Result<List<Equipment>>
 
+    suspend fun getEquipments(ids: List<String>): Result<List<Equipment>>
+
     //suspend fun refreshEquipments()
 
     //fun observeEquipment(id: String): LiveData<Result<Equipment>>

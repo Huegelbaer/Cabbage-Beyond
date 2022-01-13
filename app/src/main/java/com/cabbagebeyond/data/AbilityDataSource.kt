@@ -8,6 +8,8 @@ interface AbilityDataSource {
 
     suspend fun getAbilities(): Result<List<Ability>>
 
+    suspend fun getAbilities(ids: List<String>): Result<List<Ability>>
+
     //suspend fun refreshAbilities()
 
     //fun observeAbility(id: String): LiveData<Result<Ability>>

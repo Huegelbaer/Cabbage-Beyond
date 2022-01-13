@@ -8,6 +8,8 @@ interface ForceDataSource {
 
     suspend fun getForces(): Result<List<Force>>
 
+    suspend fun getForces(ids: List<String>): Result<List<Force>>
+
     //suspend fun refreshForces()
 
     //fun observeForce(id: String): LiveData<Result<Force>>

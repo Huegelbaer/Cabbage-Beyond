@@ -8,6 +8,8 @@ interface TalentDataSource {
 
     suspend fun getTalents(): Result<List<Talent>>
 
+    suspend fun getTalents(ids: List<String>): Result<List<Talent>>
+
     //suspend fun refreshTalents()
 
     //fun observeTalent(id: String): LiveData<Result<Talent>>
