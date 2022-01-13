@@ -1,12 +1,11 @@
 package com.cabbagebeyond.ui.collection.characters.detail
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.cabbagebeyond.R
+import com.cabbagebeyond.databinding.CharacterDetailsFragmentBinding
 
 class CharacterDetailsFragment : Fragment() {
 
@@ -15,12 +14,15 @@ class CharacterDetailsFragment : Fragment() {
     }
 
     private lateinit var viewModel: CharacterDetailsViewModel
+    private lateinit var _binding: CharacterDetailsFragmentBinding
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.character_details_fragment, container, false)
+    ): View {
+        _binding = CharacterDetailsFragmentBinding.inflate(inflater)
+        return _binding.root
     }
 
 }
