@@ -11,14 +11,14 @@
             type="com.cabbagebeyond.model.Character" />
     </data>
 
-    <!-- <FrameLayout
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ui.collection.characters.detail.CharacterDetailsFragment">
 
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">-->
+            android:layout_height="match_parent">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -123,8 +123,9 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/list"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin"
+                    android:nestedScrollingEnabled="false"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -138,7 +139,7 @@
                     app:layout_constraintGuide_percent="0.25" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
-     <!--   </ScrollView>
+        </androidx.core.widget.NestedScrollView>
 
-    </FrameLayout>-->
+    </FrameLayout>
 </layout>
