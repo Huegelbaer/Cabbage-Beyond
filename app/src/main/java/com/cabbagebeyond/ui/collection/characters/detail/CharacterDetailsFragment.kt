@@ -22,6 +22,12 @@ class CharacterDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = CharacterDetailsFragmentBinding.inflate(inflater)
+
+        val character = CharacterDetailsFragmentArgs.fromBundle(requireArguments()).character
+        _binding.character = character
+
+        viewModel = CharacterDetailsViewModel(character)
+
         return _binding.root
     }
 

@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.databinding.FragmentAccountBinding
 import com.cabbagebeyond.model.Character
@@ -53,7 +54,7 @@ class AccountFragment : Fragment() {
 
     private fun setupRecyclerView(characters: List<Character>) {
         val clickListener = CharacterClickListener {
-
+            showCharacter(it)
         }
         _adapter = CharacterAdapter(clickListener)
 
@@ -63,5 +64,9 @@ class AccountFragment : Fragment() {
         }
 
         _adapter.submitList(characters)
+    }
+
+    private fun showCharacter(character: Character) {
+        findNavController().navigate(AccountFragmentDirections.actionAccountToCharacterDetails(character))
     }
 }
