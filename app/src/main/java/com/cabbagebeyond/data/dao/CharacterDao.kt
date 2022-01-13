@@ -3,13 +3,14 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.CharacterDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.tasks.await
 
 class CharacterDao {
 
     companion object {
         private const val COLLECTION_TITLE = CharacterDTO.COLLECTION_TITLE
-        private const val TAG = "AbilityDao"
+        private const val TAG = "CharacterDao"
     }
 
     suspend fun getCharacters(): Result<List<CharacterDTO>> {
@@ -18,7 +19,7 @@ class CharacterDao {
             .get()
             .addOnSuccessListener { task ->
                 val characters = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(CharacterDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(characters)
             }
@@ -36,7 +37,7 @@ class CharacterDao {
             .get()
             .addOnSuccessListener { task ->
                 val characters = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(CharacterDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(characters)
             }
@@ -53,11 +54,8 @@ class CharacterDao {
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(CharacterDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val character = map(task)
+                result = Result.success(character)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -82,5 +80,34 @@ class CharacterDao {
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): CharacterDTO {
+        return CharacterDTO(
+        documentSnapshot.get(CharacterDTO.FIELD_NAME, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_CHARISMA, Int::class.java) ?: 0,
+        documentSnapshot.get(CharacterDTO.FIELD_CONSTITUTION, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_DECEPTION, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_DEXTERITY, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_INTELLIGENCE, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_INVESTIGATION, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_PERCEPTION, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_STEALTH, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_STRENGTH, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_WILLPOWER, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_MOVEMENT, Int::class.java) ?: 0,
+        documentSnapshot.get(CharacterDTO.FIELD_PARRY, Int::class.java) ?: 0,
+        documentSnapshot.get(CharacterDTO.FIELD_TOUGHNESS, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_ABILITIES) as List<String>,
+        documentSnapshot.get(CharacterDTO.FIELD_EQUIPMENTS) as List<String>,
+        documentSnapshot.get(CharacterDTO.FIELD_FORCES) as List<String>,
+        documentSnapshot.get(CharacterDTO.FIELD_HANDICAPS) as List<String>,
+        documentSnapshot.get(CharacterDTO.FIELD_TALENTS) as List<String>,
+        documentSnapshot.get(CharacterDTO.FIELD_TYPE, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_OWNER, String::class.java) ?: "",
+        documentSnapshot.get(CharacterDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }
