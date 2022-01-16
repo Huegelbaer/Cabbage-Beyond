@@ -1,7 +1,10 @@
 package com.cabbagebeyond.ui.collection.characters
 
+import android.app.SearchManager
+import android.content.Context
 import android.os.Bundle
 import android.view.*
+import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
@@ -62,6 +65,30 @@ class CharacterListFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
 
         inflater.inflate(R.menu.character_list, menu)
+
+        // Associate searchable configuration with the SearchView
+        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
+
+        val queryTextListener: SearchView.OnQueryTextListener =
+            object : SearchView.OnQueryTextListener {
+                override fun onQueryTextChange(newText: String): Boolean {
+                  //  val textView = findViewById(R.id.aa) as TextView
+                    //textView.text = newText
+                    if (newText.isEmpty()) {
+                        _viewModel.onSearchCanceled()
+                    }
+                    return true
+                }
+
+                override fun onQueryTextSubmit(query: String): Boolean {
+                    _viewModel.onSearchCharacter(query)
+                    return true
+                }
+            }
+        (menu.findItem(R.id.app_bar_search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
+            setOnQueryTextListener(queryTextListener)
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

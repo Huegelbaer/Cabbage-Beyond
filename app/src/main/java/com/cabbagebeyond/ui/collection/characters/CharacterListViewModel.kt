@@ -17,6 +17,7 @@ class CharacterListViewModel(
         NAME, RACE, TYPE, WORLD, NONE
     }
 
+    private var _characters: List<Character> = listOf()
     private var _items = MutableLiveData<List<Character>>()
     val items: LiveData<List<Character>>
         get() = _items
@@ -27,8 +28,19 @@ class CharacterListViewModel(
 
     init {
         viewModelScope.launch {
-            _items.value = characterDataSource.getCharacters().getOrDefault(listOf())
+            _characters = characterDataSource.getCharacters().getOrDefault(listOf())
+            _items.value = _characters
         }
+    }
+
+    fun onSearchCharacter(query: String) {
+        _items.value = _characters.filter {
+            it.name.contains(query) || it.description.contains(query)
+        }
+    }
+
+    fun onSearchCanceled() {
+        _items.value = _characters
     }
 
     fun onSelectSort(sortType: SortType) {
@@ -50,7 +62,8 @@ class CharacterListViewModel(
                     characterDataSource.getCharactersSortedByName()
                 }
             }
-            _items.value = result.getOrDefault(listOf())
+            _characters = result.getOrDefault(listOf())
+            _items.value = _characters
         }
     }
 
