@@ -18,6 +18,22 @@ class CharacterRepository(
         return@withContext characterDao.getCharacters().mapCatching { it.asDomainModel() }
     }
 
+    override suspend fun getCharactersSortedByName(): Result<List<Character>> = withContext(ioDispatcher) {
+        return@withContext characterDao.getCharactersOrderedByName().mapCatching { it.asDomainModel() }
+    }
+
+    override suspend fun getCharactersSortedByRace(): Result<List<Character>> = withContext(ioDispatcher) {
+        return@withContext characterDao.getCharactersOrderedByRace().mapCatching { it.asDomainModel() }
+    }
+
+    override suspend fun getCharactersSortedByType(): Result<List<Character>> = withContext(ioDispatcher) {
+        return@withContext characterDao.getCharactersOrderedByType().mapCatching { it.asDomainModel() }
+    }
+
+    override suspend fun getCharactersSortedByWorld(): Result<List<Character>> = withContext(ioDispatcher) {
+        return@withContext characterDao.getCharactersOrderedByWorld().mapCatching { it.asDomainModel() }
+    }
+
     override suspend fun getCharactersOfUser(id: String): Result<List<Character>> = withContext(ioDispatcher) {
         return@withContext characterDao.getCharactersOfUser(id).mapCatching { it.asDomainModel() }
     }

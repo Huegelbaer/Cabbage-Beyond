@@ -9,6 +9,8 @@ import kotlin.collections.HashMap
 data class CharacterDTO(
     @PropertyName(FIELD_NAME)
     var name: String = "",
+    @PropertyName(FIELD_RACE)
+    var race: String = "",
     @PropertyName(FIELD_DESCRIPTION)
     var description: String = "",
     @PropertyName(FIELD_CHARISMA)
@@ -60,6 +62,7 @@ data class CharacterDTO(
     companion object {
         const val COLLECTION_TITLE = "sw_characters"
         const val FIELD_NAME = "name"
+        const val FIELD_RACE = "race_id"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_CHARISMA = "charisma"
         const val FIELD_CONSTITUTION = "constitution"
@@ -120,7 +123,7 @@ fun List<CharacterDTO>.asDomainModel(): List<Character> {
 }
 
 fun CharacterDTO.asDomainModel(): Character {
-    return Character(name, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities, equipments, forces, handicaps, talents, type, owner, world, id)
+    return Character(name, race, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities, equipments, forces, handicaps, talents, type, owner, world, id)
 }
 
 fun List<Character>.asDatabaseModel(): List<CharacterDTO> {
@@ -130,5 +133,5 @@ fun List<Character>.asDatabaseModel(): List<CharacterDTO> {
 }
 
 fun Character.asDatabaseModel(): CharacterDTO {
-    return CharacterDTO(name, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities, equipments, forces, handicaps, talents, type, owner, world, id)
+    return CharacterDTO(name, race, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities, equipments, forces, handicaps, talents, type, owner, world, id)
 }

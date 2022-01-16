@@ -30,6 +30,32 @@ class CharacterDao {
         return result
     }
 
+    suspend fun getCharactersOrderedByName(): Result<List<CharacterDTO>> = getCharactersOrdered(CharacterDTO.FIELD_NAME)
+
+    suspend fun getCharactersOrderedByRace(): Result<List<CharacterDTO>> = getCharactersOrdered(CharacterDTO.FIELD_RACE)
+
+    suspend fun getCharactersOrderedByType(): Result<List<CharacterDTO>> = getCharactersOrdered(CharacterDTO.FIELD_TYPE)
+
+    suspend fun getCharactersOrderedByWorld(): Result<List<CharacterDTO>> = getCharactersOrdered(CharacterDTO.FIELD_WORLD)
+
+    private suspend fun getCharactersOrdered(fieldName: String): Result<List<CharacterDTO>> {
+        var result: Result<List<CharacterDTO>> = Result.success(mutableListOf())
+        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+            .orderBy(fieldName)
+            .get(Source.CACHE)
+            .addOnSuccessListener { task ->
+                val characters = task.documents.mapNotNull { documentSnapshot ->
+                    map(documentSnapshot)
+                }
+                result = Result.success(characters)
+            }
+            .addOnFailureListener { exception ->
+                result = Result.failure(exception.fillInStackTrace())
+            }
+            .await()
+        return result
+    }
+
     suspend fun getCharactersOfUser(id: String): Result<List<CharacterDTO>> {
         var result: Result<List<CharacterDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
@@ -85,6 +111,7 @@ class CharacterDao {
     private fun map(documentSnapshot: DocumentSnapshot): CharacterDTO {
         return CharacterDTO(
         documentSnapshot.get(CharacterDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(CharacterDTO.FIELD_RACE, String::class.java) ?: "",
         documentSnapshot.get(CharacterDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
         documentSnapshot.get(CharacterDTO.FIELD_CHARISMA, Int::class.java) ?: 0,
         documentSnapshot.get(CharacterDTO.FIELD_CONSTITUTION, String::class.java) ?: "",

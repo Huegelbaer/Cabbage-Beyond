@@ -17,22 +17,13 @@ import com.cabbagebeyond.model.Character
  */
 class CharacterListFragment : Fragment() {
 
-    private var columnCount = 1
-
     private val _viewModel: CharacterListViewModel by lazy {
         val repository = CharacterRepository(Database.characterDao)
         CharacterListViewModel(repository)
     }
+
     private lateinit var _binding: FragmentCharacterListBinding
     private lateinit var _adapter: CharacterListAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,28 +53,43 @@ class CharacterListFragment : Fragment() {
             }
         })
 
+        setHasOptionsMenu(true)
+
         return _binding.root
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            CharacterListFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
 
         inflater.inflate(R.menu.character_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.app_bar_search -> {
+                true
+            }
+            R.id.app_bar_sort_name -> {
+                _viewModel.onSelectSort(CharacterListViewModel.SortType.NAME)
+                true
+            }
+            R.id.app_bar_sort_race -> {
+                _viewModel.onSelectSort(CharacterListViewModel.SortType.RACE)
+                true
+            }
+            R.id.app_bar_sort_type -> {
+                _viewModel.onSelectSort(CharacterListViewModel.SortType.TYPE)
+                true
+            }
+            R.id.app_bar_sort_world -> {
+                _viewModel.onSelectSort(CharacterListViewModel.SortType.WORLD)
+                true
+            }
+            R.id.app_bar_filter_list -> {
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     private fun showCharacterDetails(character: Character) {

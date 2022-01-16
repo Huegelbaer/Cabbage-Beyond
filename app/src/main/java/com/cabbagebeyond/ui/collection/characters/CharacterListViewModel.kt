@@ -13,6 +13,10 @@ class CharacterListViewModel(
     private val characterDataSource: CharacterDataSource
 ) : ViewModel() {
 
+    enum class SortType {
+        NAME, RACE, TYPE, WORLD, NONE
+    }
+
     private var _items = MutableLiveData<List<Character>>()
     val items: LiveData<List<Character>>
         get() = _items
@@ -24,6 +28,29 @@ class CharacterListViewModel(
     init {
         viewModelScope.launch {
             _items.value = characterDataSource.getCharacters().getOrDefault(listOf())
+        }
+    }
+
+    fun onSelectSort(sortType: SortType) {
+        viewModelScope.launch {
+            val result = when (sortType) {
+                SortType.NAME -> {
+                    characterDataSource.getCharactersSortedByName()
+                }
+                SortType.RACE -> {
+                    characterDataSource.getCharactersSortedByRace()
+                }
+                SortType.TYPE -> {
+                    characterDataSource.getCharactersSortedByType()
+                }
+                SortType.WORLD -> {
+                    characterDataSource.getCharactersSortedByWorld()
+                }
+                SortType.NONE -> {
+                    characterDataSource.getCharactersSortedByName()
+                }
+            }
+            _items.value = result.getOrDefault(listOf())
         }
     }
 

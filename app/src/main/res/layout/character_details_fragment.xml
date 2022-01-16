@@ -52,7 +52,7 @@
                     android:id="@+id/race_value"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="@{character.id}"
+                    android:text="@{character.race}"
                     android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@id/guideline"

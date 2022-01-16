@@ -8,6 +8,14 @@ interface CharacterDataSource {
 
     suspend fun getCharacters(): Result<List<Character>>
 
+    suspend fun getCharactersSortedByName(): Result<List<Character>>
+
+    suspend fun getCharactersSortedByRace(): Result<List<Character>>
+
+    suspend fun getCharactersSortedByType(): Result<List<Character>>
+
+    suspend fun getCharactersSortedByWorld(): Result<List<Character>>
+
     suspend fun getCharactersOfUser(id: String): Result<List<Character>>
 
     //suspend fun refreshCharacters()

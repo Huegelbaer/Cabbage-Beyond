@@ -6,6 +6,7 @@ import android.os.Parcelable
 
 data class Character(
     var name: String,
+    var race: String,
     var description: String,
     var charisma: Int,
     var constitution: String,
@@ -31,6 +32,7 @@ data class Character(
     val id: String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
+        parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readInt(),
@@ -60,6 +62,7 @@ data class Character(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
+        parcel.writeString(race)
         parcel.writeString(description)
         parcel.writeInt(charisma)
         parcel.writeString(constitution)
