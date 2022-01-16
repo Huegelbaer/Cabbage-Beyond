@@ -23,6 +23,11 @@
     <string name="menu_admin_panel">Admin</string>
     <string name="menu_account">Account</string>
 
+    <!-- Options Menu -->
+    <string name="menu_search">Search</string>
+    <string name="menu_sort">Sort</string>
+    <string name="menu_filter">Filter</string>
+
     <!-- Dialog -->
     <string name="dialog_title_edit_user">Edit</string>
     <string name="dialog_button_save">Save</string>

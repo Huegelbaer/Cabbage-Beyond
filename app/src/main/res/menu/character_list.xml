@@ -5,14 +5,14 @@
     <item
         android:id="@+id/app_bar_search"
         android:icon="@drawable/ic_search"
-        android:title="Search"
+        android:title="@string/menu_search"
         app:actionViewClass="android.widget.SearchView"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/app_bar_sort_list"
         android:icon="@drawable/ic_sort"
-        android:title="Sort">
+        android:title="@string/menu_sort">
 
         <menu>
             <item
@@ -29,8 +29,11 @@
                 android:title="@string/character_world" />
         </menu>
     </item>
+    
+    <!--
     <item
         android:id="@+id/app_bar_filter_list"
         android:icon="@drawable/ic_filter_list"
-        android:title="Filter" />
+        android:title="@string/menu_filter" />
+        -->
 </menu>
