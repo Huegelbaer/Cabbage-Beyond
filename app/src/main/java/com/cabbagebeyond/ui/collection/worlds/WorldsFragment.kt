@@ -10,20 +10,15 @@ import android.widget.LinearLayout
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDirections
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.World
-import com.cabbagebeyond.ui.home.HomeViewModel
 
 /**
  * A fragment representing a list of Items.
  */
 class WorldsFragment : Fragment() {
-
 
     private val _viewModel: WorldsViewModel by activityViewModels()
 
