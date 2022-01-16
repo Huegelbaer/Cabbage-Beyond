@@ -3,7 +3,6 @@ package com.cabbagebeyond.ui.collection.characters
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,6 +10,7 @@ import com.cabbagebeyond.R
 import com.cabbagebeyond.data.Database
 import com.cabbagebeyond.data.repository.CharacterRepository
 import com.cabbagebeyond.databinding.FragmentCharacterListBinding
+import com.cabbagebeyond.model.Character
 
 /**
  * A fragment representing a list of Items.
@@ -41,7 +41,7 @@ class CharacterListFragment : Fragment() {
         _binding = FragmentCharacterListBinding.inflate(inflater)
 
         val clickListener = CharacterClickListener {
-            findNavController().navigate(CharacterListFragmentDirections.actionCharactersListToDetails(it))
+            _viewModel.onCharacterClicked(it)
         }
         _adapter = CharacterListAdapter(clickListener)
 
@@ -53,6 +53,12 @@ class CharacterListFragment : Fragment() {
         _viewModel.items.observe(viewLifecycleOwner, Observer {
             it?.let {
                 _adapter.submitList(it)
+            }
+        })
+
+        _viewModel.selectedCharacter.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showCharacterDetails(it)
             }
         })
 
@@ -78,5 +84,10 @@ class CharacterListFragment : Fragment() {
         super.onCreateOptionsMenu(menu, inflater)
 
         inflater.inflate(R.menu.character_list, menu)
+    }
+
+    private fun showCharacterDetails(character: Character) {
+        findNavController().navigate(CharacterListFragmentDirections.actionCharactersListToDetails(character))
+        _viewModel.onNavigationCompleted()
     }
 }

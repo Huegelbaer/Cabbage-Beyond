@@ -17,9 +17,21 @@ class CharacterListViewModel(
     val items: LiveData<List<Character>>
         get() = _items
 
+    private var _selectedCharacter = MutableLiveData<Character?>()
+    val selectedCharacter: LiveData<Character?>
+        get() = _selectedCharacter
+
     init {
         viewModelScope.launch {
             _items.value = characterDataSource.getCharacters().getOrDefault(listOf())
         }
+    }
+
+    fun onCharacterClicked(character: Character) {
+        _selectedCharacter.value = character
+    }
+
+    fun onNavigationCompleted() {
+        _selectedCharacter.value = null
     }
 }
