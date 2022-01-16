@@ -21,9 +21,9 @@
 
     <fragment
         android:id="@+id/nav_characters"
-        android:name="com.cabbagebeyond.ui.gallery.GalleryFragment"
+        android:name="com.cabbagebeyond.ui.collection.characters.CharacterListFragment"
         android:label="@string/menu_characters"
-        tools:layout="@layout/fragment_gallery" >
+        tools:layout="@layout/fragment_character_list">
         <action
             android:id="@+id/action_characters_list_to_details"
             app:destination="@id/characterDetailsFragment" />
