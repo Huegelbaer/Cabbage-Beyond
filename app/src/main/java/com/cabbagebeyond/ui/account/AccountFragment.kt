@@ -6,18 +6,26 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.data.CharacterDataSource
+import com.cabbagebeyond.data.UserDataSource
+import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentAccountBinding
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.ui.CharacterAdapter
 import com.cabbagebeyond.ui.CharacterClickListener
+import org.koin.android.ext.android.inject
 
 class AccountFragment : Fragment() {
 
-    private val viewModel: AccountViewModel by activityViewModels()
+    private val viewModel: AccountViewModel by lazy {
+        val userDataSource: UserDataSource by inject()
+        val characterDataSource: CharacterDataSource by inject()
+        val worldDataSource: WorldDataSource by inject()
+        AccountViewModel(userDataSource, characterDataSource, worldDataSource)
+    }
 
     private lateinit var _binding: FragmentAccountBinding
     private lateinit var _adapter: CharacterAdapter

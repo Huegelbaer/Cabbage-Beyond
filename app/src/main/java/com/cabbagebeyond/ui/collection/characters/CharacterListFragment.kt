@@ -10,10 +10,13 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
+import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.data.Database
 import com.cabbagebeyond.data.repository.CharacterRepository
 import com.cabbagebeyond.databinding.FragmentCharacterListBinding
 import com.cabbagebeyond.model.Character
+import org.koin.android.ext.android.inject
+import org.koin.core.context.GlobalContext.get
 
 /**
  * A fragment representing a list of Items.
@@ -21,8 +24,8 @@ import com.cabbagebeyond.model.Character
 class CharacterListFragment : Fragment() {
 
     private val _viewModel: CharacterListViewModel by lazy {
-        val repository = CharacterRepository(Database.characterDao)
-        CharacterListViewModel(repository)
+        val dataSource: CharacterDataSource by inject()
+        CharacterListViewModel(dataSource)
     }
 
     private lateinit var _binding: FragmentCharacterListBinding
@@ -110,9 +113,6 @@ class CharacterListFragment : Fragment() {
             }
             R.id.app_bar_sort_world -> {
                 _viewModel.onSelectSort(CharacterListViewModel.SortType.WORLD)
-                true
-            }
-            R.id.app_bar_filter_list -> {
                 true
             }
             else -> super.onOptionsItemSelected(item)
