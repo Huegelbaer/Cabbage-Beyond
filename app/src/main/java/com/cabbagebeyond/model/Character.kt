@@ -6,7 +6,7 @@ import android.os.Parcelable
 
 data class Character(
     var name: String,
-    var race: Race,
+    var race: Race?,
     var description: String,
     var charisma: Int,
     var constitution: String,

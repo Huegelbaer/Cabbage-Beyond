@@ -10,7 +10,7 @@ data class CharacterDTO(
     @PropertyName(FIELD_NAME)
     var name: String = "",
     @PropertyName(FIELD_RACE)
-    var race: String = "",
+    var race: String? = null,
     @PropertyName(FIELD_DESCRIPTION)
     var description: String = "",
     @PropertyName(FIELD_CHARISMA)

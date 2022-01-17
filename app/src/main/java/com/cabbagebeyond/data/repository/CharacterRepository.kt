@@ -94,18 +94,18 @@ class CharacterRepository(
 fun List<CharacterDTO>.asDomainModel(allRaces: List<Race>, allAbilities: List<Ability>, allEquipments: List<Equipment>, allForces: List<Force>, allHandicaps: List<Handicap>, allTalents: List<Talent>, allWorlds: List<World>): List<Character> {
     return map { character ->
         character.asDomainModel(
-            allRaces.first { it.id == character.race },
+            allRaces.firstOrNull { it.id == character.race },
             allAbilities.filter { it.id in character.abilities },
             allEquipments.filter { it.id in character.equipments },
             allForces.filter { it.id in character.forces },
             allHandicaps.filter { it.id in character.handicaps },
             allTalents.filter { it.id in character.talents },
-            allWorlds.first { it.id == character.world }
+            allWorlds.firstOrNull { it.id == character.world }
         )
     }
 }
 
-fun CharacterDTO.asDomainModel(_race: Race, _abilities: List<Ability>, _equipments: List<Equipment>, _forces: List<Force>, _handicaps: List<Handicap>, _talents: List<Talent>, _world: World): Character {
+fun CharacterDTO.asDomainModel(_race: Race?, _abilities: List<Ability>, _equipments: List<Equipment>, _forces: List<Force>, _handicaps: List<Handicap>, _talents: List<Talent>, _world: World?): Character {
     return Character(name, _race, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, _abilities, _equipments, _forces, _handicaps, _talents, type, owner, _world, id)
 }
 
@@ -116,5 +116,5 @@ fun List<Character>.asDatabaseModel(): List<CharacterDTO> {
 }
 
 fun Character.asDatabaseModel(): CharacterDTO {
-    return CharacterDTO(name, race.id, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities.map { it.id }, equipments.map { it.id }, forces.map { it.id }, handicaps.map { it.id }, talents.map { it.id }, type, owner, world?.id, id)
+    return CharacterDTO(name, race?.id, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities.map { it.id }, equipments.map { it.id }, forces.map { it.id }, handicaps.map { it.id }, talents.map { it.id }, type, owner, world?.id, id)
 }
