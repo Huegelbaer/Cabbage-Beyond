@@ -2,59 +2,47 @@ package com.cabbagebeyond.ui.collection.worlds
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cabbagebeyond.R
+import com.cabbagebeyond.data.WorldDataSource
+import com.cabbagebeyond.databinding.FragmentWorldsListBinding
 import com.cabbagebeyond.model.World
+import org.koin.android.ext.android.inject
 
-/**
- * A fragment representing a list of Items.
- */
+
 class WorldsFragment : Fragment() {
 
-    private val _viewModel: WorldsViewModel by activityViewModels()
-
-    private var columnCount = 1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        arguments?.let {
-            columnCount = it.getInt(ARG_COLUMN_COUNT)
-        }
+    private val _viewModel: WorldsViewModel by lazy {
+        val dataSource: WorldDataSource by inject()
+        WorldsViewModel(dataSource)
     }
+
+    private lateinit var _binding: FragmentWorldsListBinding
+    private lateinit var _adapter: WorldRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val view = inflater.inflate(R.layout.fragment_worlds_list, container, false)
+    ): View {
+        _binding = FragmentWorldsListBinding.inflate(inflater)
 
         val clickListener = WorldClickListener {
             _viewModel.onSelectWorld(it)
         }
+        _adapter = WorldRecyclerViewAdapter(clickListener)
 
-        val worldsAdapter = WorldRecyclerViewAdapter(clickListener)
-
-        // Set the adapter
-        if (view is RecyclerView) {
-            with(view) {
-                layoutManager = LinearLayoutManager(context)
-                adapter = worldsAdapter
-            }
+        _binding.list.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = _adapter
         }
 
         _viewModel.items.observe(viewLifecycleOwner, Observer { worlds ->
             worlds?.let {
-                worldsAdapter.submitList(it)
+                _adapter.submitList(it)
             }
         })
 
@@ -64,26 +52,11 @@ class WorldsFragment : Fragment() {
             }
         })
 
-        return view
+        return _binding.root
     }
 
     private fun navigateToDetails(world: World) {
         findNavController().navigate(WorldsFragmentDirections.actionHomeToWorldDetails(world))
         _viewModel.onNavigationCompleted()
-    }
-
-    companion object {
-
-        // TODO: Customize parameter argument names
-        const val ARG_COLUMN_COUNT = "column-count"
-
-        // TODO: Customize parameter initialization
-        @JvmStatic
-        fun newInstance(columnCount: Int) =
-            WorldsFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARG_COLUMN_COUNT, columnCount)
-                }
-            }
     }
 }
