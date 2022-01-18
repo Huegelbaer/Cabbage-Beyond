@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/worldDetailsFragment"
-        android:name="com.cabbagebeyond.ui.collection.worlds.WorldDetailsFragment">
+        android:name="com.cabbagebeyond.ui.collection.worlds.details.WorldDetailsFragment">
         <argument
             android:name="world"
             app:argType="com.cabbagebeyond.model.World" />
@@ -51,7 +51,7 @@
     </fragment>
     <fragment
         android:id="@+id/characterDetailsFragment"
-        android:name="com.cabbagebeyond.ui.collection.characters.detail.CharacterDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.characters.details.CharacterDetailsFragment"
         android:label="CharacterDetailsFragment" >
         <argument
             android:name="character"

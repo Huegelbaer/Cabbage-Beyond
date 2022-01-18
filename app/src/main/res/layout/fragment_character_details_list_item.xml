@@ -4,7 +4,7 @@
     <data>
         <variable
             name="item"
-            type="com.cabbagebeyond.ui.collection.characters.detail.CharacterDetailsViewModel.ListItem" />
+            type="com.cabbagebeyond.ui.collection.characters.details.CharacterDetailsViewModel.ListItem" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

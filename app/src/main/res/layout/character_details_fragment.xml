@@ -14,7 +14,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.collection.characters.detail.CharacterDetailsFragment">
+        tools:context=".ui.collection.characters.details.CharacterDetailsFragment">
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="@dimen/default_margin"
-                tools:context=".ui.collection.characters.detail.CharacterDetailsFragment">
+                tools:context=".ui.collection.characters.details.CharacterDetailsFragment">
 
                 <TextView
                     android:id="@+id/name_value"

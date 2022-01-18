@@ -11,16 +11,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
-import com.cabbagebeyond.data.Database
-import com.cabbagebeyond.data.repository.CharacterRepository
 import com.cabbagebeyond.databinding.FragmentCharacterListBinding
 import com.cabbagebeyond.model.Character
 import org.koin.android.ext.android.inject
-import org.koin.core.context.GlobalContext.get
 
-/**
- * A fragment representing a list of Items.
- */
 class CharacterListFragment : Fragment() {
 
     private val _viewModel: CharacterListViewModel by lazy {

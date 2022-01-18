@@ -1,4 +1,4 @@
-package com.cabbagebeyond.ui.collection.worlds
+package com.cabbagebeyond.ui.collection.worlds.details
 
 import android.os.Bundle
 import android.view.LayoutInflater
