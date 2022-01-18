@@ -67,4 +67,9 @@
         android:name="com.cabbagebeyond.ui.collection.talents.TalentsListFragment"
         android:label="@string/menu_talents"
         tools:layout="@layout/fragment_talents_list" />
+    <fragment
+        android:id="@+id/nav_handicaps"
+        android:name="com.cabbagebeyond.ui.collection.handicaps.HandicapsFragment"
+        android:label="@string/menu_handicaps"
+        tools:layout="@layout/fragment_handicaps_list" />
 </navigation>
