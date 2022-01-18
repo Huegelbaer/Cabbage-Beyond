@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.cabbagebeyond.databinding.FragmentWorldsListItemBinding
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.CollectionDiffCallback
+import com.cabbagebeyond.ui.CollectionItemClickListener
 
 
 class WorldRecyclerViewAdapter(private val clickListener: WorldClickListener) :
@@ -39,17 +41,7 @@ class WorldRecyclerViewAdapter(private val clickListener: WorldClickListener) :
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<World>() {
-        override fun areItemsTheSame(oldItem: World, newItem: World): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: World, newItem: World): Boolean {
-            return oldItem.id == newItem.id
-        }
-    }
+    companion object DiffCallback: CollectionDiffCallback<World>()
 }
 
-class WorldClickListener(val clickListener: (world: World) -> Unit) {
-    fun onClick(world: World) = clickListener(world)
-}
+class WorldClickListener(clickListener: (item: World) -> Unit): CollectionItemClickListener<World>(clickListener)
