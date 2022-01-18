@@ -8,7 +8,6 @@ import com.cabbagebeyond.databinding.FragmentAbilitiesListItemBinding
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.ui.CollectionDiffCallback
 import com.cabbagebeyond.ui.CollectionItemClickListener
-import com.cabbagebeyond.ui.collection.abilities.placeholder.PlaceholderContent.PlaceholderItem
 
 class AbilitiesRecyclerViewAdapter(private val clickListener: AbilityClickListener) :
     ListAdapter<Ability, AbilitiesRecyclerViewAdapter.ViewHolder>(DiffCallback) {
