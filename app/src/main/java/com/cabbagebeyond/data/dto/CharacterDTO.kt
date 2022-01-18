@@ -9,6 +9,8 @@ import kotlin.collections.HashMap
 data class CharacterDTO(
     @PropertyName(FIELD_NAME)
     var name: String = "",
+    @PropertyName(FIELD_RACE)
+    var race: String? = null,
     @PropertyName(FIELD_DESCRIPTION)
     var description: String = "",
     @PropertyName(FIELD_CHARISMA)
@@ -52,7 +54,7 @@ data class CharacterDTO(
     @PropertyName(FIELD_OWNER)
     var owner : String = "",
     @PropertyName(FIELD_WORLD)
-    var world: String = "",
+    var world: String? = null,
     @DocumentId
     val id: String = UUID.randomUUID().toString()
 ) {
@@ -60,6 +62,7 @@ data class CharacterDTO(
     companion object {
         const val COLLECTION_TITLE = "sw_characters"
         const val FIELD_NAME = "name"
+        const val FIELD_RACE = "race_id"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_CHARISMA = "charisma"
         const val FIELD_CONSTITUTION = "constitution"
@@ -84,7 +87,7 @@ data class CharacterDTO(
         const val FIELD_WORLD = "world_id"
     }
 
-    fun toHashMap(): HashMap<String, Any> {
+    fun toHashMap(): HashMap<String, Any?> {
         return hashMapOf(
             FIELD_NAME to name,
             FIELD_DESCRIPTION to description,
@@ -111,24 +114,4 @@ data class CharacterDTO(
             FIELD_WORLD to world
         )
     }
-}
-
-fun List<CharacterDTO>.asDomainModel(): List<Character> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun CharacterDTO.asDomainModel(): Character {
-    return Character(name, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities, equipments, forces, handicaps, talents, type, owner, world, id)
-}
-
-fun List<Character>.asDatabaseModel(): List<CharacterDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Character.asDatabaseModel(): CharacterDTO {
-    return CharacterDTO(name, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities, equipments, forces, handicaps, talents, type, owner, world, id)
 }

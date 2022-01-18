@@ -7,9 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.data.Database
 import com.cabbagebeyond.data.repository.*
 import com.cabbagebeyond.databinding.CharacterDetailsFragmentBinding
+import org.koin.android.ext.android.inject
 
 class CharacterDetailsFragment : Fragment() {
 
@@ -43,14 +45,7 @@ class CharacterDetailsFragment : Fragment() {
             adapter = _adapter
         }
 
-        viewModel = CharacterDetailsViewModel(
-            character,
-            CharacterRepository(Database.characterDao),
-            TalentRepository(Database.talentDao),
-            HandicapRepository(Database.handicapDao),
-            ForceRepository(Database.forceDao),
-            EquipmentRepository(Database.equipmentDao)
-        )
+        viewModel = CharacterDetailsViewModel(character)
 
         viewModel.items.observe(viewLifecycleOwner, Observer {
             it?.let {

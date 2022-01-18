@@ -4,18 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cabbagebeyond.data.dao.CharacterDao
-import com.cabbagebeyond.data.dao.UserDao
-import com.cabbagebeyond.data.dao.WorldDao
-import com.cabbagebeyond.data.repository.CharacterRepository
-import com.cabbagebeyond.data.repository.UserRepository
-import com.cabbagebeyond.data.repository.WorldRepository
+import com.cabbagebeyond.data.CharacterDataSource
+import com.cabbagebeyond.data.UserDataSource
+import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.util.FirebaseUtil
 import kotlinx.coroutines.launch
 
-class AccountViewModel : ViewModel() {
+class AccountViewModel(
+    private val userDataSource: UserDataSource,
+    private val characterDataSource: CharacterDataSource,
+    private val worldDataSource: WorldDataSource
+) : ViewModel() {
 
     data class Account(
         var name: String,
@@ -32,20 +33,13 @@ class AccountViewModel : ViewModel() {
     val worlds: LiveData<List<World>>
         get() = _worlds
 
-    private lateinit var userRepository: UserRepository
-    private lateinit var characterRepository: CharacterRepository
-    private lateinit var worldRepository: WorldRepository
-
     init {
         val email = FirebaseUtil.auth.currentUser?.email ?: ""
-        userRepository = UserRepository(UserDao())
-        characterRepository = CharacterRepository(CharacterDao())
-        worldRepository = WorldRepository(WorldDao())
 
         viewModelScope.launch {
-            val user = userRepository.getUserByEmail(email).getOrNull()
-            val characters = characterRepository.getCharactersOfUser(user?.id ?: "").getOrDefault(listOf())
-            _worlds.value = worldRepository.getWorlds().getOrDefault(listOf())
+            val user = userDataSource.getUserByEmail(email).getOrNull()
+            val characters = characterDataSource.getCharactersOfUser(user?.id ?: "").getOrDefault(listOf())
+            _worlds.value = worldDataSource.getWorlds().getOrDefault(listOf())
 
             _account.value = Account(user?.name ?: "", email, "", characters)
         }

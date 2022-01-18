@@ -6,6 +6,7 @@ import android.os.Parcelable
 
 data class Character(
     var name: String,
+    var race: Race?,
     var description: String,
     var charisma: Int,
     var constitution: String,
@@ -20,18 +21,20 @@ data class Character(
     var movement: Int,
     var parry: Int,
     var toughness: String,
-    var abilities: List<String>,
-    var equipments: List<String>,
-    var forces: List<String>,
-    var handicaps: List<String>,
-    var talents: List<String>,
+    var abilities: List<Ability>,
+    var equipments: List<Equipment>,
+    var forces: List<Force>,
+    var handicaps: List<Handicap>,
+    var talents: List<Talent>,
     var type: String,
     var owner: String,
-    var world: String,
+    var world: World?,
     val id: String
 ): Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
+        parcel.readParcelable(Race::class.java.classLoader)!!,
         parcel.readString()!!,
         parcel.readInt(),
         parcel.readString()!!,
@@ -46,20 +49,27 @@ data class Character(
         parcel.readInt(),
         parcel.readInt(),
         parcel.readString()!!,
-        parcel.createStringArrayList()!!,
-        parcel.createStringArrayList()!!,
-        parcel.createStringArrayList()!!,
-        parcel.createStringArrayList()!!,
-        parcel.createStringArrayList()!!,
+        listOf(),
+        listOf(),
+        listOf(),
+        listOf(),
+        listOf(),
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(World::class.java.classLoader),
         parcel.readString()!!
     ) {
+        parcel.readTypedList(abilities, Ability.CREATOR)
+        parcel.readTypedList(equipments, Equipment.CREATOR)
+        parcel.readTypedList(forces, Force.CREATOR)
+        parcel.readTypedList(handicaps, Handicap.CREATOR)
+        parcel.readTypedList(talents, Talent.CREATOR)
+
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
+        parcel.writeParcelable(race, flags)
         parcel.writeString(description)
         parcel.writeInt(charisma)
         parcel.writeString(constitution)
@@ -74,14 +84,14 @@ data class Character(
         parcel.writeInt(movement)
         parcel.writeInt(parry)
         parcel.writeString(toughness)
-        parcel.writeStringList(abilities)
-        parcel.writeStringList(equipments)
-        parcel.writeStringList(forces)
-        parcel.writeStringList(handicaps)
-        parcel.writeStringList(talents)
+        parcel.writeTypedArray(abilities.toTypedArray(), flags)
+        parcel.writeTypedArray(equipments.toTypedArray(), flags)
+        parcel.writeTypedArray(forces.toTypedArray(), flags)
+        parcel.writeTypedArray(handicaps.toTypedArray(), flags)
+        parcel.writeTypedArray(talents.toTypedArray(), flags)
         parcel.writeString(type)
         parcel.writeString(owner)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 
