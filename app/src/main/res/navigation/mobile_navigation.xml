@@ -77,4 +77,9 @@
         android:name="com.cabbagebeyond.ui.collection.forces.ForcesFragment"
         android:label="@string/menu_forces"
         tools:layout="@layout/fragment_forces_list" />
+    <fragment
+        android:id="@+id/nav_equipments"
+        android:name="com.cabbagebeyond.ui.collection.equipments.EquipmentsFragment"
+        android:label="@string/menu_equipments"
+        tools:layout="@layout/fragment_equipments_list" />
 </navigation>
