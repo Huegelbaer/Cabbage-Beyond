@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="talent"
+            type="com.cabbagebeyond.model.Talent" />
+
+        <variable
+            name="clickListener"
+            type="com.cabbagebeyond.ui.collection.talents.TalentClickListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="@{() -> clickListener.onClick(talent)}"
+        app:cardElevation="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_margin">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{talent.name}"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Nobles" />
+
+            <TextView
+                android:id="@+id/type_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/character_type"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toStartOf="@+id/rang_requirement_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <TextView
+                android:id="@+id/type_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{talent.type}"
+                app:layout_constraintEnd_toEndOf="@id/type_title"
+                app:layout_constraintStart_toStartOf="@id/type_title"
+                app:layout_constraintTop_toBottomOf="@id/type_title"
+                tools:text="Background talent" />
+
+            <TextView
+                android:id="@+id/rang_requirement_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/talent_rang_requirement"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toStartOf="@id/world_title"
+                app:layout_constraintStart_toEndOf="@id/type_title"
+                app:layout_constraintTop_toBottomOf="@id/name" />
+
+            <TextView
+                android:id="@+id/rang_requirement_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{talent.rangRequirement}"
+                app:layout_constraintEnd_toEndOf="@id/rang_requirement_title"
+                app:layout_constraintStart_toStartOf="@id/rang_requirement_title"
+                app:layout_constraintTop_toBottomOf="@id/rang_requirement_title"
+                tools:text="Beginner" />
+
+            <TextView
+                android:id="@+id/world_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/character_world"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rang_requirement_title"
+                app:layout_constraintTop_toTopOf="@id/rang_requirement_title" />
+
+            <TextView
+                android:id="@+id/world_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{talent.world}"
+                app:layout_constraintEnd_toEndOf="@id/world_title"
+                app:layout_constraintStart_toStartOf="@id/world_title"
+                app:layout_constraintTop_toBottomOf="@id/world_title"
+                tools:text="Sundered Skies" />
+
+            <TextView
+                android:id="@+id/description_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/character_description"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/type_value" />
+
+            <TextView
+                android:id="@+id/description_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@{talent.description}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description_title"
+                tools:text="Blue blood may bring many benefits, but it usually draws just as much responsibility.
+They receive a +2 bonus to their Charisma and the talent Realm."/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
