@@ -12,6 +12,7 @@
 
         <TextView
             android:id="@+id/role_name"
+            style="@style/TextAppearance.Property.Title"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"
@@ -23,6 +24,7 @@
 
         <EditText
             android:id="@+id/edit_role_name"
+            style="@style/TextAppearance.Body"
             android:layout_width="0dp"
             android:layout_height="@dimen/image_button_size"
             android:layout_marginStart="8dp"
@@ -45,8 +47,7 @@
 
         <ImageButton
             android:id="@+id/add_feature_button"
-            android:layout_width="@dimen/image_button_size"
-            android:layout_height="@dimen/image_button_size"
+            style="@style/IconButton"
             android:layout_marginTop="16dp"
             android:src="@android:drawable/ic_menu_add"
             app:layout_constraintEnd_toEndOf="parent"

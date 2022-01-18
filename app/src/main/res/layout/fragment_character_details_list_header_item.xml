@@ -23,10 +23,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@{item.icon}"
-            tools:srcCompat="@drawable/ic_menu_person" />
+            tools:srcCompat="@drawable/ic_menu_person"
+            app:tint="@color/primaryDarkColor" />
 
         <TextView
             android:id="@+id/title"
+            style="@style/ListAppearance.Header.Text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/small_margin"
@@ -43,6 +45,7 @@
             android:layout_width="@dimen/image_button_size"
             android:layout_height="@dimen/image_button_size"
             android:background="@drawable/selector_expand"
+            android:backgroundTint="@color/secondaryColor"
             android:textOff=""
             android:textOn=""
             app:layout_constraintBottom_toBottomOf="parent"

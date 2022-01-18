@@ -30,6 +30,7 @@
 
             <TextView
                 android:id="@+id/name"
+                style="@style/ListAppearance.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{equipment.name}"
@@ -41,17 +42,20 @@
 
             <TextView
                 android:id="@+id/cost"
+                style="@style/ListAppearance.Body"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{equipment.cost}"
+                android:textAlignment="viewEnd"
                 android:textAppearance="?attr/textAppearanceListItem"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/name"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:text="Bow" />
+                tools:text="Price" />
 
             <TextView
                 android:id="@+id/requirement_title"
+                style="@style/ListAppearance.Property.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
@@ -63,6 +67,7 @@
 
             <TextView
                 android:id="@+id/requirement_value"
+                style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{equipment.requirements.toString()}"
@@ -73,6 +78,7 @@
 
             <TextView
                 android:id="@+id/world_title"
+                style="@style/ListAppearance.Property.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/character_world"
@@ -83,6 +89,7 @@
 
             <TextView
                 android:id="@+id/world_name"
+                style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{equipment.world}"
@@ -93,6 +100,7 @@
 
             <TextView
                 android:id="@+id/description_title"
+                style="@style/ListAppearance.Property.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
@@ -104,6 +112,7 @@
 
             <TextView
                 android:id="@+id/description_value"
+                style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="2"

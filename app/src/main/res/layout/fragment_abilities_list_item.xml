@@ -29,6 +29,7 @@
 
             <TextView
                 android:id="@+id/name"
+                style="@style/ListAppearance.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{ability.name}"
@@ -40,6 +41,7 @@
 
             <TextView
                 android:id="@+id/attribute_title"
+                style="@style/ListAppearance.Property.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
@@ -51,6 +53,7 @@
 
             <TextView
                 android:id="@+id/attribute_value"
+                style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{ability.attribute}"
@@ -61,6 +64,7 @@
 
             <TextView
                 android:id="@+id/world_title"
+                style="@style/ListAppearance.Property.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/character_world"
@@ -71,6 +75,7 @@
 
             <TextView
                 android:id="@+id/world_name"
+                style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@{ability.world}"
@@ -81,6 +86,7 @@
 
             <TextView
                 android:id="@+id/description_title"
+                style="@style/ListAppearance.Property.Title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/small_margin"
@@ -92,6 +98,7 @@
 
             <TextView
                 android:id="@+id/description_value"
+                style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:maxLines="2"

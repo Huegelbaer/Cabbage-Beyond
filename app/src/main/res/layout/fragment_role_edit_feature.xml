@@ -19,6 +19,7 @@
 
         <TextView
             android:id="@+id/title"
+            style="@style/ListAppearance.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
@@ -31,8 +32,7 @@
 
         <ImageButton
             android:id="@+id/delete_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/IconButton"
             android:minHeight="@dimen/image_button_size"
             android:onClick="@{() -> clickListener.onClick(feature)}"
             app:layout_constraintBottom_toBottomOf="parent"
