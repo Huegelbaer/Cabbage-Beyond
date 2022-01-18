@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="force"
+            type="com.cabbagebeyond.model.Force" />
+
+        <variable
+            name="clickListener"
+            type="com.cabbagebeyond.ui.collection.forces.ForceClickListener" />
+    </data>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:onClick="@{() -> clickListener.onClick(force)}"
+        app:cardElevation="2dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/default_margin">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{force.name}"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Fear" />
+
+            <TextView
+                android:id="@+id/rang_requirement_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/character_race"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toStartOf="@+id/world_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
+
+            <TextView
+                android:id="@+id/rang_requirement_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{force.rangRequirement}"
+                app:layout_constraintEnd_toEndOf="@id/rang_requirement_title"
+                app:layout_constraintStart_toStartOf="@id/rang_requirement_title"
+                app:layout_constraintTop_toBottomOf="@id/rang_requirement_title"
+                tools:text="Severe" />
+
+            <TextView
+                android:id="@+id/world_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/character_world"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/rang_requirement_title"
+                app:layout_constraintTop_toTopOf="@id/rang_requirement_title" />
+
+            <TextView
+                android:id="@+id/world_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{force.world}"
+                app:layout_constraintEnd_toEndOf="@id/world_title"
+                app:layout_constraintStart_toStartOf="@id/world_title"
+                app:layout_constraintTop_toBottomOf="@id/world_title"
+                tools:text="Sundered Skies" />
+
+            <TextView
+                android:id="@+id/description_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/small_margin"
+                android:text="@string/character_description"
+                android:textAppearance="?attr/textAppearanceListItem"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rang_requirement_value" />
+
+            <TextView
+                android:id="@+id/description_value"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                android:text="@{force.description}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/description_title"
+                tools:text="This power fills the target with overwhelming fear." />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.google.android.material.card.MaterialCardView>
+</layout>
