@@ -82,4 +82,9 @@
         android:name="com.cabbagebeyond.ui.collection.equipments.EquipmentsFragment"
         android:label="@string/menu_equipments"
         tools:layout="@layout/fragment_equipments_list" />
+    <fragment
+        android:id="@+id/nav_races"
+        android:name="com.cabbagebeyond.ui.collection.races.RacesFragment"
+        android:label="@string/menu_races"
+        tools:layout="@layout/fragment_races_list" />
 </navigation>
