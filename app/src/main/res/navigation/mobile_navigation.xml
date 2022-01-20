@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/worldDetailsFragment"
-        android:name="com.cabbagebeyond.ui.collection.worlds.WorldDetailsFragment">
+        android:name="com.cabbagebeyond.ui.collection.worlds.details.WorldDetailsFragment">
         <argument
             android:name="world"
             app:argType="com.cabbagebeyond.model.World" />
@@ -51,10 +51,40 @@
     </fragment>
     <fragment
         android:id="@+id/characterDetailsFragment"
-        android:name="com.cabbagebeyond.ui.collection.characters.detail.CharacterDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.characters.details.CharacterDetailsFragment"
         android:label="CharacterDetailsFragment" >
         <argument
             android:name="character"
             app:argType="com.cabbagebeyond.model.Character" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_abilities"
+        android:name="com.cabbagebeyond.ui.collection.abilities.AbilitiesListFragment"
+        android:label="@string/menu_abilities"
+        tools:layout="@layout/fragment_abilities_list" />
+    <fragment
+        android:id="@+id/nav_talents"
+        android:name="com.cabbagebeyond.ui.collection.talents.TalentsListFragment"
+        android:label="@string/menu_talents"
+        tools:layout="@layout/fragment_talents_list" />
+    <fragment
+        android:id="@+id/nav_handicaps"
+        android:name="com.cabbagebeyond.ui.collection.handicaps.HandicapsFragment"
+        android:label="@string/menu_handicaps"
+        tools:layout="@layout/fragment_handicaps_list" />
+    <fragment
+        android:id="@+id/nav_forces"
+        android:name="com.cabbagebeyond.ui.collection.forces.ForcesFragment"
+        android:label="@string/menu_forces"
+        tools:layout="@layout/fragment_forces_list" />
+    <fragment
+        android:id="@+id/nav_equipments"
+        android:name="com.cabbagebeyond.ui.collection.equipments.EquipmentsFragment"
+        android:label="@string/menu_equipments"
+        tools:layout="@layout/fragment_equipments_list" />
+    <fragment
+        android:id="@+id/nav_races"
+        android:name="com.cabbagebeyond.ui.collection.races.RacesFragment"
+        android:label="@string/menu_races"
+        tools:layout="@layout/fragment_races_list" />
 </navigation>

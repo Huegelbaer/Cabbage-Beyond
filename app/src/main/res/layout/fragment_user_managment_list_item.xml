@@ -22,6 +22,7 @@
 
         <TextView
             android:id="@+id/user_name"
+            style="@style/ListAppearance.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
@@ -32,6 +33,7 @@
 
         <TextView
             android:id="@+id/roles"
+            style="@style/ListAppearance.Body"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
@@ -42,13 +44,11 @@
 
         <ImageButton
             android:id="@+id/user_edit_button"
-            android:layout_width="@dimen/image_button_size"
-            android:layout_height="@dimen/image_button_size"
-            android:layout_weight="1"
             android:onClick="@{() -> clickListener.onClick(data)}"
             app:descriptionContent="@{@string/edit_description}"
             app:descriptionParameter="@{data.user.name}"
-            app:srcCompat="@drawable/ic_edit" />
+            app:srcCompat="@drawable/ic_edit"
+            style="@style/IconButton" />
 
     </LinearLayout>
 </layout>

@@ -4,12 +4,11 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.cabbagebeyond.data.dao.WorldDao
-import com.cabbagebeyond.data.repository.WorldRepository
+import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.launch
 
-class WorldsViewModel: ViewModel() {
+class WorldsViewModel(private val dataSource: WorldDataSource) : ViewModel() {
 
     private val _items = MutableLiveData<List<World>>()
     val items: LiveData<List<World>>
@@ -23,13 +22,9 @@ class WorldsViewModel: ViewModel() {
     lateinit var world: World
         private set
 
-    private lateinit var repository: WorldRepository
-
     init {
-        repository = WorldRepository(WorldDao())
-
         viewModelScope.launch {
-            val result = repository.getWorlds()
+            val result = dataSource.getWorlds()
             _items.value = result.getOrNull() ?: listOf()
         }
     }

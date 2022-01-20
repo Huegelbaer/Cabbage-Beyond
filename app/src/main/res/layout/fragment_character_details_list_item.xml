@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
         <variable
             name="item"
-            type="com.cabbagebeyond.ui.collection.characters.detail.CharacterDetailsViewModel.ListItem" />
+            type="com.cabbagebeyond.ui.collection.characters.details.CharacterDetailsViewModel.ListItem" />
     </data>
 
-    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout
+        style="@style/ListAppearance.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">

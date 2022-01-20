@@ -17,6 +17,7 @@
 
         <TextView
             android:id="@+id/nickname_title"
+            style="@style/TextAppearance.Property.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/nickname_title"
@@ -26,19 +27,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/edit_nickname" />
 
-        <EditText
-            android:id="@+id/edit_nickname"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="@{account.name}"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <TextView
             android:id="@+id/email_title"
+            style="@style/TextAppearance.Property.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/email_title"
@@ -50,16 +41,44 @@
 
         <TextView
             android:id="@+id/email_value"
+            style="@style/TextAppearance.Property.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="12dp"
             android:text="@{account.email}"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="@+id/guideline"
             app:layout_constraintTop_toBottomOf="@+id/edit_nickname" />
 
+        <Spinner
+            android:id="@+id/spinner_world"
+            style="@style/TextAppearance.Property.Value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toBottomOf="@+id/email_value" />
+
+        <EditText
+            android:id="@+id/edit_nickname"
+            style="@style/TextAppearance.Body"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:ems="10"
+            android:inputType="textPersonName"
+            android:text="@{account.name}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/guideline"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/active_world_title"
+            style="@style/TextAppearance.Property.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/account_active_world_title"
@@ -69,17 +88,9 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/spinner_world" />
 
-        <Spinner
-            android:id="@+id/spinner_world"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_margin"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/guideline"
-            app:layout_constraintTop_toBottomOf="@+id/email_value" />
-
         <TextView
             android:id="@+id/own_characters_title"
+            style="@style/TextAppearance.Property.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/large_margin"

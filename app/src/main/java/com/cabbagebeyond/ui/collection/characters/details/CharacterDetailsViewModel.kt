@@ -1,4 +1,4 @@
-package com.cabbagebeyond.ui.collection.characters.detail
+package com.cabbagebeyond.ui.collection.characters.details
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.cabbagebeyond.databinding.FragmentCharacterListItemBinding
 import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.ui.CollectionDiffCallback
+import com.cabbagebeyond.ui.CollectionItemClickListener
 
 class CharacterListAdapter(private val clickListener: CharacterClickListener) :
     ListAdapter<Character, CharacterListAdapter.ViewHolder>(DiffCallback) {
@@ -38,17 +40,7 @@ class CharacterListAdapter(private val clickListener: CharacterClickListener) :
         }
     }
 
-    companion object DiffCallback : DiffUtil.ItemCallback<Character>() {
-        override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
-            return oldItem === newItem
-        }
-
-        override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
-            return oldItem.toString() == newItem.toString()
-        }
-    }
+    companion object DiffCallback : CollectionDiffCallback<Character>()
 }
 
-class CharacterClickListener(val clickListener: (item: Character) -> Unit) {
-    fun onClick(item: Character) = clickListener(item)
-}
+class CharacterClickListener(clickListener: (item: Character) -> Unit): CollectionItemClickListener<Character>(clickListener)
