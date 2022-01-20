@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="ability"
+            type="com.cabbagebeyond.model.Ability" />
+
+        <variable
+            name="viewModel"
+            type="com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin"
+        tools:context=".ui.collection.abilities.details.AbilityDetailsFragment">
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/property_name"
+            app:layout_constraintBottom_toBottomOf="@id/edit_name"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/attribute_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/attribute"
+            app:layout_constraintBottom_toBottomOf="@id/attribute_spinner"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/attribute_spinner" />
+
+        <TextView
+            android:id="@+id/world_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/character_world"
+            app:layout_constraintBottom_toBottomOf="@id/world_spinner"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/world_spinner" />
+
+        <TextView
+            android:id="@+id/description_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:text="@string/character_description"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/world_spinner" />
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="@string/enter_name"
+            android:importantForAutofill="no"
+            android:minHeight="@dimen/image_button_size"
+            android:text="@{ability.name}"
+            android:textColorHint="@color/secondaryTextColor"
+            android:inputType="text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/name"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <Spinner
+            android:id="@+id/attribute_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:contentDescription="@string/select_attribute"
+            android:minHeight="@dimen/image_button_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/edit_name" />
+
+        <Spinner
+            android:id="@+id/world_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:contentDescription="@string/select_world"
+            android:minHeight="@dimen/image_button_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/attribute_spinner" />
+
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/enter_description"
+            android:importantForAutofill="no"
+            android:minHeight="@dimen/image_button_size"
+            android:text="@{ability.description}"
+            android:inputType="textMultiLine"
+            android:textColorHint="@color/secondaryTextColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_title"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/fab_margin"
+            android:layout_marginBottom="@dimen/fab_margin"
+            android:clickable="true"
+            android:onClick="@{() -> viewModel.onClickFab()}"
+            app:srcCompat="@drawable/ic_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:visibility="@{viewModel.userCanEdit}"
+            android:focusable="true" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

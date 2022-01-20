@@ -4,7 +4,7 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.cabbagebeyond.model.Role
-import android.graphics.drawable.Drawable
+import android.view.View
 import android.widget.ImageView
 
 
@@ -26,4 +26,13 @@ fun bindContentDescription(button: ImageButton, content: String, parameter: Stri
 @BindingAdapter("srcCompat")
 fun bindSrcCompat(imageView: ImageView, resource: Int) {
     imageView.setImageResource(resource)
+}
+
+@BindingAdapter("visibility")
+fun bindVisibility(view: View, isVisible: Boolean?) {
+    view.visibility = when (isVisible) {
+        true -> View.VISIBLE
+        false -> View.INVISIBLE
+        null -> View.GONE
+    }
 }

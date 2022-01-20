@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.databinding.FragmentAbilitiesListBinding
+import com.cabbagebeyond.model.Ability
 import org.koin.android.ext.android.inject
 
 class AbilitiesListFragment : Fragment() {
@@ -43,6 +45,17 @@ class AbilitiesListFragment : Fragment() {
             }
         })
 
+        _viewModel.selectedAbility.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showDetails(it)
+            }
+        })
+
         return _binding.root
+    }
+
+    private fun showDetails(ability: Ability) {
+        findNavController().navigate(AbilitiesListFragmentDirections.actionAbilitiesToDetails(ability))
+        _viewModel.onNavigationCompleted()
     }
 }
