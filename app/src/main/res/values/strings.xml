@@ -51,6 +51,14 @@
     <string name="select_attribute">Select an attribute</string>
     <string name="select_world">Select a world</string>
 
+    <string-array name="attributes">
+        <item>Strength</item>
+        <item>Verstand</item>
+        <item>Constitution</item>
+        <item>Dexterity</item>
+        <item>Willpower</item>
+    </string-array>
+
     <!-- -->
     <string name="property_name">Name</string>
     <string name="talent_rang_requirement">Rank requirement</string>
