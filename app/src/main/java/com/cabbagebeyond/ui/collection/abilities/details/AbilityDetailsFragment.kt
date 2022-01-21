@@ -15,6 +15,7 @@ import com.cabbagebeyond.databinding.AbilityDetailsFragmentBinding
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.util.Feature
+import com.google.android.material.snackbar.Snackbar
 import org.koin.android.ext.android.inject
 
 class AbilityDetailsFragment : Fragment() {
@@ -43,6 +44,12 @@ class AbilityDetailsFragment : Fragment() {
         _binding.viewModel = _viewModel
         _binding.ability = _viewModel.ability.value
 
+        _viewModel.ability.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                _binding.ability = it
+            }
+        })
+
         _viewModel.fabImage.observe(viewLifecycleOwner, Observer {
             it?.let {
                 _binding.floatingActionButton.setImageResource(it)
@@ -69,6 +76,12 @@ class AbilityDetailsFragment : Fragment() {
         _viewModel.worlds.observe(viewLifecycleOwner, Observer {
             val list = it ?: listOf()
             setupWorldSpinner(ability.world, list)
+        })
+
+        _viewModel.message.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showSnackbar(resources.getString(it))
+            }
         })
 
         return _binding.root
@@ -127,5 +140,11 @@ class AbilityDetailsFragment : Fragment() {
         spinner.setSelection(position)
 
         spinner.onItemSelectedListener = listener
+    }
+
+    private fun showSnackbar(message: String) {
+        Snackbar
+            .make(requireView(), message, Snackbar.LENGTH_LONG)
+            .show()
     }
 }

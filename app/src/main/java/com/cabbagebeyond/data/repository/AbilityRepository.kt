@@ -31,11 +31,11 @@ class AbilityRepository(
         return@withContext map(result)
     }
 
-    override suspend fun saveAbility(ability: Ability) = withContext(ioDispatcher) {
+    override suspend fun saveAbility(ability: Ability): Result<Boolean> = withContext(ioDispatcher) {
         abilityDao.saveAbility(ability.asDatabaseModel())
     }
 
-    override suspend fun deleteAbility(id: String) = withContext(ioDispatcher) {
+    override suspend fun deleteAbility(id: String): Result<Boolean> = withContext(ioDispatcher) {
         abilityDao.deleteAbility(id)
     }
 

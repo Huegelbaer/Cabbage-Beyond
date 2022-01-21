@@ -42,6 +42,10 @@ class AbilityDetailsViewModel(
     val attributes: LiveData<List<String>>
         get() = _attributes
 
+    private var _message = MutableLiveData<Int?>()
+    val message: LiveData<Int?>
+        get() = _message
+
     init {
         // for MVP the attributes are stored in resources.
         val stringArray = context.resources.getStringArray(R.array.attributes)
@@ -90,7 +94,12 @@ class AbilityDetailsViewModel(
 
     private fun save(ability: Ability) {
         viewModelScope.launch {
-            _abilityDataSource.saveAbility(ability)
+            val result = _abilityDataSource.saveAbility(ability)
+            _message.value = if (result.isSuccess) {
+                R.string.save_completed
+            } else {
+                R.string.save_failed
+            }
         }
     }
 

@@ -71,21 +71,42 @@ class AbilityDao {
         return result
     }
 
-    suspend fun saveAbility(ability: AbilityDTO) {
+    suspend fun saveAbility(ability: AbilityDTO): Result<Boolean> {
+        var result: Result<Boolean> = Result.failure(Throwable())
         val entity = ability.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(ability.id)
             .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+                result = Result.success(true)
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error writing document", error)
+                result = Result.failure(error)
+            }
+            .await()
+
+        return result
     }
 
-    suspend fun deleteAbility(id: String) {
+    suspend fun deleteAbility(id: String): Result<Boolean> {
+        var result: Result<Boolean> = Result.failure(Throwable())
+
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                result = Result.success(true)
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error deleting document", error)
+                result = Result.failure(error)
+            }
+            .await()
+
+        return result
     }
 }

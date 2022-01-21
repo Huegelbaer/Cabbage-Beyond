@@ -70,4 +70,7 @@
     <string name="character_name">Name</string>
     <string name="attribute">Attribute</string>
 
+    <string name="save_completed">Save completed!</string>
+    <string name="save_failed">Save failed!</string>
+
 </resources>
