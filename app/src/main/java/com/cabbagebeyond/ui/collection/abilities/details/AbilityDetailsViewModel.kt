@@ -34,8 +34,8 @@ class AbilityDetailsViewModel(
     val fabImage: LiveData<Int>
         get() = _fabImage
 
-    private var _worlds = MutableLiveData<List<World>>()
-    val worlds: LiveData<List<World>>
+    private var _worlds = MutableLiveData<List<World?>>()
+    val worlds: LiveData<List<World?>>
         get() = _worlds
 
     private var _attributes = MutableLiveData<List<String>>()
@@ -71,7 +71,9 @@ class AbilityDetailsViewModel(
 
     private fun loadWorlds() {
         viewModelScope.launch {
-            _worlds.value = _worldDataSource.getWorlds().getOrDefault(listOf())
+            val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
+            worlds.add(0, null)
+            _worlds.value = worlds
         }
     }
 
@@ -100,7 +102,7 @@ class AbilityDetailsViewModel(
 
     fun onWorldSelected(world: World?) {
         val givenAbility = ability.value
-        givenAbility?.world = world?.name ?: ""
+        givenAbility?.world = world
         ability.value = givenAbility
     }
 }

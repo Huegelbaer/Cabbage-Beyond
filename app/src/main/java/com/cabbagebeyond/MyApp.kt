@@ -16,7 +16,7 @@ class MyApp: Application() {
          * use Koin Library as a service locator
          */
         val myModule = module {
-            single { AbilityRepository(Database.abilityDao) as AbilityDataSource }
+            single { AbilityRepository(Database.abilityDao, get()) as AbilityDataSource }
             single { CharacterRepository(Database.characterDao, get(), get(), get(), get(), get(), get(), get()) as CharacterDataSource }
             single { EquipmentRepository(Database.equipmentDao) as EquipmentDataSource }
             single { ForceRepository(Database.forceDao) as ForceDataSource }

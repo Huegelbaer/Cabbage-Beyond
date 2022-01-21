@@ -93,8 +93,10 @@ class AbilityDetailsFragment : Fragment() {
         })
     }
 
-    private fun setupWorldSpinner(world: String?, worlds: List<World>) {
-        setupSpinner(world, worlds, _binding.worldSpinner, object :
+    private fun setupWorldSpinner(world: World?, worlds: List<World?>) {
+        val titles = worlds.map { it?.name ?: "" }
+
+        setupSpinner(world?.name, titles, _binding.worldSpinner, object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,

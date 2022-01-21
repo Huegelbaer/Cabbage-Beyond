@@ -142,7 +142,7 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:gravity="center_vertical"
-            android:text="@{ability.world}"
+            android:text="@{ability.world.name}"
             app:layout_constraintBottom_toBottomOf="@+id/world_spinner"
             app:layout_constraintEnd_toEndOf="@id/world_spinner"
             app:layout_constraintStart_toStartOf="@id/world_spinner"

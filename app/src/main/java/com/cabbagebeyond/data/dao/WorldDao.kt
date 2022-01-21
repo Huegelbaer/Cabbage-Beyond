@@ -16,7 +16,7 @@ class WorldDao {
     suspend fun getWorlds(): Result<List<WorldDTO>> {
         var result: Result<List<WorldDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get(Source.CACHE)
+            .get()
             .addOnSuccessListener { task ->
                 val worlds = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(WorldDTO::class.java)

@@ -37,22 +37,3 @@ data class AbilityDTO(
         )
     }
 }
-fun List<AbilityDTO>.asDomainModel(): List<Ability> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun AbilityDTO.asDomainModel(): Ability {
-    return Ability(name, description, attribute, world, id)
-}
-
-fun List<Ability>.asDatabaseModel(): List<AbilityDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Ability.asDatabaseModel(): AbilityDTO {
-    return AbilityDTO(name, description, attribute, world, id)
-}
