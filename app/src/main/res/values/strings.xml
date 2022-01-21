@@ -59,6 +59,12 @@
         <item>Willpower</item>
     </string-array>
 
+    <string-array name="types">
+        <item>Weapon</item>
+        <item>Armor</item>
+        <item>Others</item>
+    </string-array>
+
     <!-- -->
     <string name="property_name">Name</string>
     <string name="talent_rang_requirement">Rank requirement</string>
@@ -72,5 +78,9 @@
 
     <string name="save_completed">Save completed!</string>
     <string name="save_failed">Save failed!</string>
+    <string name="select_type">Select type</string>
+    <string name="cost">Cost</string>
+    <string name="weight">Weight</string>
+    <string name="enter_cost">Enter cost</string>
 
 </resources>

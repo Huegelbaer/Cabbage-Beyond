@@ -9,7 +9,7 @@ data class Equipment(
     var cost: String,
     var requirements: List<String>,
     var type: String,
-    var world: String,
+    var world: World?,
     val id: String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -18,7 +18,7 @@ data class Equipment(
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(World::class.java.classLoader),
         parcel.readString()!!
     )
 
@@ -28,7 +28,7 @@ data class Equipment(
         parcel.writeString(cost)
         parcel.writeStringList(requirements)
         parcel.writeString(type)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 

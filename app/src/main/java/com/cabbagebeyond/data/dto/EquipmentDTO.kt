@@ -1,6 +1,7 @@
 package com.cabbagebeyond.data.dto
 
 import com.cabbagebeyond.model.Equipment
+import com.cabbagebeyond.model.World
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
 import java.util.*
@@ -43,24 +44,4 @@ data class EquipmentDTO(
             FIELD_WORLD to world
         )
     }
-}
-
-fun List<EquipmentDTO>.asDomainModel(): List<Equipment> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun EquipmentDTO.asDomainModel(): Equipment {
-    return Equipment(name, description, cost, requirements.split(", "), type, world, id)
-}
-
-fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Equipment.asDatabaseModel(): EquipmentDTO {
-    return EquipmentDTO(name, description, cost, requirements.joinToString(), type, world, id)
 }

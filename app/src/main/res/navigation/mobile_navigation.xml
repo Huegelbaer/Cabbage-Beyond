@@ -85,7 +85,11 @@
         android:id="@+id/nav_equipments"
         android:name="com.cabbagebeyond.ui.collection.equipments.EquipmentsFragment"
         android:label="@string/menu_equipments"
-        tools:layout="@layout/fragment_equipments_list" />
+        tools:layout="@layout/fragment_equipments_list" >
+        <action
+            android:id="@+id/action_equipments_to_details"
+            app:destination="@id/equipmentDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_races"
         android:name="com.cabbagebeyond.ui.collection.races.RacesFragment"
@@ -97,5 +101,13 @@
         <argument
             android:name="ability"
             app:argType="com.cabbagebeyond.model.Ability" />
+    </fragment>
+    <fragment
+        android:id="@+id/equipmentDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.equipments.details.EquipmentDetailsFragment"
+        tools:layout="@layout/equipment_details_fragment" >
+        <argument
+            android:name="equipment"
+            app:argType="com.cabbagebeyond.model.Equipment" />
     </fragment>
 </navigation>
