@@ -47,13 +47,7 @@ class EquipmentDetailsFragment : Fragment() {
             Feature.CONFIGURE_APP.name), listOf(), ""), requireContext())
 
         _binding.viewModel = _viewModel
-        _binding.equipment = _viewModel.equipment.value
-
-        _viewModel.equipment.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                _binding.equipment = it
-            }
-        })
+        _binding.lifecycleOwner = this
 
         _viewModel.fabImage.observe(viewLifecycleOwner, Observer {
             it?.let {
@@ -102,7 +96,7 @@ class EquipmentDetailsFragment : Fragment() {
                 id: Long
             ) {
                 val item = attributes[position]
-                _viewModel.onAttributeSelected(item)
+                _viewModel.onTypeSelected(item)
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {

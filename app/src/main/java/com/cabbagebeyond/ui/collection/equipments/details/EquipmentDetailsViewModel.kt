@@ -8,7 +8,6 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
@@ -49,7 +48,7 @@ class EquipmentDetailsViewModel(
 
     init {
         // for MVP the types are stored in resources.
-        val stringArray = context.resources.getStringArray(R.array.attributes)
+        val stringArray = context.resources.getStringArray(R.array.types)
         _types.value = stringArray.toList()
     }
 
@@ -93,21 +92,20 @@ class EquipmentDetailsViewModel(
         _fabImage.value = R.drawable.ic_edit
     }
 
-    private fun save(equipment: Equipment) {
+    private fun save(toSafe: Equipment) {
         viewModelScope.launch {
-            val result = _equipmentDataSource.saveEquipment(equipment)
-            _message.value = if (result.isSuccess) {
-                R.string.save_completed
+            val result = _equipmentDataSource.saveEquipment(toSafe)
+            if (result.isSuccess) {
+                _message.value = R.string.save_completed
+                equipment.value = toSafe
             } else {
-                R.string.save_failed
+                _message.value = R.string.save_failed
             }
         }
     }
 
-    fun onAttributeSelected(attribute: String?) {
-       /* val givenAbility = ability.value
-        givenAbility?.attribute = attribute ?: ""
-        ability.value = givenAbility*/
+    fun onTypeSelected(type: String) {
+        equipment.value?.type = type
     }
 
     fun onWorldSelected(world: World?) {

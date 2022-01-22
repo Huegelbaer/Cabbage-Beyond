@@ -6,13 +6,12 @@
 
     <data>
 
-        <variable
-            name="equipment"
-            type="com.cabbagebeyond.model.Equipment" />
+        <import type="com.cabbagebeyond.ui.DoubleConverter" />
 
         <variable
             name="viewModel"
             type="com.cabbagebeyond.ui.collection.equipments.details.EquipmentDetailsViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -116,7 +115,7 @@
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:minHeight="@dimen/image_button_size"
-                    android:text="@{equipment.name}"
+                    android:text="@={viewModel.equipment.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/name"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -127,7 +126,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{equipment.name}"
+                    android:text="@{viewModel.equipment.name}"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_name"
                     app:layout_constraintEnd_toEndOf="@id/edit_name"
                     app:layout_constraintStart_toStartOf="@id/edit_name"
@@ -151,7 +150,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{equipment.type}"
+                    android:text="@{viewModel.equipment.type}"
                     app:layout_constraintBottom_toBottomOf="@+id/type_spinner"
                     app:layout_constraintEnd_toEndOf="@id/type_spinner"
                     app:layout_constraintStart_toStartOf="@id/type_spinner"
@@ -175,7 +174,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{equipment.world.name}"
+                    android:text="@{viewModel.equipment.world.name}"
                     app:layout_constraintBottom_toBottomOf="@+id/world_spinner"
                     app:layout_constraintEnd_toEndOf="@id/world_spinner"
                     app:layout_constraintStart_toStartOf="@id/world_spinner"
@@ -192,7 +191,7 @@
                     android:importantForAutofill="no"
                     android:inputType="text"
                     android:minHeight="@dimen/image_button_size"
-                    android:text="@{equipment.cost}"
+                    android:text="@={viewModel.equipment.cost}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/guideline"
                     app:layout_constraintTop_toBottomOf="@id/world_spinner" />
@@ -203,7 +202,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{equipment.cost}"
+                    android:text="@{viewModel.equipment.cost}"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_cost"
                     app:layout_constraintEnd_toEndOf="@id/edit_cost"
                     app:layout_constraintStart_toStartOf="@id/edit_cost"
@@ -220,7 +219,7 @@
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:minHeight="@dimen/image_button_size"
-                    android:text="@{`` + equipment.weight}"
+                    android:text="@={DoubleConverter.toString(viewModel.equipment.weight)}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/guideline"
                     app:layout_constraintTop_toBottomOf="@id/edit_cost" />
@@ -231,7 +230,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{``+ equipment.weight}"
+                    android:text="@{``+ viewModel.equipment.weight}"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_weight"
                     app:layout_constraintEnd_toEndOf="@id/edit_weight"
                     app:layout_constraintStart_toStartOf="@id/edit_weight"
@@ -250,7 +249,7 @@
                     android:importantForAutofill="no"
                     android:inputType="textMultiLine"
                     android:minHeight="@dimen/image_button_size"
-                    android:text="@{equipment.description}"
+                    android:text="@={viewModel.equipment.description}"
                     android:textColorHint="@color/secondaryTextColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -263,7 +262,7 @@
                     style="@style/TextAppearance.Property.Value"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:text="@{equipment.description}"
+                    android:text="@{viewModel.equipment.description}"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_description"
                     app:layout_constraintEnd_toEndOf="@+id/edit_description"
                     app:layout_constraintStart_toStartOf="@+id/edit_description"
