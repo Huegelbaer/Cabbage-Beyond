@@ -220,7 +220,7 @@
                     android:importantForAutofill="no"
                     android:inputType="number"
                     android:minHeight="@dimen/image_button_size"
-                    android:text="@{equipment.id}"
+                    android:text="@{`` + equipment.weight}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/guideline"
                     app:layout_constraintTop_toBottomOf="@id/edit_cost" />
@@ -231,7 +231,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{equipment.id}"
+                    android:text="@{``+ equipment.weight}"
                     app:layout_constraintBottom_toBottomOf="@+id/edit_weight"
                     app:layout_constraintEnd_toEndOf="@id/edit_weight"
                     app:layout_constraintStart_toStartOf="@id/edit_weight"

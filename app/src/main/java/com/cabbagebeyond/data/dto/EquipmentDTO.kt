@@ -1,7 +1,5 @@
 package com.cabbagebeyond.data.dto
 
-import com.cabbagebeyond.model.Equipment
-import com.cabbagebeyond.model.World
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
 import java.util.*
@@ -14,6 +12,8 @@ data class EquipmentDTO(
     var description: String = "",
     @PropertyName(FIELD_COST)
     var cost: String = "",
+    @PropertyName(FIELD_WEIGHT)
+    var weight: Double = 0.0,
     @PropertyName(FIELD_REQUIREMENTS)
     var requirements: String = "",
     @PropertyName(FIELD_TYPE)
@@ -29,6 +29,7 @@ data class EquipmentDTO(
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
         const val FIELD_COST = "cost"
+        const val FIELD_WEIGHT = "weight"
         const val FIELD_REQUIREMENTS = "requirements"
         const val FIELD_TYPE = "type"
         const val FIELD_WORLD = "world_id"
@@ -39,6 +40,7 @@ data class EquipmentDTO(
             FIELD_NAME to name,
             FIELD_DESCRIPTION to description,
             FIELD_COST to cost,
+            FIELD_WEIGHT to weight,
             FIELD_REQUIREMENTS to requirements,
             FIELD_TYPE to type,
             FIELD_WORLD to world

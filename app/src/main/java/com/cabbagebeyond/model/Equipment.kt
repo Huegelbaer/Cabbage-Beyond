@@ -7,6 +7,7 @@ data class Equipment(
     var name: String,
     var description: String,
     var cost: String,
+    var weight: Double,
     var requirements: List<String>,
     var type: String,
     var world: World?,
@@ -16,6 +17,7 @@ data class Equipment(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
+        parcel.readDouble(),
         parcel.createStringArrayList()!!,
         parcel.readString()!!,
         parcel.readParcelable(World::class.java.classLoader),
@@ -26,6 +28,7 @@ data class Equipment(
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(cost)
+        parcel.writeDouble(weight)
         parcel.writeStringList(requirements)
         parcel.writeString(type)
         parcel.writeParcelable(world, flags)

@@ -3,11 +3,7 @@ package com.cabbagebeyond.data.repository
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.EquipmentDao
-import com.cabbagebeyond.data.dto.AbilityDTO
 import com.cabbagebeyond.data.dto.EquipmentDTO
-import com.cabbagebeyond.data.dto.asDatabaseModel
-import com.cabbagebeyond.data.dto.asDomainModel
-import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -66,7 +62,7 @@ fun List<EquipmentDTO>.asDomainModel(worlds: List<World>): List<Equipment> {
 }
 
 fun EquipmentDTO.asDomainModel(world: World?): Equipment {
-    return Equipment(name, description, cost, requirements.split(", "), type, world, id)
+    return Equipment(name, description, cost, weight, requirements.split(", "), type, world, id)
 }
 
 fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
@@ -76,5 +72,5 @@ fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
 }
 
 fun Equipment.asDatabaseModel(): EquipmentDTO {
-    return EquipmentDTO(name, description, cost, requirements.joinToString(), type, world?.id ?: "", id)
+    return EquipmentDTO(name, description, cost, weight, requirements.joinToString(), type, world?.id ?: "", id)
 }
