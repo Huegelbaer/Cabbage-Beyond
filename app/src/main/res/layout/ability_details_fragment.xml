@@ -83,7 +83,7 @@
             android:importantForAutofill="no"
             android:inputType="text"
             android:minHeight="@dimen/image_button_size"
-            android:text="@{ability.name}"
+            android:text="@={ability.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/name"
             app:layout_constraintTop_toTopOf="parent" />
@@ -161,7 +161,7 @@
             android:importantForAutofill="no"
             android:inputType="textMultiLine"
             android:minHeight="@dimen/image_button_size"
-            android:text="@{ability.description}"
+            android:text="@={ability.description}"
             android:textColorHint="@color/secondaryTextColor"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

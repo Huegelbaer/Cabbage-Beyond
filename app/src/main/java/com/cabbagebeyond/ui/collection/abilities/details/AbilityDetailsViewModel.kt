@@ -92,13 +92,14 @@ class AbilityDetailsViewModel(
         _fabImage.value = R.drawable.ic_edit
     }
 
-    private fun save(ability: Ability) {
+    private fun save(toSafe: Ability) {
         viewModelScope.launch {
-            val result = _abilityDataSource.saveAbility(ability)
-            _message.value = if (result.isSuccess) {
-                R.string.save_completed
+            val result = _abilityDataSource.saveAbility(toSafe)
+            if (result.isSuccess) {
+                _message.value = R.string.save_completed
+                ability.value = toSafe
             } else {
-                R.string.save_failed
+                _message.value = R.string.save_failed
             }
         }
     }
