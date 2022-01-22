@@ -80,7 +80,11 @@
         android:id="@+id/nav_forces"
         android:name="com.cabbagebeyond.ui.collection.forces.ForcesFragment"
         android:label="@string/menu_forces"
-        tools:layout="@layout/fragment_forces_list" />
+        tools:layout="@layout/fragment_forces_list" >
+        <action
+            android:id="@+id/action_forces_to_details"
+            app:destination="@id/forceDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_equipments"
         android:name="com.cabbagebeyond.ui.collection.equipments.EquipmentsFragment"
@@ -109,5 +113,12 @@
         <argument
             android:name="equipment"
             app:argType="com.cabbagebeyond.model.Equipment" />
+    </fragment>
+    <fragment
+        android:id="@+id/forceDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.forces.details.ForceDetailsFragment" >
+        <argument
+            android:name="force"
+            app:argType="com.cabbagebeyond.model.Force" />
     </fragment>
 </navigation>

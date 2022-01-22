@@ -52,23 +52,3 @@ data class ForceDTO(
         )
     }
 }
-
-fun List<ForceDTO>.asDomainModel(): List<Force> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun ForceDTO.asDomainModel(): Force {
-    return Force(name, description, cost, duration, rangRequirement, range, shaping, world, id)
-}
-
-fun List<Force>.asDatabaseModel(): List<ForceDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Force.asDatabaseModel(): ForceDTO {
-    return ForceDTO(name, description, cost, duration, rangRequirement, range, shaping, world, id)
-}

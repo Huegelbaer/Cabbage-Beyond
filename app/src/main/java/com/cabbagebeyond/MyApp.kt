@@ -19,7 +19,7 @@ class MyApp: Application() {
             single { AbilityRepository(Database.abilityDao, get()) as AbilityDataSource }
             single { CharacterRepository(Database.characterDao, get(), get(), get(), get(), get(), get(), get()) as CharacterDataSource }
             single { EquipmentRepository(Database.equipmentDao, get()) as EquipmentDataSource }
-            single { ForceRepository(Database.forceDao) as ForceDataSource }
+            single { ForceRepository(Database.forceDao, get()) as ForceDataSource }
             single { HandicapRepository(Database.handicapDao) as HandicapDataSource }
             single { RaceRepository(Database.raceDao) as RaceDataSource }
             single { RoleRepository(Database.roleDao) as RoleDataSource }

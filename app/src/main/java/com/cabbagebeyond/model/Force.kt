@@ -11,7 +11,7 @@ data class Force(
     var rangRequirement: String,
     var range: String,
     var shaping: String,
-    var world: String,
+    var world: World?,
     val id: String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -22,7 +22,7 @@ data class Force(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable<World>(World::class.java.classLoader)!!,
         parcel.readString()!!
     )
 
@@ -34,7 +34,7 @@ data class Force(
         parcel.writeString(rangRequirement)
         parcel.writeString(range)
         parcel.writeString(shaping)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 
