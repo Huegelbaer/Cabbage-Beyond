@@ -75,7 +75,11 @@
         android:id="@+id/nav_handicaps"
         android:name="com.cabbagebeyond.ui.collection.handicaps.HandicapsFragment"
         android:label="@string/menu_handicaps"
-        tools:layout="@layout/fragment_handicaps_list" />
+        tools:layout="@layout/fragment_handicaps_list" >
+        <action
+            android:id="@+id/action_handicaps_to_details"
+            app:destination="@id/handicapDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_forces"
         android:name="com.cabbagebeyond.ui.collection.forces.ForcesFragment"
@@ -120,5 +124,12 @@
         <argument
             android:name="force"
             app:argType="com.cabbagebeyond.model.Force" />
+    </fragment>
+    <fragment
+        android:id="@+id/handicapDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.handicaps.details.HandicapDetailsFragment" >
+        <argument
+            android:name="handicap"
+            app:argType="com.cabbagebeyond.model.Handicap" />
     </fragment>
 </navigation>

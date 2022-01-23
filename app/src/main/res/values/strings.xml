@@ -73,6 +73,12 @@
         <item>Legend</item>
     </string-array>
 
+    <string-array name="handicapTypes">
+        <item>slight</item>
+        <item>heavy</item>
+        <item>slight or heavy</item>
+    </string-array>
+
     <!-- -->
     <string name="property_name">Name</string>
     <string name="talent_rang_requirement">Rank requirement</string>

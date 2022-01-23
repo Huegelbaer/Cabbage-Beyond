@@ -18,9 +18,9 @@ interface HandicapDataSource {
 
     //suspend fun refreshHandicap(id: String)
 
-    suspend fun saveHandicap(handicap: Handicap)
+    suspend fun saveHandicap(handicap: Handicap): Result<Boolean>
 
     //suspend fun deleteAllHandicaps()
 
-    suspend fun deleteHandicap(id: String)
+    suspend fun deleteHandicap(id: String): Result<Boolean>
 }
