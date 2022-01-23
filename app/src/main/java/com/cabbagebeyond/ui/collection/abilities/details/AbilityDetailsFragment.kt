@@ -39,7 +39,7 @@ class AbilityDetailsFragment : Fragment() {
 
         val dataSource: AbilityDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        _viewModel = AbilityDetailsViewModel(ability, dataSource, worldDataSource, User("", "", listOf(Feature.CONFIGURE_APP.name), listOf(), ""), requireContext())
+        _viewModel = AbilityDetailsViewModel(ability, dataSource, worldDataSource, User("", "", listOf(Feature.CONFIGURE_APP.name), listOf(), ""), requireActivity().application)
 
         _binding.viewModel = _viewModel
         _binding.ability = _viewModel.ability.value

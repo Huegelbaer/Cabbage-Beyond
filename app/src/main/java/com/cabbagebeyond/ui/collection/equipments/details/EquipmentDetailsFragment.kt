@@ -44,7 +44,7 @@ class EquipmentDetailsFragment : Fragment() {
         val dataSource: EquipmentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         _viewModel = EquipmentDetailsViewModel(equipment, dataSource, worldDataSource, User("", "", listOf(
-            Feature.CONFIGURE_APP.name), listOf(), ""), requireContext())
+            Feature.CONFIGURE_APP.name), listOf(), ""), requireActivity().application)
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = this

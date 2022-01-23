@@ -44,7 +44,7 @@ class ForceDetailsFragment : Fragment() {
                 "", "", listOf(
                     Feature.CONFIGURE_APP.name
                 ), listOf(), ""
-            ), requireContext()
+            ), requireActivity().application
         )
 
         _binding.viewModel = _viewModel
