@@ -102,7 +102,11 @@
         android:id="@+id/nav_races"
         android:name="com.cabbagebeyond.ui.collection.races.RacesFragment"
         android:label="@string/menu_races"
-        tools:layout="@layout/fragment_races_list" />
+        tools:layout="@layout/fragment_races_list" >
+        <action
+            android:id="@+id/action_races_to_details"
+            app:destination="@id/raceDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/ability_details"
         android:name="com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsFragment" >
@@ -131,5 +135,13 @@
         <argument
             android:name="handicap"
             app:argType="com.cabbagebeyond.model.Handicap" />
+    </fragment>
+    <fragment
+        android:id="@+id/raceDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.races.details.RaceDetailsFragment"
+        tools:layout="@layout/race_details_fragment" >
+        <argument
+            android:name="race"
+            app:argType="com.cabbagebeyond.model.Race" />
     </fragment>
 </navigation>

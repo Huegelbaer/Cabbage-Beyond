@@ -103,5 +103,6 @@
     <string name="shape_title">Shaping</string>
     <string name="enter_duration">Enter duration</string>
     <string name="enter_shape">Enter shaping</string>
+    <string name="features_title">Features</string>
 
 </resources>

@@ -21,7 +21,7 @@ class MyApp: Application() {
             single { EquipmentRepository(Database.equipmentDao, get()) as EquipmentDataSource }
             single { ForceRepository(Database.forceDao, get()) as ForceDataSource }
             single { HandicapRepository(Database.handicapDao, get()) as HandicapDataSource }
-            single { RaceRepository(Database.raceDao) as RaceDataSource }
+            single { RaceRepository(Database.raceDao, get()) as RaceDataSource }
             single { RoleRepository(Database.roleDao) as RoleDataSource }
             single { SessionRepository(Database.sessionDao) as SessionDataSource }
             single { StoryRepository(Database.storyDao) as StoryDataSource }

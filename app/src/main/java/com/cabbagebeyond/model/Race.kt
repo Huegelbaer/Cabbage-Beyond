@@ -7,14 +7,14 @@ data class Race(
     var name: String,
     var description: String,
     var raceFeatures: List<String>,
-    var world: String,
+    var world: World?,
     val id: String
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(World::class.java.classLoader)!!,
         parcel.readString()!!
     )
 
@@ -22,7 +22,7 @@ data class Race(
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeStringList(raceFeatures)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 

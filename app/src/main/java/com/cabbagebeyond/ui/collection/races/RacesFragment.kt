@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.databinding.FragmentRacesListBinding
+import com.cabbagebeyond.model.Race
 import org.koin.android.ext.android.inject
 
 class RacesFragment : Fragment() {
@@ -43,6 +45,17 @@ class RacesFragment : Fragment() {
             }
         })
 
+        _viewModel.selectedRace.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showDetails(it)
+            }
+        })
+
         return _binding.root
+    }
+
+    private fun showDetails(race: Race) {
+        findNavController().navigate(RacesFragmentDirections.actionRacesToDetails(race))
+        _viewModel.onNavigationCompleted()
     }
 }

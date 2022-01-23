@@ -48,21 +48,37 @@ class RaceDao {
         return result
     }
 
-    suspend fun saveRace(race: RaceDTO) {
+    suspend fun saveRace(race: RaceDTO): Result<Boolean> {
+        var result = Result.success(true)
         val entity = race.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(race.id)
             .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error writing document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 
-    suspend fun deleteRace(id: String) {
+    suspend fun deleteRace(id: String): Result<Boolean> {
+        var result = Result.success(true)
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error deleting document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 }

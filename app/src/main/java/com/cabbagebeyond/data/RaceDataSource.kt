@@ -16,9 +16,9 @@ interface RaceDataSource {
 
     //suspend fun refreshRace(id: String)
 
-    suspend fun saveRace(race: Race)
+    suspend fun saveRace(race: Race): Result<Boolean>
 
     //suspend fun deleteAllRaces()
 
-    suspend fun deleteRace(id: String)
+    suspend fun deleteRace(id: String): Result<Boolean>
 }

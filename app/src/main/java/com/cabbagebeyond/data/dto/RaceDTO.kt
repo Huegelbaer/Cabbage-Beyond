@@ -37,23 +37,3 @@ data class RaceDTO(
         )
     }
 }
-
-fun List<RaceDTO>.asDomainModel(): List<Race> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun RaceDTO.asDomainModel(): Race {
-    return Race(name, description, raceFeatures, world, id)
-}
-
-fun List<Race>.asDatabaseModel(): List<RaceDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Race.asDatabaseModel(): RaceDTO {
-    return RaceDTO(name, description, raceFeatures, world, id)
-}
