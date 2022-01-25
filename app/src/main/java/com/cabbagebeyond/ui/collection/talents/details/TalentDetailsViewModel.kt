@@ -1,27 +1,28 @@
-package com.cabbagebeyond.ui.collection.equipments.details
+package com.cabbagebeyond.ui.collection.talents.details
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.EquipmentDataSource
+import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.model.Equipment
+import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
 import kotlinx.coroutines.launch
 
-class EquipmentDetailsViewModel(
-    givenEquipment: Equipment,
-    private val _equipmentDataSource: EquipmentDataSource,
+class TalentDetailsViewModel(
+    givenTalent: Talent,
+    private val _talentDataSource: TalentDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
 ) : DetailsViewModel(user, app) {
 
-    var equipment = MutableLiveData(givenEquipment)
+    var talent = MutableLiveData(givenTalent)
 
     private var _worlds = MutableLiveData<List<World?>>()
     val worlds: LiveData<List<World?>>
@@ -31,10 +32,13 @@ class EquipmentDetailsViewModel(
     val types: LiveData<List<String>>
         get() = _types
 
+    private var _ranks = MutableLiveData<List<String>>()
+    val ranks: LiveData<List<String>>
+        get() = _ranks
+
     init {
-        // for MVP the types are stored in resources.
-        val stringArray = app.applicationContext.resources.getStringArray(R.array.types_of_weapons)
-        _types.value = stringArray.toList()
+        loadRanks(app.applicationContext)
+        loadTypes(app.applicationContext)
     }
 
     override fun onEdit() {
@@ -42,9 +46,14 @@ class EquipmentDetailsViewModel(
         if (_worlds.value == null) {
             loadWorlds()
         }
-        if (_types.value == null) {
-            loadAttributes()
+        /*
+        if (_ranks.value == null) {
+            loadRanks()
         }
+        if (_types.value == null) {
+            loadTypes()
+        }
+         */
     }
 
     private fun loadWorlds() {
@@ -55,36 +64,48 @@ class EquipmentDetailsViewModel(
         }
     }
 
-    private fun loadAttributes() {
+    private fun loadRanks(context: Context) {
+        // for MVP the ranks are stored in resources.
+        val stringArray = context.resources.getStringArray(R.array.ranks)
+        _ranks.value = stringArray.toList()
+
+    }
+
+    private fun loadTypes(context: Context) {
+        // for MVP the types are stored in resources.
+        val stringArray = context.resources.getStringArray(R.array.types_of_talents)
+        _types.value = stringArray.toList()
 
     }
 
     override fun onSave() {
         super.onSave()
-        equipment.value?.let {
+        talent.value?.let {
             save(it)
         }
     }
 
-    private fun save(toSafe: Equipment) {
+    private fun save(toSafe: Talent) {
         viewModelScope.launch {
-            val result = _equipmentDataSource.saveEquipment(toSafe)
+            val result = _talentDataSource.saveTalent(toSafe)
             if (result.isSuccess) {
                 message.value = R.string.save_completed
-                equipment.value = toSafe
+                talent.value = toSafe
             } else {
                 message.value = R.string.save_failed
             }
         }
     }
 
-    fun onTypeSelected(type: String) {
-        equipment.value?.type = type
+    fun onRankSelected(rank: String) {
+        talent.value?.rangRequirement = rank
+    }
+
+    fun onTypeSelected(rank: String) {
+        talent.value?.type = rank
     }
 
     fun onWorldSelected(world: World?) {
-        val given = equipment.value
-        given?.world = world
-        equipment.value = given
+        talent.value?.world = world
     }
 }

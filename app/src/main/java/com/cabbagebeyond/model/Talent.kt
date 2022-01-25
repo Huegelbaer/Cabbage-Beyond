@@ -10,7 +10,7 @@ data class Talent(
     var rangRequirement: String,
     var requirements: List<String>,
     var type: String,
-    var world: String,
+    var world: World?,
     val id: String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
@@ -19,7 +19,7 @@ data class Talent(
         parcel.readString()!!,
         parcel.createStringArrayList()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(World::class.java.classLoader)!!,
         parcel.readString()!!
     )
 
@@ -29,7 +29,7 @@ data class Talent(
         parcel.writeString(rangRequirement)
         parcel.writeStringList(requirements)
         parcel.writeString(type)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 

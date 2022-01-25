@@ -59,7 +59,7 @@
         <item>Willpower</item>
     </string-array>
 
-    <string-array name="types">
+    <string-array name="types_of_weapons">
         <item>Weapon</item>
         <item>Armor</item>
         <item>Others</item>
@@ -73,10 +73,23 @@
         <item>Legend</item>
     </string-array>
 
-    <string-array name="handicapTypes">
+    <string-array name="types_of_handicap">
         <item>slight</item>
         <item>heavy</item>
         <item>slight or heavy</item>
+    </string-array>
+
+    <string-array name="types_of_talents">
+        <item>background</item>
+        <item>leader</item>
+        <item>expert</item>
+        <item>fight</item>
+        <item>force</item>
+        <item>race</item>
+        <item>social</item>
+        <item>supernatural</item>
+        <item>wildcard</item>
+        <item>legendary</item>
     </string-array>
 
     <!-- -->

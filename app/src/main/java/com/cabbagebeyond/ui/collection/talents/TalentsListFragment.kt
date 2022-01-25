@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.databinding.FragmentTalentsListBinding
+import com.cabbagebeyond.model.Talent
 import org.koin.android.ext.android.inject
 
 class TalentsListFragment : Fragment() {
@@ -43,6 +45,17 @@ class TalentsListFragment : Fragment() {
             }
         })
 
+        _viewModel.selectedTalent.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showDetails(it)
+            }
+        })
+
         return _binding.root
+    }
+
+    private fun showDetails(talent: Talent) {
+        findNavController().navigate(TalentsListFragmentDirections.actionTalentsToDetails(talent))
+        _viewModel.onNavigationCompleted()
     }
 }

@@ -33,7 +33,7 @@ class HandicapDetailsViewModel(
 
     init {
         // for MVP the types are stored in resources.
-        val stringArray = app.applicationContext.resources.getStringArray(R.array.handicapTypes)
+        val stringArray = app.applicationContext.resources.getStringArray(R.array.types_of_handicap)
         _types.value = stringArray.toList()
     }
 

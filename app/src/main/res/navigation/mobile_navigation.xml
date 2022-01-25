@@ -70,7 +70,11 @@
         android:id="@+id/nav_talents"
         android:name="com.cabbagebeyond.ui.collection.talents.TalentsListFragment"
         android:label="@string/menu_talents"
-        tools:layout="@layout/fragment_talents_list" />
+        tools:layout="@layout/fragment_talents_list" >
+        <action
+            android:id="@+id/action_talents_to_details"
+            app:destination="@id/talentDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_handicaps"
         android:name="com.cabbagebeyond.ui.collection.handicaps.HandicapsFragment"
@@ -143,5 +147,13 @@
         <argument
             android:name="race"
             app:argType="com.cabbagebeyond.model.Race" />
+    </fragment>
+    <fragment
+        android:id="@+id/talentDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.talents.details.TalentDetailsFragment"
+        tools:layout="@layout/talent_details_fragment" >
+        <argument
+            android:name="talent"
+            app:argType="com.cabbagebeyond.model.Talent" />
     </fragment>
 </navigation>

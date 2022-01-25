@@ -45,23 +45,3 @@ data class TalentDTO(
         )
     }
 }
-
-fun List<TalentDTO>.asDomainModel(): List<Talent> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun TalentDTO.asDomainModel(): Talent {
-    return Talent(name, description, rangRequirement, requirements.split(", "), type, world, id)
-}
-
-fun List<Talent>.asDatabaseModel(): List<TalentDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Talent.asDatabaseModel(): TalentDTO {
-    return TalentDTO(name, description, rangRequirement, requirements.joinToString(), type, world, id)
-}
