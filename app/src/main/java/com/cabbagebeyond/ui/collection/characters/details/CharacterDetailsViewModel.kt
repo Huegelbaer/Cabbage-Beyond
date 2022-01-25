@@ -1,16 +1,28 @@
 package com.cabbagebeyond.ui.collection.characters.details
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
+import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.model.User
+import com.cabbagebeyond.ui.DetailsViewModel
+import kotlinx.coroutines.launch
 
-class CharacterDetailsViewModel(private val character: Character) : ViewModel() {
+class CharacterDetailsViewModel(
+    givenCharacter: Character,
+    private val _characterDataSource: CharacterDataSource,
+    user: User,
+    app: Application
+) : DetailsViewModel(user, app) {
 
     sealed class Item(val title: String)
     class HeaderItem(title: String, val icon: Int, var items: MutableList<ListItem>): Item(title)
     class ListItem(title: String, var content: Any): Item(title)
+
+    var character = MutableLiveData(givenCharacter)
 
     private var _items = MutableLiveData<MutableList<Item>>()
     val items: LiveData<MutableList<Item>>
@@ -19,25 +31,25 @@ class CharacterDetailsViewModel(private val character: Character) : ViewModel() 
     init {
         val itemList = mutableListOf<Item>()
 
-        val talents = character.talents.map {
+        val talents = givenCharacter.talents.map {
                 ListItem(it.name, it)
             }.toMutableList()
         val talentItem = HeaderItem("Talents", R.drawable.ic_thumb_up, talents)
         itemList.add(talentItem)
 
-        val handicaps = character.handicaps.map {
+        val handicaps = givenCharacter.handicaps.map {
             ListItem(it.name, it)
         }.toMutableList()
         val handicapItem = HeaderItem("Handicaps", R.drawable.ic_thumb_down, handicaps)
         itemList.add(handicapItem)
 
-        val forces = character.forces.map {
+        val forces = givenCharacter.forces.map {
             ListItem(it.name, it)
         }.toMutableList()
         val forceItem = HeaderItem("Forces", R.drawable.ic_local_library, forces)
         itemList.add(forceItem)
 
-        val equipments = character.equipments.map {
+        val equipments = givenCharacter.equipments.map {
             ListItem(it.name, it)
         }.toMutableList()
         val equipmentItem = HeaderItem("Equipments", R.drawable.ic_security, equipments)
@@ -57,6 +69,25 @@ class CharacterDetailsViewModel(private val character: Character) : ViewModel() 
         val list = _items.value ?: return
         list.removeAll(headerItem.items)
         _items.value = list
+    }
+
+    override fun onSave() {
+        super.onSave()
+        character.value?.let {
+            save(it)
+        }
+    }
+
+    private fun save(toSafe: Character) {
+        viewModelScope.launch {
+            val result = _characterDataSource.saveCharacter(toSafe)
+            if (result.isSuccess) {
+                message.value = R.string.save_completed
+                character.value = toSafe
+            } else {
+                message.value = R.string.save_failed
+            }
+        }
     }
 
     fun show(listItem: ListItem) {

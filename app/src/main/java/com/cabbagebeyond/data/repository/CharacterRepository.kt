@@ -55,12 +55,12 @@ class CharacterRepository(
         return@withContext map(character)
     }
 
-    override suspend fun saveCharacter(character: Character) = withContext(ioDispatcher) {
-        characterDao.saveCharacter(character.asDatabaseModel())
+    override suspend fun saveCharacter(character: Character): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext characterDao.saveCharacter(character.asDatabaseModel())
     }
 
-    override suspend fun deleteCharacter(id: String) = withContext(ioDispatcher) {
-        characterDao.deleteCharacter(id)
+    override suspend fun deleteCharacter(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext characterDao.deleteCharacter(id)
     }
 
 

@@ -2,6 +2,7 @@ package com.cabbagebeyond.data.dao
 
 import android.util.Log
 import com.cabbagebeyond.data.dto.CharacterDTO
+import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -56,22 +57,41 @@ class CharacterDao {
         return result
     }
 
-    suspend fun saveCharacter(character: CharacterDTO) {
+    suspend fun saveCharacter(character: CharacterDTO): Result<Boolean> {
+        var result: Result<Boolean> = Result.success(true)
         val entity = character.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(character.id)
             .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error writing document", error)
+                result = Result.failure(error)
+            }
+            .await()
+
+        return result
     }
 
-    suspend fun deleteCharacter(id: String) {
+    suspend fun deleteCharacter(id: String): Result<Boolean> {
+        var result: Result<Boolean> = Result.success(true)
+
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error deleting document", error)
+                result = Result.failure(error)
+            }
+            .await()
+
+        return result
     }
 
 
