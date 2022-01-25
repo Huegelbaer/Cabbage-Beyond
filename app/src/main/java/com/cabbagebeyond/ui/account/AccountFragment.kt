@@ -1,14 +1,14 @@
 package com.cabbagebeyond.ui.account
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.MainActivity
+import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.data.WorldDataSource
@@ -36,15 +36,22 @@ class AccountFragment : Fragment() {
     ): View {
         _binding = FragmentAccountBinding.inflate(inflater)
 
-        viewModel.account.observe(viewLifecycleOwner, Observer { account ->
+        viewModel.account.observe(viewLifecycleOwner) { account ->
             _binding.account = account
 
             val worlds = viewModel.worlds.value ?: listOf()
             setupSpinner(worlds.map { it.name }, account.activeWorld)
             setupRecyclerView(account.characters)
-        })
+        }
+
+        setHasOptionsMenu(true)
 
         return _binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.account, menu)
     }
 
     private fun setupSpinner(worlds: List<String>, activeWorld: String) {

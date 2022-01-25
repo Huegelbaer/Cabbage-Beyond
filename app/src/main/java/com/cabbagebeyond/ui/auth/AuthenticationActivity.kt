@@ -4,10 +4,15 @@ import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.lifecycle.lifecycleScope
 import com.cabbagebeyond.MainActivity
 import com.cabbagebeyond.databinding.ActivityAuthenticationBinding
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AuthenticationActivity : AppCompatActivity() {
 
@@ -28,7 +33,9 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         if (AuthenticationService.isUserAlreadyLoggedIn()) {
-            navigateIntoApp()
+            lifecycleScope.launch {
+                updateUserAndNavigateIntoApp()
+            }
         }
     }
 
@@ -37,10 +44,19 @@ class AuthenticationActivity : AppCompatActivity() {
 
         if (requestCode == SIGN_IN_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                navigateIntoApp()
+                lifecycleScope.launch {
+                    updateUserAndNavigateIntoApp()
+                }
             } else {
                 AuthenticationService.logLoginError(data)
             }
+        }
+    }
+
+    private suspend fun updateUserAndNavigateIntoApp() {
+        UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
+        withContext(Dispatchers.Main) {
+            navigateIntoApp()
         }
     }
 

@@ -9,6 +9,7 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.EquipmentDetailsFragmentBinding
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
 import com.cabbagebeyond.util.Feature
 import org.koin.android.ext.android.inject
@@ -34,8 +35,7 @@ class EquipmentDetailsFragment : DetailsFragment() {
 
         val dataSource: EquipmentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        _viewModel = EquipmentDetailsViewModel(equipment, dataSource, worldDataSource, User("", "", listOf(
-            Feature.CONFIGURE_APP.name), listOf(), ""), requireActivity().application)
+        _viewModel = EquipmentDetailsViewModel(equipment, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application)
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = this
