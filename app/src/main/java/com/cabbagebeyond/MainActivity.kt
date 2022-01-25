@@ -44,6 +44,15 @@ class MainActivity : AppCompatActivity() {
             setOf(
                 R.id.nav_worlds,
                 R.id.nav_characters,
+                R.id.nav_talents,
+                R.id.nav_handicaps,
+                R.id.nav_abilities,
+                R.id.nav_forces,
+                R.id.nav_equipments,
+                R.id.nav_races,
+                R.id.nav_stories,
+                R.id.nav_sessions,
+                R.id.nav_account,
                 R.id.nav_admin_panel
             ), drawerLayout
         )
