@@ -15,3 +15,17 @@ object DoubleConverter {
         return value.toDouble()
     }
 }
+
+object IntegerConverter {
+
+    @JvmStatic
+    @InverseMethod("toInt")
+    fun toString(value: Int): String {
+        return value.toString()
+    }
+
+    @JvmStatic
+    fun toInt(value: String): Int {
+        return value.toInt()
+    }
+}

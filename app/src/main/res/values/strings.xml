@@ -118,5 +118,14 @@
     <string name="enter_shape">Enter shaping</string>
     <string name="features_title">Features</string>
     <string name="menu_logout">Logout</string>
+    <string name="movement_title">Movement</string>
+    <string name="charisma_title">Charisma</string>
+    <string name="parry_title">Parade</string>
+    <string name="robustness">robustness</string>
+    <string name="attribute_agility_title">Agility</string>
+    <string name="attribute_constitution_title">Constitution</string>
+    <string name="attribute_strength_title">Strength</string>
+    <string name="attribute_intellect_title">Intellect</string>
+    <string name="attribute_willpower_title">Willpower</string>
 
 </resources>
