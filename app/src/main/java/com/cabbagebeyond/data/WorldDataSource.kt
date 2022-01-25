@@ -16,9 +16,9 @@ interface WorldDataSource {
 
     suspend fun refreshWorld(id: String)
 
-    suspend fun saveWorld(world: World)
+    suspend fun saveWorld(world: World): Result<Boolean>
 
     //suspend fun deleteAllWorlds()
 
-    suspend fun deleteWorld(id: String)
+    suspend fun deleteWorld(id: String): Result<Boolean>
 }

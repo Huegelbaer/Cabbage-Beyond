@@ -64,21 +64,37 @@ class WorldDao {
             .addOnFailureListener { }
     }
 
-    suspend fun saveWorld(world: WorldDTO) {
+    suspend fun saveWorld(world: WorldDTO): Result<Boolean> {
+        var result = Result.success(true)
         val entity = world.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(world.id)
             .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error writing document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 
-    suspend fun deleteWorld(id: String) {
+    suspend fun deleteWorld(id: String): Result<Boolean> {
+        var result = Result.success(true)
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error deleting document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 }
