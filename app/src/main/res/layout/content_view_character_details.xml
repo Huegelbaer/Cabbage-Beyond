@@ -89,16 +89,27 @@
             app:layout_constraintStart_toStartOf="@id/guideline"
             app:layout_constraintTop_toTopOf="@id/world_title" />
 
+
+        <com.github.mikephil.charting.charts.RadarChart
+            android:id="@+id/attribute_chart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="200dp"
+            android:layout_marginTop="@dimen/default_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/world_value" />
+
         <TextView
             android:id="@+id/description_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/default_margin"
+            android:layout_marginTop="@dimen/large_margin"
             android:text="@string/character_description"
             android:textAppearance="@style/TextAppearance.Property.Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/world_title" />
+            app:layout_constraintTop_toBottomOf="@+id/attribute_chart" />
 
         <TextView
             android:id="@+id/description_value"
