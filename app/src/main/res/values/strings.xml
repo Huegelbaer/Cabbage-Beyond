@@ -127,5 +127,6 @@
     <string name="attribute_strength_title">Strength</string>
     <string name="attribute_intellect_title">Intellect</string>
     <string name="attribute_willpower_title">Willpower</string>
+    <string name="Stats">Stats</string>
 
 </resources>

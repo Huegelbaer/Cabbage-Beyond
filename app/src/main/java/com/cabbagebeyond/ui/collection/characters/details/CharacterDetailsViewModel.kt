@@ -29,33 +29,50 @@ class CharacterDetailsViewModel(
         get() = _items
 
     init {
-        val itemList = mutableListOf<Item>()
-
-        val talents = givenCharacter.talents.map {
-                ListItem(it.name, it)
-            }.toMutableList()
-        val talentItem = HeaderItem("Talents", R.drawable.ic_thumb_up, talents)
-        itemList.add(talentItem)
-
-        val handicaps = givenCharacter.handicaps.map {
-            ListItem(it.name, it)
-        }.toMutableList()
-        val handicapItem = HeaderItem("Handicaps", R.drawable.ic_thumb_down, handicaps)
-        itemList.add(handicapItem)
-
-        val forces = givenCharacter.forces.map {
-            ListItem(it.name, it)
-        }.toMutableList()
-        val forceItem = HeaderItem("Forces", R.drawable.ic_local_library, forces)
-        itemList.add(forceItem)
-
-        val equipments = givenCharacter.equipments.map {
-            ListItem(it.name, it)
-        }.toMutableList()
-        val equipmentItem = HeaderItem("Equipments", R.drawable.ic_security, equipments)
-        itemList.add(equipmentItem)
+        val itemList = mutableListOf<Item>(
+            extractTalents(givenCharacter),
+            extractHandicaps(givenCharacter),
+            extractAbilities(givenCharacter),
+            extractForces(givenCharacter),
+            extractEquipments(givenCharacter)
+        )
 
         _items.value = itemList
+    }
+
+    private fun extractTalents(character: Character): HeaderItem {
+        val talents = character.talents.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        return HeaderItem("Talents", R.drawable.ic_thumb_up, talents)
+    }
+
+    private fun extractHandicaps(character: Character): HeaderItem {
+        val handicaps = character.handicaps.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        return HeaderItem("Handicaps", R.drawable.ic_thumb_down, handicaps)
+    }
+
+    private fun extractAbilities(character: Character): HeaderItem {
+        val abilities = character.abilities.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        return HeaderItem("Abilities", R.drawable.ic_menu_abilities, abilities)
+    }
+
+    private fun extractForces(character: Character): HeaderItem {
+        val forces = character.forces.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        return HeaderItem("Forces", R.drawable.ic_local_library, forces)
+    }
+
+    private fun extractEquipments(character: Character): HeaderItem {
+        val equipments = character.equipments.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        return HeaderItem("Equipments", R.drawable.ic_security, equipments)
     }
 
     fun expandHeader(headerItem: HeaderItem) {

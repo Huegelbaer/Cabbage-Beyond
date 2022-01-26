@@ -5,6 +5,8 @@
 
     <data>
 
+        <import type="com.cabbagebeyond.ui.IntegerConverter" />
+        
         <variable
             name="character"
             type="com.cabbagebeyond.model.Character" />
@@ -34,7 +36,7 @@
             android:layout_marginTop="@dimen/default_margin"
             android:text="@string/character_race"
             android:textAppearance="@style/TextAppearance.Property.Title"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_quarter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/name_value" />
 
@@ -45,16 +47,17 @@
             android:text="@{character.race.name}"
             android:textAppearance="@style/TextAppearance.Property.Value"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/guideline_quarter"
             app:layout_constraintTop_toTopOf="@id/race_title" />
 
         <TextView
             android:id="@+id/type_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/character_type"
             android:textAppearance="@style/TextAppearance.Property.Title"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_quarter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/race_title" />
 
@@ -65,7 +68,7 @@
             android:text="@{character.type}"
             android:textAppearance="@style/TextAppearance.Property.Value"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/guideline_quarter"
             app:layout_constraintTop_toTopOf="@id/type_title"
             tools:text="Monster" />
 
@@ -73,9 +76,10 @@
             android:id="@+id/world_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/character_world"
             android:textAppearance="@style/TextAppearance.Property.Title"
-            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintEnd_toStartOf="@id/guideline_quarter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/type_title" />
 
@@ -86,9 +90,90 @@
             android:text="@{character.world.name}"
             android:textAppearance="@style/TextAppearance.Property.Value"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="@id/guideline_quarter"
             app:layout_constraintTop_toTopOf="@id/world_title" />
 
+        <TextView
+            android:id="@+id/movement_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/movement_title"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toStartOf="@id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/stats_title" />
+
+        <TextView
+            android:id="@+id/movement_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{IntegerConverter.toString(character.movement)}"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toEndOf="@id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/movement_title" />
+
+        <TextView
+            android:id="@+id/charisma_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/charisma_title"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_half_width"
+            app:layout_constraintTop_toTopOf="@id/movement_title" />
+
+        <TextView
+            android:id="@+id/charisma_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{IntegerConverter.toString(character.charisma)}"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@id/charisma_title" />
+
+        <TextView
+            android:id="@+id/parry_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/parry_title"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toStartOf="@id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/movement_value" />
+
+        <TextView
+            android:id="@+id/parry_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{IntegerConverter.toString(character.parry)}"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toStartOf="@id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/parry_title" />
+
+        <TextView
+            android:id="@+id/robustness_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/robustness"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_half_width"
+            app:layout_constraintTop_toTopOf="@id/parry_title" />
+
+        <TextView
+            android:id="@+id/robustness_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@{character.toughness}"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@id/robustness_title" />
 
         <com.github.mikephil.charting.charts.RadarChart
             android:id="@+id/attribute_chart"
@@ -98,23 +183,24 @@
             android:layout_marginTop="@dimen/default_margin"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/world_value" />
+            app:layout_constraintTop_toBottomOf="@+id/robustness_value" />
 
         <TextView
             android:id="@+id/description_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/large_margin"
+            android:layout_marginTop="@dimen/default_margin"
             android:text="@string/character_description"
             android:textAppearance="@style/TextAppearance.Property.Title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/attribute_chart" />
+            app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         <TextView
             android:id="@+id/description_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/small_margin"
             android:text="@{character.description}"
             android:textAppearance="@style/TextAppearance.Property.Value"
             app:layout_constraintEnd_toEndOf="parent"
@@ -126,19 +212,55 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/default_margin"
-            android:layout_marginBottom="@dimen/large_margin"
             android:nestedScrollingEnabled="false"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/description_value" />
+            app:layout_constraintTop_toBottomOf="@+id/attribute_chart" />
 
         <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline"
+            android:id="@+id/guideline_quarter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.25" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_half_width"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="409dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/large_margin"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/world_value" />
+
+        <TextView
+            android:id="@+id/stats_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/Stats"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+        <View
+            android:id="@+id/divider2"
+            android:layout_width="413dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/large_margin"
+            android:background="?android:attr/listDivider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/list" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
