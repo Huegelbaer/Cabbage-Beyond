@@ -60,6 +60,9 @@ dependencies {
     // Cool charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    // OCR
+    implementation "com.google.android.gms:play-services-mlkit-text-recognition:$mlkitVersion"
+
     //Koin
     implementation "io.insert-koin:koin-android:$koinVersion"
 
