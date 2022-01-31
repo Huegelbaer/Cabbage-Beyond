@@ -32,7 +32,7 @@ object FirebaseUtil {
     private fun setupFirestore(): FirebaseFirestore {
         val store = FirebaseFirestore.getInstance()
         if (USE_EMULATORS) {
-            store.useEmulator("10.0.2.2", 8080)
+            store.useEmulator(BuildConfig.LOCAL_FIREBASE_URL, 8080)
         }
         return store
     }
@@ -40,7 +40,7 @@ object FirebaseUtil {
     private fun setupAuth(): FirebaseAuth {
         val auth = FirebaseAuth.getInstance()
         if (USE_EMULATORS) {
-            auth.useEmulator("10.0.2.2", 9099)
+            auth.useEmulator(BuildConfig.LOCAL_FIREBASE_URL, 9099)
         }
         return auth
     }
@@ -48,7 +48,7 @@ object FirebaseUtil {
     private fun setupAuthUI(): AuthUI {
         val ui = AuthUI.getInstance()
         if (USE_EMULATORS) {
-            ui.useEmulator("10.0.2.2", 9099)
+            ui.useEmulator(BuildConfig.LOCAL_FIREBASE_URL, 9099)
         }
         return ui
     }
