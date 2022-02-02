@@ -34,6 +34,7 @@ class TextRecognizerFragment : Fragment() {
         }
 
         _binding.galleryButton.setOnClickListener {
+            startChooseImageFromGalleryIntent()
         }
 
         return _binding.root
@@ -73,11 +74,13 @@ class TextRecognizerFragment : Fragment() {
             val uri = data?.extras?.get("data")
             // start ocr
             Log.d(TAG, uri.toString() ?: "NO image uri")
+        }
+        else if (requestCode == REQUEST_CHOOSE_IMAGE && resultCode == RESULT_OK) {
             imageUri = data?.data
             // start ocr
+            Log.d(TAG, imageUri?.toString() ?: "NO image uri")
         }
     }
-
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -107,9 +110,19 @@ class TextRecognizerFragment : Fragment() {
         ) == PackageManager.PERMISSION_GRANTED)
     }
 
+    private fun startChooseImageFromGalleryIntent() {
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type = "image/*"
+        startActivityForResult(
+            Intent.createChooser(intent, "Select Picture"),
+            REQUEST_CHOOSE_IMAGE
+        )
+    }
+
     companion object {
         private const val TAG = "TextRecognizerFragment"
         private const val REQUEST_IMAGE_CAPTURE = 1001
+        private const val REQUEST_CHOOSE_IMAGE = 1002
         private const val PERMISSION_CAMERA_REQUESTS = 1101
     }
 }
