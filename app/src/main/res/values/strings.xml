@@ -127,5 +127,8 @@
     <string name="attribute_strength_title">Strength</string>
     <string name="attribute_intellect_title">Intellect</string>
     <string name="attribute_willpower_title">Willpower</string>
+    <string name="text_recognition_selection_to_property">Set as property</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
 
 </resources>

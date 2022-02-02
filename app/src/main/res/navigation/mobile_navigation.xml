@@ -156,4 +156,8 @@
             android:name="talent"
             app:argType="com.cabbagebeyond.model.Talent" />
     </fragment>
+    <fragment
+        android:id="@+id/nav_sessions"
+        android:name="com.cabbagebeyond.ui.ocr.TextRecognizerFragment">
+    </fragment>
 </navigation>
