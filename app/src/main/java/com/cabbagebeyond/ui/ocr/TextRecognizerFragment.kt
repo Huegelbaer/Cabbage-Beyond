@@ -19,8 +19,7 @@ import com.cabbagebeyond.databinding.FragmentTextRecognizerBinding
 
 class TextRecognizerFragment : Fragment() {
 
-    private var imageUri: Uri? = null
-
+    private lateinit var _viewModel: TextRecognizerViewModel
     private lateinit var _binding: FragmentTextRecognizerBinding
 
     override fun onCreateView(
@@ -28,6 +27,11 @@ class TextRecognizerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTextRecognizerBinding.inflate(inflater)
+
+        _viewModel = TextRecognizerViewModel()
+
+        _binding.lifecycleOwner = this
+        _binding.viewModel = _viewModel
 
         _binding.cameraButton.setOnClickListener {
             checkCameraPermission()
@@ -71,14 +75,12 @@ class TextRecognizerFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            val uri = data?.extras?.get("data")
-            // start ocr
-            Log.d(TAG, uri.toString() ?: "NO image uri")
+            val uri = data?.extras?.get("data") as Uri
+            _viewModel.startTextRecognition(requireContext(), uri)
         }
         else if (requestCode == REQUEST_CHOOSE_IMAGE && resultCode == RESULT_OK) {
-            imageUri = data?.data
-            // start ocr
-            Log.d(TAG, imageUri?.toString() ?: "NO image uri")
+            val uri = data?.data as Uri
+            _viewModel.startTextRecognition(requireContext(), uri)
         }
     }
 

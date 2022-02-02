@@ -4,6 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="viewModel"
+            type="com.cabbagebeyond.ui.ocr.TextRecognizerViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -13,16 +17,18 @@
 
         <TextView
             android:id="@+id/recognizedTextView"
+            style="@style/TextAppearance.Body"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:focusable="true"
             android:longClickable="true"
+            android:text="@{viewModel.result}"
             android:textIsSelectable="true"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{viewModel.state == viewModel.State.FINISHED}" />
 
         <Button
             android:id="@+id/cameraButton"
@@ -32,7 +38,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/galleryButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{viewModel.state == viewModel.State.RESET}" />
 
         <Button
             android:id="@+id/galleryButton"
@@ -42,18 +49,19 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/cameraButton"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{viewModel.state == viewModel.State.RESET}" />
 
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:visibility="@{viewModel.state == viewModel.State.RUNNING}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
