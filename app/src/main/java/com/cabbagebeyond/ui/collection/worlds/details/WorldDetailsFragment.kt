@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentWorldDetailsBinding
 import com.cabbagebeyond.services.UserService
@@ -51,6 +52,12 @@ class WorldDetailsFragment : DetailsFragment() {
             }
         }
 
+        setHasOptionsMenu(true)
+
         return _binding.root
+    }
+
+    override fun navigateToOcr() {
+        findNavController().navigate(WorldDetailsFragmentDirections.actionWorldDetailsToOcr())
     }
 }

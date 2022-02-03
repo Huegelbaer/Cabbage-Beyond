@@ -1,15 +1,33 @@
 package com.cabbagebeyond.ui
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import com.cabbagebeyond.R
 import com.cabbagebeyond.model.World
 import com.google.android.material.snackbar.Snackbar
 
 open class DetailsFragment : Fragment() {
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.edit, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_ocr) {
+            navigateToOcr()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    protected open fun navigateToOcr() {}
 
     protected fun setupStringSpinner(attribute: String, attributes: List<String>, spinner: Spinner, onSelected: ((item: String) -> Unit)) {
         setupSpinner(attribute, attributes, spinner, object :

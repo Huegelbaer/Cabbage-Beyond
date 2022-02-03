@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.ForceDetailsFragmentBinding
-import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
-import com.cabbagebeyond.util.Feature
 import org.koin.android.ext.android.inject
 
 class ForceDetailsFragment : DetailsFragment() {
@@ -68,6 +67,8 @@ class ForceDetailsFragment : DetailsFragment() {
             }
         }
 
+        setHasOptionsMenu(true)
+
         return _binding.root
     }
 
@@ -81,6 +82,10 @@ class ForceDetailsFragment : DetailsFragment() {
         super.setupWorldSpinner(world, worlds, _binding.worldSpinner) {
             _viewModel.onWorldSelected(it)
         }
+    }
+
+    override fun navigateToOcr() {
+        findNavController().navigate(ForceDetailsFragmentDirections.actionForceDetailsToOcr())
     }
 }
 

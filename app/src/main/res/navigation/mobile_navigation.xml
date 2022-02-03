@@ -35,6 +35,9 @@
         <argument
             android:name="world"
             app:argType="com.cabbagebeyond.model.World" />
+        <action
+            android:id="@+id/action_worldDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/nav_admin_panel"
@@ -56,6 +59,9 @@
         <argument
             android:name="character"
             app:argType="com.cabbagebeyond.model.Character" />
+        <action
+            android:id="@+id/action_characterDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/nav_abilities"
@@ -117,6 +123,9 @@
         <argument
             android:name="ability"
             app:argType="com.cabbagebeyond.model.Ability" />
+        <action
+            android:id="@+id/action_ability_details_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/equipmentDetailsFragment"
@@ -125,6 +134,9 @@
         <argument
             android:name="equipment"
             app:argType="com.cabbagebeyond.model.Equipment" />
+        <action
+            android:id="@+id/action_equipmentDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/forceDetailsFragment"
@@ -132,6 +144,9 @@
         <argument
             android:name="force"
             app:argType="com.cabbagebeyond.model.Force" />
+        <action
+            android:id="@+id/action_forceDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/handicapDetailsFragment"
@@ -139,6 +154,9 @@
         <argument
             android:name="handicap"
             app:argType="com.cabbagebeyond.model.Handicap" />
+        <action
+            android:id="@+id/action_handicapDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/raceDetailsFragment"
@@ -147,6 +165,9 @@
         <argument
             android:name="race"
             app:argType="com.cabbagebeyond.model.Race" />
+        <action
+            android:id="@+id/action_raceDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/talentDetailsFragment"
@@ -155,9 +176,11 @@
         <argument
             android:name="talent"
             app:argType="com.cabbagebeyond.model.Talent" />
+        <action
+            android:id="@+id/action_talentDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
-        android:id="@+id/nav_sessions"
-        android:name="com.cabbagebeyond.ui.ocr.TextRecognizerFragment">
-    </fragment>
+        android:id="@+id/ocr"
+        android:name="com.cabbagebeyond.ui.ocr.TextRecognizerFragment" />
 </navigation>
