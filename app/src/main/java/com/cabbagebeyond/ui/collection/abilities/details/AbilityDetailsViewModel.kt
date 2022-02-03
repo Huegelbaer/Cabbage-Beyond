@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class AbilityDetailsViewModel(
@@ -35,6 +36,12 @@ class AbilityDetailsViewModel(
         // for MVP the attributes are stored in resources.
         val stringArray = app.applicationContext.resources.getStringArray(R.array.attributes)
         _attributes.value = stringArray.toList()
+
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("attribute", R.string.attribute, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     override fun onEdit() {
@@ -88,5 +95,15 @@ class AbilityDetailsViewModel(
         val givenAbility = ability.value
         givenAbility?.world = world
         ability.value = givenAbility
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> ability.value?.name = property.value
+                "attribute" -> ability.value?.attribute = property.value
+                "description" -> ability.value?.description += property.value
+            }
+        }
     }
 }

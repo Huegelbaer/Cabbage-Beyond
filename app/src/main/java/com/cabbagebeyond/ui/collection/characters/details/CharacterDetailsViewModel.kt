@@ -9,6 +9,7 @@ import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class CharacterDetailsViewModel(
@@ -56,6 +57,11 @@ class CharacterDetailsViewModel(
         itemList.add(equipmentItem)
 
         _items.value = itemList
+
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     fun expandHeader(headerItem: HeaderItem) {
@@ -92,5 +98,14 @@ class CharacterDetailsViewModel(
 
     fun show(listItem: ListItem) {
 
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> character.value?.name = property.value
+                "description" -> character.value?.description += property.value
+            }
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.cabbagebeyond.ui
 
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -8,11 +9,26 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.setFragmentResultListener
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.ocr.TextRecognizerFragment
+import com.cabbagebeyond.util.CollectionProperty
 import com.google.android.material.snackbar.Snackbar
 
 open class DetailsFragment : Fragment() {
+
+    protected open lateinit var viewModel: DetailsViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        // Use the Kotlin extension in the fragment-ktx artifact
+        setFragmentResultListener(TextRecognizerFragment.RESULT_KEY) { _, bundle ->
+            val properties = bundle.getParcelableArray(TextRecognizerFragment.RESULT_ARRAY_KEY) ?: return@setFragmentResultListener
+            val array = properties.mapNotNull { it as CollectionProperty }.toTypedArray()
+            viewModel.onPropertiesReceived(array)
+        }
+    }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.edit, menu)

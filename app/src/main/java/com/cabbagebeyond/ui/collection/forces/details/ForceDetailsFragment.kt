@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.ForceDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class ForceDetailsFragment : DetailsFragment() {
@@ -19,7 +20,8 @@ class ForceDetailsFragment : DetailsFragment() {
         fun newInstance() = ForceDetailsFragment()
     }
 
-    private lateinit var _viewModel: ForceDetailsViewModel
+    private val _viewModel: ForceDetailsViewModel
+        get() = viewModel as ForceDetailsViewModel
 
     private lateinit var _binding: ForceDetailsFragmentBinding
 
@@ -34,7 +36,7 @@ class ForceDetailsFragment : DetailsFragment() {
 
         val dataSource: ForceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        _viewModel = ForceDetailsViewModel(
+        viewModel = ForceDetailsViewModel(
             force, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application
         )
 
@@ -85,7 +87,7 @@ class ForceDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(ForceDetailsFragmentDirections.actionForceDetailsToOcr())
+        findNavController().navigate(ForceDetailsFragmentDirections.actionForceDetailsToOcr(_viewModel.properties))
     }
 }
 

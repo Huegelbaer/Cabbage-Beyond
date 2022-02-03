@@ -2,6 +2,7 @@ package com.cabbagebeyond.ui.ocr
 
 import android.Manifest
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -14,10 +15,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.core.os.bundleOf
+import androidx.fragment.app.setFragmentResult
+import com.cabbagebeyond.R
 import com.cabbagebeyond.databinding.FragmentTextRecognizerBinding
+import com.cabbagebeyond.util.CollectionProperty
 
 
 class TextRecognizerFragment : Fragment() {
+
+    private lateinit var _propertyKeys: Array<CollectionProperty>
 
     private lateinit var _viewModel: TextRecognizerViewModel
     private lateinit var _binding: FragmentTextRecognizerBinding
@@ -26,6 +33,8 @@ class TextRecognizerFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        _propertyKeys = TextRecognizerFragmentArgs.fromBundle(requireArguments()).properties
+
         _binding = FragmentTextRecognizerBinding.inflate(inflater)
 
         _viewModel = TextRecognizerViewModel()
@@ -39,6 +48,10 @@ class TextRecognizerFragment : Fragment() {
 
         _binding.galleryButton.setOnClickListener {
             startChooseImageFromGalleryIntent()
+        }
+
+        _binding.recognizedTextView.customSelectionActionModeCallback = AddToPropertyActionCallback(_binding.recognizedTextView) {
+            showChooseDialog(it)
         }
 
         return _binding.root
@@ -121,10 +134,38 @@ class TextRecognizerFragment : Fragment() {
         )
     }
 
+    private fun showChooseDialog(value: String) {
+        var selectedKey = _propertyKeys.first()
+        val keys = _propertyKeys.map { resources.getString(it.displayName) }.toTypedArray()
+
+        AlertDialog
+            .Builder(requireContext())
+            .setTitle(R.string.ocr_add_property_dialog_title)
+            .setSingleChoiceItems(keys, 0) { _, i ->
+                selectedKey = _propertyKeys[i]
+            }
+            .setPositiveButton(R.string.ocr_add_property_dialog_add_button) { _, _ ->
+                addProperty(selectedKey, value)
+            }
+            .create()
+            .show()
+    }
+
+    private fun addProperty(property: CollectionProperty, value: String) {
+        property.value = value
+
+        val bundle = Bundle()
+        bundle.putParcelableArray(RESULT_ARRAY_KEY, _propertyKeys)
+        setFragmentResult(RESULT_KEY, bundle)
+    }
+
     companion object {
         private const val TAG = "TextRecognizerFragment"
         private const val REQUEST_IMAGE_CAPTURE = 1001
         private const val REQUEST_CHOOSE_IMAGE = 1002
         private const val PERMISSION_CAMERA_REQUESTS = 1101
+
+        const val RESULT_KEY = "requestKey"
+        const val RESULT_ARRAY_KEY = "array"
     }
 }

@@ -9,11 +9,14 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentWorldDetailsBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class WorldDetailsFragment : DetailsFragment() {
 
-    private lateinit var _viewModel: WorldDetailsViewModel
+    private val _viewModel: WorldDetailsViewModel
+        get() = viewModel as WorldDetailsViewModel
+
     private lateinit var _binding: FragmentWorldDetailsBinding
 
     override fun onCreateView(
@@ -27,7 +30,7 @@ class WorldDetailsFragment : DetailsFragment() {
         val world = WorldDetailsFragmentArgs.fromBundle(requireArguments()).world
 
         val dataSource: WorldDataSource by inject()
-        _viewModel = WorldDetailsViewModel(
+        viewModel = WorldDetailsViewModel(
             world, dataSource, UserService.currentUser, requireActivity().application
         )
 
@@ -58,6 +61,6 @@ class WorldDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(WorldDetailsFragmentDirections.actionWorldDetailsToOcr())
+        findNavController().navigate(WorldDetailsFragmentDirections.actionWorldDetailsToOcr(_viewModel.properties))
     }
 }

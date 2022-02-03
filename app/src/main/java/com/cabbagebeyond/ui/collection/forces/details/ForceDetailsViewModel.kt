@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Force
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class ForceDetailsViewModel(
@@ -35,6 +36,14 @@ class ForceDetailsViewModel(
         // for MVP the types are stored in resources.
         val stringArray = app.applicationContext.resources.getStringArray(R.array.ranks)
         _ranks.value = stringArray.toList()
+
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("requirement", R.string.requirement_title, ""),
+            CollectionProperty("cost", R.string.cost, ""),
+            CollectionProperty("range", R.string.range, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     override fun onEdit() {
@@ -86,5 +95,17 @@ class ForceDetailsViewModel(
         val given = force.value
         given?.world = world
         force.value = given
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> force.value?.name = property.value
+                "requirement" -> force.value?.rangRequirement = property.value
+                "cost" -> force.value?.cost = property.value
+                "range" -> force.value?.range = property.value
+                "description" -> force.value?.description += property.value
+            }
+        }
     }
 }

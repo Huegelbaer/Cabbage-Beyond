@@ -12,6 +12,7 @@ import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class TalentDetailsViewModel(
@@ -39,6 +40,13 @@ class TalentDetailsViewModel(
     init {
         loadRanks(app.applicationContext)
         loadTypes(app.applicationContext)
+
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("type", R.string.character_type, ""),
+            CollectionProperty("rank", R.string.talent_rang_requirement, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     override fun onEdit() {
@@ -107,5 +115,16 @@ class TalentDetailsViewModel(
 
     fun onWorldSelected(world: World?) {
         talent.value?.world = world
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> talent.value?.name = property.value
+                "attribute" -> talent.value?.rangRequirement = property.value
+                "type" -> talent.value?.type = property.value
+                "description" -> talent.value?.description += property.value
+            }
+        }
     }
 }

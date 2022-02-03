@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class RaceDetailsViewModel(
@@ -27,7 +28,12 @@ class RaceDetailsViewModel(
     val worlds: LiveData<List<World?>>
         get() = _worlds
 
+
     init {
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     override fun onEdit() {
@@ -72,5 +78,14 @@ class RaceDetailsViewModel(
         val given = race.value
         given?.world = world
         race.value = given
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> race.value?.name = property.value
+                "description" -> race.value?.description += property.value
+            }
+        }
     }
 }

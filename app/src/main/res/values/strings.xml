@@ -131,4 +131,7 @@
     <string name="camera">Camera</string>
     <string name="gallery">Gallery</string>
 
+    <string name="ocr_add_property_dialog_title">Which property is the selected text?</string>
+    <string name="ocr_add_property_dialog_add_button">Add</string>
+
 </resources>

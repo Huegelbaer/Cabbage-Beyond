@@ -11,6 +11,8 @@ import com.cabbagebeyond.databinding.TalentDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
+import com.cabbagebeyond.ui.collection.talents.TalentsViewModel
 import org.koin.android.ext.android.inject
 
 class TalentDetailsFragment : DetailsFragment() {
@@ -19,7 +21,9 @@ class TalentDetailsFragment : DetailsFragment() {
         fun newInstance() = TalentDetailsFragment()
     }
 
-    private lateinit var _viewModel: TalentDetailsViewModel
+
+    private val _viewModel: TalentDetailsViewModel
+        get() = viewModel as TalentDetailsViewModel
 
     private lateinit var _binding: TalentDetailsFragmentBinding
 
@@ -34,7 +38,7 @@ class TalentDetailsFragment : DetailsFragment() {
 
         val dataSource: TalentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        _viewModel = TalentDetailsViewModel(
+        viewModel = TalentDetailsViewModel(
             talent, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application
         )
 
@@ -95,6 +99,6 @@ class TalentDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(TalentDetailsFragmentDirections.actionTalentDetailsToOcr())
+        findNavController().navigate(TalentDetailsFragmentDirections.actionTalentDetailsToOcr(_viewModel.properties))
     }
 }

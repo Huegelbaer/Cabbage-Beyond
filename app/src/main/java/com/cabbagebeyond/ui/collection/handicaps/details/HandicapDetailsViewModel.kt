@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Handicap
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class HandicapDetailsViewModel(
@@ -35,6 +36,12 @@ class HandicapDetailsViewModel(
         // for MVP the types are stored in resources.
         val stringArray = app.applicationContext.resources.getStringArray(R.array.types_of_handicap)
         _types.value = stringArray.toList()
+
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("type", R.string.character_type, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     override fun onEdit() {
@@ -86,5 +93,15 @@ class HandicapDetailsViewModel(
         val given = handicap.value
         given?.world = world
         handicap.value = given
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> handicap.value?.name = property.value
+                "type" -> handicap.value?.type = property.value
+                "description" -> handicap.value?.description += property.value
+            }
+        }
     }
 }

@@ -19,6 +19,7 @@ import com.github.mikephil.charting.components.YAxis
 import android.graphics.Typeface
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.R
+import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 
@@ -28,7 +29,9 @@ class CharacterDetailsFragment : DetailsFragment() {
         fun newInstance() = CharacterDetailsFragment()
     }
 
-    private lateinit var _viewModel: CharacterDetailsViewModel
+    private val _viewModel: CharacterDetailsViewModel
+        get() = viewModel as CharacterDetailsViewModel
+
     private lateinit var _adapter: CharacterDetailsAdapter
     private lateinit var _binding: CharacterDetailsFragmentBinding
 
@@ -42,7 +45,7 @@ class CharacterDetailsFragment : DetailsFragment() {
         val character = CharacterDetailsFragmentArgs.fromBundle(requireArguments()).character
 
         val dataSource: CharacterDataSource by inject()
-        _viewModel = CharacterDetailsViewModel(
+        viewModel = CharacterDetailsViewModel(
             character, dataSource,UserService.currentUser, requireActivity().application
         )
 
@@ -176,6 +179,6 @@ class CharacterDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(CharacterDetailsFragmentDirections.actionCharacterDetailsToOcr())
+        findNavController().navigate(CharacterDetailsFragmentDirections.actionCharacterDetailsToOcr(_viewModel.properties))
     }
 }

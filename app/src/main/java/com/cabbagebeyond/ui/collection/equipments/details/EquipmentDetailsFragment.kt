@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.EquipmentDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class EquipmentDetailsFragment : DetailsFragment() {
@@ -19,7 +20,8 @@ class EquipmentDetailsFragment : DetailsFragment() {
         fun newInstance() = EquipmentDetailsFragment()
     }
 
-    private lateinit var _viewModel: EquipmentDetailsViewModel
+    private val _viewModel: EquipmentDetailsViewModel
+        get() = viewModel as EquipmentDetailsViewModel
 
     private lateinit var _binding: EquipmentDetailsFragmentBinding
 
@@ -34,7 +36,7 @@ class EquipmentDetailsFragment : DetailsFragment() {
 
         val dataSource: EquipmentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        _viewModel = EquipmentDetailsViewModel(equipment, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application)
+        viewModel = EquipmentDetailsViewModel(equipment, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application)
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = this
@@ -83,7 +85,7 @@ class EquipmentDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(EquipmentDetailsFragmentDirections.actionEquipmentDetailsToOcr())
+        findNavController().navigate(EquipmentDetailsFragmentDirections.actionEquipmentDetailsToOcr(_viewModel.properties))
     }
 }
 

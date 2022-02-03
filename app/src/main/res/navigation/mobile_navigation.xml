@@ -182,5 +182,9 @@
     </fragment>
     <fragment
         android:id="@+id/ocr"
-        android:name="com.cabbagebeyond.ui.ocr.TextRecognizerFragment" />
+        android:name="com.cabbagebeyond.ui.ocr.TextRecognizerFragment">
+        <argument
+            android:name="properties"
+            app:argType="com.cabbagebeyond.util.CollectionProperty[]" />
+    </fragment>
 </navigation>

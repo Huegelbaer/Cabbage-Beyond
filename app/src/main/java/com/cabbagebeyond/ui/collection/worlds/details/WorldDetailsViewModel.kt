@@ -8,11 +8,19 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class WorldDetailsViewModel(givenWorld: World, private val worldDataSource: WorldDataSource, user: User, app: Application): DetailsViewModel(user, app) {
 
     var world = MutableLiveData(givenWorld)
+
+    init {
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
+    }
 
     override fun onSave() {
         super.onSave()
@@ -29,6 +37,15 @@ class WorldDetailsViewModel(givenWorld: World, private val worldDataSource: Worl
                 world.value = toSafe
             } else {
                 message.value = R.string.save_failed
+            }
+        }
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> world.value?.name = property.value
+                "description" -> world.value?.description += property.value
             }
         }
     }

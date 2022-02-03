@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class EquipmentDetailsViewModel(
@@ -35,6 +36,15 @@ class EquipmentDetailsViewModel(
         // for MVP the types are stored in resources.
         val stringArray = app.applicationContext.resources.getStringArray(R.array.types_of_weapons)
         _types.value = stringArray.toList()
+
+        properties = arrayOf(
+            CollectionProperty("name", R.string.character_name, ""),
+            CollectionProperty("type", R.string.character_type, ""),
+            CollectionProperty("cost", R.string.cost, ""),
+            CollectionProperty("weight", R.string.weight, ""),
+            CollectionProperty("requirements", R.string.requirement_title, ""),
+            CollectionProperty("description", R.string.character_description, "")
+        )
     }
 
     override fun onEdit() {
@@ -86,5 +96,18 @@ class EquipmentDetailsViewModel(
         val given = equipment.value
         given?.world = world
         equipment.value = given
+    }
+
+    override fun onPropertiesReceived(properties: Array<CollectionProperty>) {
+        for (property in properties) {
+            when (property.key) {
+                "name" -> equipment.value?.name = property.value
+                "type" -> equipment.value?.type = property.value
+                "cost" -> equipment.value?.cost = property.value
+                "weight" -> equipment.value?.weight = property.value.toDouble()
+                "requirements" -> equipment.value?.requirements = property.value.split(", ")
+                "description" -> equipment.value?.description += property.value
+            }
+        }
     }
 }

@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.RaceDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class RaceDetailsFragment : DetailsFragment() {
@@ -19,7 +20,8 @@ class RaceDetailsFragment : DetailsFragment() {
         fun newInstance() = RaceDetailsFragment()
     }
 
-    private lateinit var _viewModel: RaceDetailsViewModel
+    private val _viewModel: RaceDetailsViewModel
+        get() = viewModel as RaceDetailsViewModel
 
     private lateinit var _binding: RaceDetailsFragmentBinding
 
@@ -34,7 +36,7 @@ class RaceDetailsFragment : DetailsFragment() {
 
         val dataSource: RaceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        _viewModel = RaceDetailsViewModel(
+        viewModel = RaceDetailsViewModel(
             race, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application
         )
 
@@ -75,7 +77,7 @@ class RaceDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(RaceDetailsFragmentDirections.actionRaceDetailsToOcr())
+        findNavController().navigate(RaceDetailsFragmentDirections.actionRaceDetailsToOcr(_viewModel.properties))
     }
 }
 

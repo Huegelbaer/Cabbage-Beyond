@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.util.Feature
+import com.cabbagebeyond.util.CollectionProperty
 
 open class DetailsViewModel(user: User, app: Application) : AndroidViewModel(app) {
 
@@ -22,6 +23,11 @@ open class DetailsViewModel(user: User, app: Application) : AndroidViewModel(app
 
     var message = MutableLiveData<Int?>()
         protected set
+
+    var properties: Array<CollectionProperty> = arrayOf()
+        protected set
+
+    open fun onPropertiesReceived(properties: Array<CollectionProperty>) {}
 
     fun onClickFab() {
         val inEditMode = _isEditing.value ?: false
