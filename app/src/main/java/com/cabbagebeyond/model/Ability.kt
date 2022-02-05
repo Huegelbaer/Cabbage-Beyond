@@ -7,14 +7,14 @@ data class Ability(
     var name: String,
     var description: String,
     var attribute: String,
-    var world: String,
+    var world: World?,
     var id: String,
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(World::class.java.classLoader),
         parcel.readString()!!
     )
 
@@ -22,7 +22,7 @@ data class Ability(
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(attribute)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 

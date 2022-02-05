@@ -7,14 +7,14 @@ data class Handicap(
     var name: String,
     var description: String,
     var type: String,
-    var world: String,
+    var world: World?,
     val id: String
 ): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(World::class.java.classLoader)!!,
         parcel.readString()!!
     ) {
     }
@@ -23,7 +23,7 @@ data class Handicap(
         parcel.writeString(name)
         parcel.writeString(description)
         parcel.writeString(type)
-        parcel.writeString(world)
+        parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }
 

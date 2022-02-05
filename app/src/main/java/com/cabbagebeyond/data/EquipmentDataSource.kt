@@ -18,9 +18,9 @@ interface EquipmentDataSource {
 
     //suspend fun refreshEquipment(id: String)
 
-    suspend fun saveEquipment(equipment: Equipment)
+    suspend fun saveEquipment(equipment: Equipment): Result<Boolean>
 
     //suspend fun deleteAllEquipments()
 
-    suspend fun deleteEquipment(id: String)
+    suspend fun deleteEquipment(id: String): Result<Boolean>
 }

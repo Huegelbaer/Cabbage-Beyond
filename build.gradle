@@ -6,6 +6,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
@@ -31,4 +32,5 @@ ext {
     koinVersion = '3.1.2'
     lifecycleVersion = '2.4.0'
     navigationVersion = '2.4.0-rc01'
+    mlkitVersion = '18.0.0'
 }

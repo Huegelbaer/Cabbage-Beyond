@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'kotlin-parcelize'
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
 }
@@ -17,6 +18,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField 'String', 'LOCAL_FIREBASE_URL', '"' + InetAddress.localHost.canonicalHostName + '"'
     }
 
     buildTypes {
@@ -56,6 +59,12 @@ dependencies {
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Cool charts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // OCR
+    implementation "com.google.android.gms:play-services-mlkit-text-recognition:$mlkitVersion"
 
     //Koin
     implementation "io.insert-koin:koin-android:$koinVersion"

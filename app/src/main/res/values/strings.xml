@@ -27,6 +27,7 @@
     <string name="menu_search">Search</string>
     <string name="menu_sort">Sort</string>
     <string name="menu_filter">Filter</string>
+    <string name="menu_ocr">OCR</string>
 
     <!-- Dialog -->
     <string name="dialog_title_edit_user">Edit</string>
@@ -48,13 +49,90 @@
     <string name="character_type">Type</string>
     <string name="character_world">World</string>
     <string name="character_description">Description</string>
+    <string name="select_attribute">Select an attribute</string>
+    <string name="select_world">Select a world</string>
+
+    <string-array name="attributes">
+        <item>Strength</item>
+        <item>Verstand</item>
+        <item>Constitution</item>
+        <item>Dexterity</item>
+        <item>Willpower</item>
+    </string-array>
+
+    <string-array name="types_of_weapons">
+        <item>Weapon</item>
+        <item>Armor</item>
+        <item>Others</item>
+    </string-array>
+
+    <string-array name="ranks">
+        <item>Rookie</item>
+        <item>Advanced</item>
+        <item>Veteran</item>
+        <item>Hero</item>
+        <item>Legend</item>
+    </string-array>
+
+    <string-array name="types_of_handicap">
+        <item>slight</item>
+        <item>heavy</item>
+        <item>slight or heavy</item>
+    </string-array>
+
+    <string-array name="types_of_talents">
+        <item>background</item>
+        <item>leader</item>
+        <item>expert</item>
+        <item>fight</item>
+        <item>force</item>
+        <item>race</item>
+        <item>social</item>
+        <item>supernatural</item>
+        <item>wildcard</item>
+        <item>legendary</item>
+    </string-array>
 
     <!-- -->
     <string name="property_name">Name</string>
     <string name="talent_rang_requirement">Rank requirement</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter_description">Enter description</string>
 
     <string name="action_sign_in">Sign in</string>
     <string name="welcome">"Welcome !"</string>
     <string name="character_name">Name</string>
+    <string name="attribute">Attribute</string>
+
+    <string name="save_completed">Save completed!</string>
+    <string name="save_failed">Save failed!</string>
+    <string name="select_type">Select type</string>
+    <string name="cost">Cost</string>
+    <string name="weight">Weight</string>
+    <string name="enter_cost">Enter cost</string>
+    <string name="requirement_title">Requirement</string>
+    <string name="range">Range</string>
+    <string name="select_requirement">Select rang requirement</string>
+    <string name="duration_title">Duration</string>
+    <string name="shape_title">Shaping</string>
+    <string name="enter_duration">Enter duration</string>
+    <string name="enter_shape">Enter shaping</string>
+    <string name="features_title">Features</string>
+    <string name="menu_logout">Logout</string>
+    <string name="movement_title">Movement</string>
+    <string name="charisma_title">Charisma</string>
+    <string name="parry_title">Parade</string>
+    <string name="robustness">robustness</string>
+    <string name="attribute_agility_title">Agility</string>
+    <string name="attribute_constitution_title">Constitution</string>
+    <string name="attribute_strength_title">Strength</string>
+    <string name="attribute_intellect_title">Intellect</string>
+    <string name="attribute_willpower_title">Willpower</string>
+    <string name="text_recognition_selection_to_property">Set as property</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Gallery</string>
+
+    <string name="ocr_add_property_dialog_title">Which property is the selected text?</string>
+    <string name="ocr_add_property_dialog_add_button">Add</string>
 
 </resources>

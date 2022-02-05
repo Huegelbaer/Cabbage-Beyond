@@ -18,9 +18,9 @@ interface ForceDataSource {
 
     //suspend fun refreshForce(id: String)
 
-    suspend fun saveForce(force: Force)
+    suspend fun saveForce(force: Force): Result<Boolean>
 
     //suspend fun deleteAllForces()
 
-    suspend fun deleteForce(id: String)
+    suspend fun deleteForce(id: String): Result<Boolean>
 }

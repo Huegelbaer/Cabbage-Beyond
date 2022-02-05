@@ -3,6 +3,7 @@ package com.cabbagebeyond
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
+import android.view.MenuItem
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -14,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.cabbagebeyond.databinding.ActivityMainBinding
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
 import com.cabbagebeyond.util.AuthenticationService
+import com.cabbagebeyond.util.FirebaseUtil
 import com.google.android.gms.tasks.OnCompleteListener
 
 class MainActivity : AppCompatActivity() {
@@ -30,12 +32,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(binding.appBarMain.toolbar)
 
         binding.appBarMain.fab.setOnClickListener {
-            AuthenticationService.logout(this, OnCompleteListener {
-                val intent = Intent(this, AuthenticationActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
-                startActivity(intent)
-                finish()
-            })
+            logoutUserAndNavigateToStartScreen()
         }
         
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -45,7 +42,18 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_worlds, R.id.nav_characters, R.id.nav_admin_panel
+                R.id.nav_worlds,
+                R.id.nav_characters,
+                R.id.nav_talents,
+                R.id.nav_handicaps,
+                R.id.nav_abilities,
+                R.id.nav_forces,
+                R.id.nav_equipments,
+                R.id.nav_races,
+                R.id.nav_stories,
+                R.id.nav_sessions,
+                R.id.nav_account,
+                R.id.nav_admin_panel
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -58,8 +66,25 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_logout) {
+            logoutUserAndNavigateToStartScreen()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
+    }
+
+    private fun logoutUserAndNavigateToStartScreen() {
+        AuthenticationService.logout(this, OnCompleteListener {
+            val intent = Intent(this, AuthenticationActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
+            startActivity(intent)
+            finish()
+        })
     }
 }

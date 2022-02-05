@@ -35,6 +35,9 @@
         <argument
             android:name="world"
             app:argType="com.cabbagebeyond.model.World" />
+        <action
+            android:id="@+id/action_worldDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/nav_admin_panel"
@@ -56,35 +59,132 @@
         <argument
             android:name="character"
             app:argType="com.cabbagebeyond.model.Character" />
+        <action
+            android:id="@+id/action_characterDetails_to_ocr"
+            app:destination="@id/ocr" />
     </fragment>
     <fragment
         android:id="@+id/nav_abilities"
         android:name="com.cabbagebeyond.ui.collection.abilities.AbilitiesListFragment"
         android:label="@string/menu_abilities"
-        tools:layout="@layout/fragment_abilities_list" />
+        tools:layout="@layout/fragment_abilities_list" >
+        <action
+            android:id="@+id/action_abilities_to_details"
+            app:destination="@id/ability_details" />
+    </fragment>
     <fragment
         android:id="@+id/nav_talents"
         android:name="com.cabbagebeyond.ui.collection.talents.TalentsListFragment"
         android:label="@string/menu_talents"
-        tools:layout="@layout/fragment_talents_list" />
+        tools:layout="@layout/fragment_talents_list" >
+        <action
+            android:id="@+id/action_talents_to_details"
+            app:destination="@id/talentDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_handicaps"
         android:name="com.cabbagebeyond.ui.collection.handicaps.HandicapsFragment"
         android:label="@string/menu_handicaps"
-        tools:layout="@layout/fragment_handicaps_list" />
+        tools:layout="@layout/fragment_handicaps_list" >
+        <action
+            android:id="@+id/action_handicaps_to_details"
+            app:destination="@id/handicapDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_forces"
         android:name="com.cabbagebeyond.ui.collection.forces.ForcesFragment"
         android:label="@string/menu_forces"
-        tools:layout="@layout/fragment_forces_list" />
+        tools:layout="@layout/fragment_forces_list" >
+        <action
+            android:id="@+id/action_forces_to_details"
+            app:destination="@id/forceDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_equipments"
         android:name="com.cabbagebeyond.ui.collection.equipments.EquipmentsFragment"
         android:label="@string/menu_equipments"
-        tools:layout="@layout/fragment_equipments_list" />
+        tools:layout="@layout/fragment_equipments_list" >
+        <action
+            android:id="@+id/action_equipments_to_details"
+            app:destination="@id/equipmentDetailsFragment" />
+    </fragment>
     <fragment
         android:id="@+id/nav_races"
         android:name="com.cabbagebeyond.ui.collection.races.RacesFragment"
         android:label="@string/menu_races"
-        tools:layout="@layout/fragment_races_list" />
+        tools:layout="@layout/fragment_races_list" >
+        <action
+            android:id="@+id/action_races_to_details"
+            app:destination="@id/raceDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/ability_details"
+        android:name="com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsFragment" >
+        <argument
+            android:name="ability"
+            app:argType="com.cabbagebeyond.model.Ability" />
+        <action
+            android:id="@+id/action_ability_details_to_ocr"
+            app:destination="@id/ocr" />
+    </fragment>
+    <fragment
+        android:id="@+id/equipmentDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.equipments.details.EquipmentDetailsFragment"
+        tools:layout="@layout/equipment_details_fragment" >
+        <argument
+            android:name="equipment"
+            app:argType="com.cabbagebeyond.model.Equipment" />
+        <action
+            android:id="@+id/action_equipmentDetails_to_ocr"
+            app:destination="@id/ocr" />
+    </fragment>
+    <fragment
+        android:id="@+id/forceDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.forces.details.ForceDetailsFragment" >
+        <argument
+            android:name="force"
+            app:argType="com.cabbagebeyond.model.Force" />
+        <action
+            android:id="@+id/action_forceDetails_to_ocr"
+            app:destination="@id/ocr" />
+    </fragment>
+    <fragment
+        android:id="@+id/handicapDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.handicaps.details.HandicapDetailsFragment" >
+        <argument
+            android:name="handicap"
+            app:argType="com.cabbagebeyond.model.Handicap" />
+        <action
+            android:id="@+id/action_handicapDetails_to_ocr"
+            app:destination="@id/ocr" />
+    </fragment>
+    <fragment
+        android:id="@+id/raceDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.races.details.RaceDetailsFragment"
+        tools:layout="@layout/race_details_fragment" >
+        <argument
+            android:name="race"
+            app:argType="com.cabbagebeyond.model.Race" />
+        <action
+            android:id="@+id/action_raceDetails_to_ocr"
+            app:destination="@id/ocr" />
+    </fragment>
+    <fragment
+        android:id="@+id/talentDetailsFragment"
+        android:name="com.cabbagebeyond.ui.collection.talents.details.TalentDetailsFragment"
+        tools:layout="@layout/talent_details_fragment" >
+        <argument
+            android:name="talent"
+            app:argType="com.cabbagebeyond.model.Talent" />
+        <action
+            android:id="@+id/action_talentDetails_to_ocr"
+            app:destination="@id/ocr" />
+    </fragment>
+    <fragment
+        android:id="@+id/ocr"
+        android:name="com.cabbagebeyond.ui.ocr.TextRecognizerFragment">
+        <argument
+            android:name="properties"
+            app:argType="com.cabbagebeyond.util.CollectionProperty[]" />
+    </fragment>
 </navigation>

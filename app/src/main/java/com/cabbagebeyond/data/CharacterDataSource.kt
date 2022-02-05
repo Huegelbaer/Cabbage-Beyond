@@ -26,9 +26,9 @@ interface CharacterDataSource {
 
     //suspend fun refreshCharacter(id: String)
 
-    suspend fun saveCharacter(character: Character)
+    suspend fun saveCharacter(character: Character): Result<Boolean>
 
     //suspend fun deleteAllCharacters()
 
-    suspend fun deleteCharacter(id: String)
+    suspend fun deleteCharacter(id: String): Result<Boolean>
 }

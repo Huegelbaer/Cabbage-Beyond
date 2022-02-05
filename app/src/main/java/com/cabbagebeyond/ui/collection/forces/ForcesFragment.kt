@@ -7,8 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.databinding.FragmentForcesListBinding
+import com.cabbagebeyond.model.Force
+import com.cabbagebeyond.ui.collection.forces.details.ForceDetailsFragmentArgs
 import org.koin.android.ext.android.inject
 
 class ForcesFragment : Fragment() {
@@ -43,6 +46,17 @@ class ForcesFragment : Fragment() {
             }
         })
 
+        _viewModel.selectedForce.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showDetails(it)
+            }
+        })
+
         return _binding.root
+    }
+
+    private fun showDetails(force: Force) {
+        findNavController().navigate(ForcesFragmentDirections.actionForcesToDetails(force))
+        _viewModel.onNavigationCompleted()
     }
 }

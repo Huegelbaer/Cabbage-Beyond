@@ -32,11 +32,11 @@ class WorldRepository(
         worldDao.refreshWorld(id)
     }
 
-    override suspend fun saveWorld(world: World) = withContext(ioDispatcher) {
-        worldDao.saveWorld(world.asDatabaseModel())
+    override suspend fun saveWorld(world: World): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext worldDao.saveWorld(world.asDatabaseModel())
     }
 
-    override suspend fun deleteWorld(id: String) = withContext(ioDispatcher) {
-        worldDao.deleteWorld(id)
+    override suspend fun deleteWorld(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext worldDao.deleteWorld(id)
     }
 }

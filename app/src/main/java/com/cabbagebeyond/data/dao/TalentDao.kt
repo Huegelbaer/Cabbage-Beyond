@@ -71,21 +71,38 @@ class TalentDao {
         return result
     }
 
-    suspend fun saveTalent(talent: TalentDTO) {
+    suspend fun saveTalent(talent: TalentDTO): Result<Boolean> {
+        var result = Result.success(true)
         val entity = talent.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(talent.id)
             .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error writing document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 
-    suspend fun deleteTalent(id: String) {
+    suspend fun deleteTalent(id: String): Result<Boolean> {
+        var result = Result.success(true)
+
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error deleting document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 }

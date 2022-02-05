@@ -18,9 +18,9 @@ interface AbilityDataSource {
 
     //suspend fun refreshAbility(id: String)
 
-    suspend fun saveAbility(ability: Ability)
+    suspend fun saveAbility(ability: Ability): Result<Boolean>
 
     //suspend fun deleteAllAbilities()
 
-    suspend fun deleteAbility(id: String)
+    suspend fun deleteAbility(id: String): Result<Boolean>
 }

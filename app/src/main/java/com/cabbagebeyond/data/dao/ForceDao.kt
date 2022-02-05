@@ -71,21 +71,37 @@ class ForceDao {
         return result
     }
 
-    suspend fun saveForce(force: ForceDTO) {
+    suspend fun saveForce(force: ForceDTO): Result<Boolean> {
+        var result: Result<Boolean> = Result.success(true)
         val entity = force.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(force.id)
             .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully written!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error writing document", error)
+                result = Result.failure(error) }
+            .await()
+        return result
     }
 
-    suspend fun deleteForce(id: String) {
+    suspend fun deleteForce(id: String): Result<Boolean> {
+        var result: Result<Boolean> = Result.success(true)
+
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+            .addOnSuccessListener {
+                Log.d(TAG, "DocumentSnapshot successfully deleted!")
+            }
+            .addOnFailureListener { error ->
+                Log.w(TAG, "Error deleting document", error)
+                result = Result.failure(error)
+            }
+            .await()
+        return result
     }
 }

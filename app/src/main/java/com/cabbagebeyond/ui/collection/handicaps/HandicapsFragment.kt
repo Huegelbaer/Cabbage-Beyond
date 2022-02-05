@@ -7,8 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.databinding.FragmentHandicapsListBinding
+import com.cabbagebeyond.model.Handicap
 import org.koin.android.ext.android.inject
 
 class HandicapsFragment : Fragment() {
@@ -43,6 +45,17 @@ class HandicapsFragment : Fragment() {
             }
         })
 
+        _viewModel.selectedHandicap.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                showDetails(it)
+            }
+        })
+
         return _binding.root
+    }
+
+    private fun showDetails(handicap: Handicap) {
+        findNavController().navigate(HandicapsFragmentDirections.actionHandicapsToDetails(handicap))
+        _viewModel.onNavigationCompleted()
     }
 }

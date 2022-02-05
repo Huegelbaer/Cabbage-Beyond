@@ -18,9 +18,9 @@ interface TalentDataSource {
 
     //suspend fun refreshTalent(id: String)
 
-    suspend fun saveTalent(talent: Talent)
+    suspend fun saveTalent(talent: Talent): Result<Boolean>
 
     //suspend fun deleteAllTalents()
 
-    suspend fun deleteTalent(id: String)
+    suspend fun deleteTalent(id: String): Result<Boolean>
 }

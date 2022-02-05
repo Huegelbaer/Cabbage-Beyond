@@ -36,12 +36,12 @@
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
-    <style name="TextAppearance.Property.Title" parent="TextAppearance.MaterialComponents.Body1">
+    <style name="TextAppearance.Property.Title" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
-    <style name="TextAppearance.Property.Value" parent="TextAppearance.MaterialComponents.Body2">
+    <style name="TextAppearance.Property.Value" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/secondaryTextColor</item>
     </style>

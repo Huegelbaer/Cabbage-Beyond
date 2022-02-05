@@ -92,7 +92,7 @@
                 style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{equipment.world}"
+                android:text="@{equipment.world.name}"
                 app:layout_constraintEnd_toEndOf="@id/world_title"
                 app:layout_constraintStart_toStartOf="@id/world_title"
                 app:layout_constraintTop_toBottomOf="@id/world_title"

@@ -1,36 +1,76 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.TalentDataSource
+import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.TalentDao
-import com.cabbagebeyond.data.dto.asDatabaseModel
-import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.dto.TalentDTO
 import com.cabbagebeyond.model.Talent
+import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class TalentRepository(
     private val talentDao: TalentDao,
+    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TalentDataSource {
 
     override suspend fun getTalents(): Result<List<Talent>> = withContext(ioDispatcher) {
-        return@withContext talentDao.getTalents().mapCatching { it.asDomainModel() }
+        val result = talentDao.getTalents()
+        return@withContext mapList(result)
     }
 
     override suspend fun getTalents(ids: List<String>): Result<List<Talent>> = withContext(ioDispatcher) {
-        return@withContext talentDao.getTalents(ids).mapCatching { it.asDomainModel() }
+        val result = talentDao.getTalents(ids)
+        return@withContext mapList(result)
     }
 
     override suspend fun getTalent(id: String): Result<Talent> = withContext(ioDispatcher) {
-        return@withContext talentDao.getTalent(id).mapCatching { it.asDomainModel() }
+        val result = talentDao.getTalent(id)
+        return@withContext map(result)
     }
 
-    override suspend fun saveTalent(talent: Talent) = withContext(ioDispatcher) {
-        talentDao.saveTalent(talent.asDatabaseModel())
+    override suspend fun saveTalent(talent: Talent): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext talentDao.saveTalent(talent.asDatabaseModel())
     }
 
-    override suspend fun deleteTalent(id: String) = withContext(ioDispatcher) {
-        talentDao.deleteTalent(id)
+    override suspend fun deleteTalent(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        return@withContext talentDao.deleteTalent(id)
     }
+
+    private suspend fun mapList(result: Result<List<TalentDTO>>): Result<List<Talent>> {
+        val worlds = worldDataSource.getWorlds().getOrDefault(listOf())
+        return result.mapCatching {
+            it.asDomainModel(worlds)
+        }
+    }
+
+    private suspend fun map(result: Result<TalentDTO>): Result<Talent> {
+        return result.mapCatching {
+            val world = worldDataSource.getWorld(it.world).getOrNull()
+            it.asDomainModel(world)
+        }
+    }
+}
+
+
+fun List<TalentDTO>.asDomainModel(worlds: List<World>): List<Talent> {
+    return map { talent ->
+        talent.asDomainModel(worlds.firstOrNull { it.id == talent.world })
+    }
+}
+
+fun TalentDTO.asDomainModel(world: World?): Talent {
+    return Talent(name, description, rangRequirement, requirements.split(", "), type, world, id)
+}
+
+fun List<Talent>.asDatabaseModel(): List<TalentDTO> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun Talent.asDatabaseModel(): TalentDTO {
+    return TalentDTO(name, description, rangRequirement, requirements.joinToString(), type, world?.id ?: "", id)
 }

@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="com.cabbagebeyond.ui.IntegerConverter" />
+
+        <variable
+            name="character"
+            type="com.cabbagebeyond.model.Character" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/default_margin"
+        tools:context=".ui.collection.characters.details.CharacterDetailsFragment">
+
+        <TextView
+            android:id="@+id/name_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/character_name"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/edit_name"/>
+
+        <EditText
+            android:id="@+id/edit_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/image_button_size"
+            android:text="@={character.name}"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Thunderbeast"
+            android:importantForAutofill="no" />
+
+        <TextView
+            android:id="@+id/race_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:text="@string/character_race"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/spinner_race"
+            app:layout_constraintBottom_toBottomOf="@id/spinner_race" />
+
+        <Spinner
+            android:id="@+id/spinner_race"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:minHeight="@dimen/image_button_size"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/edit_name" />
+
+        <TextView
+            android:id="@+id/type_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/character_type"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/type_spinner"
+            app:layout_constraintBottom_toBottomOf="@id/type_spinner" />
+
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/image_button_size"
+            android:layout_marginTop="@dimen/default_margin"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/spinner_race" />
+
+        <TextView
+            android:id="@+id/world_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/character_world"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/world_spinner"
+            app:layout_constraintBottom_toBottomOf="@id/world_spinner" />
+
+        <Spinner
+            android:id="@+id/world_spinner"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:minHeight="@dimen/image_button_size"
+            android:layout_marginTop="@dimen/default_margin"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintTop_toBottomOf="@id/type_spinner" />
+
+        <TextView
+            android:id="@+id/description_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:text="@string/character_description"
+            android:textAppearance="@style/TextAppearance.Property.Title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/edit_willpower" />
+
+        <TextView
+            android:id="@+id/description_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@={character.description}"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/description_title" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/large_margin"
+            android:nestedScrollingEnabled="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/description_value" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.25" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_half_width"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline_three_quarter_width"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.75" />
+
+        <TextView
+            android:id="@+id/properties"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:text="@string/attribute"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/world_spinner" />
+
+        <TextView
+            android:id="@+id/movement_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/movement_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_movement"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_movement" />
+
+        <EditText
+            android:id="@+id/edit_movement"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={IntegerConverter.toString(character.movement)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/properties" />
+
+        <TextView
+            android:id="@+id/charisma_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/charisma_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_charisma"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edit_charisma" />
+
+        <EditText
+            android:id="@+id/edit_charisma"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={IntegerConverter.toString(character.charisma)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_movement" />
+
+        <TextView
+            android:id="@+id/parry_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/parry_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_parry"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_parry" />
+
+        <EditText
+            android:id="@+id/edit_parry"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={IntegerConverter.toString(character.parry)}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_charisma" />
+
+
+        <TextView
+            android:id="@+id/robustness_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/robustness"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@id/robustness_value"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/robustness_value" />
+
+
+        <EditText
+            android:id="@+id/robustness_value"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:text="@={character.toughness}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_parry" />
+
+        <TextView
+            android:id="@+id/attributes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/large_margin"
+            android:text="@string/attribute"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/robustness_value" />
+
+
+        <TextView
+            android:id="@+id/agility_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/attribute_agility_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+
+            app:layout_constraintBottom_toBottomOf="@+id/edit_agility"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_agility" />
+
+        <EditText
+            android:id="@+id/edit_agility"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={character.dexterity}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/attributes" />
+
+        <TextView
+            android:id="@+id/constitution_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/attribute_constitution_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@id/edit_constitution"
+            app:layout_constraintEnd_toStartOf="@id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edit_constitution" />
+
+        <EditText
+            android:id="@+id/edit_constitution"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={character.constitution}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_agility" />
+
+        <TextView
+            android:id="@+id/strength_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/attribute_strength_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_strength"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_strength" />
+
+        <EditText
+            android:id="@+id/edit_strength"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={character.strength}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_constitution" />
+
+
+        <TextView
+            android:id="@+id/intellect_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/attribute_intellect_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@id/edit_intellect"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/edit_intellect" />
+
+
+        <EditText
+            android:id="@+id/edit_intellect"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={character.intelligence}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_strength" />
+
+        <TextView
+            android:id="@+id/willpower_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/attribute_willpower_title"
+            android:textAppearance="@style/TextAppearance.Property.Value"
+            app:layout_constraintBottom_toBottomOf="@+id/edit_willpower"
+            app:layout_constraintEnd_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/edit_willpower" />
+
+        <EditText
+            android:id="@+id/edit_willpower"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/default_margin"
+            android:ems="10"
+            android:inputType="numberDecimal"
+            android:text="@={character.willpower}"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
+            app:layout_constraintTop_toBottomOf="@+id/edit_intellect" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
