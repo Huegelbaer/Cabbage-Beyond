@@ -5,18 +5,14 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.RoleDataSource
 import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.databinding.FragmentUserManagmentListBinding
-import com.cabbagebeyond.ui.collection.abilities.AbilitiesViewModel
 import org.koin.android.ext.android.inject
 
 class UserManagementFragment : Fragment() {

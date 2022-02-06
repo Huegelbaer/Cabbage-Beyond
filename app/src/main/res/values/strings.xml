@@ -5,7 +5,6 @@
     <string name="nav_header_title">Android Studio</string>
     <string name="nav_header_subtitle">android.studio@android.com</string>
     <string name="nav_header_desc">Navigation header</string>
-    <string name="action_settings">Settings</string>
 
     <!-- Drawer Menu -->
     <string name="menu_collection">Data</string>
@@ -28,6 +27,7 @@
     <string name="menu_sort">Sort</string>
     <string name="menu_filter">Filter</string>
     <string name="menu_ocr">OCR</string>
+    <string name="menu_synchronize">Synchronize</string>
 
     <!-- Dialog -->
     <string name="dialog_title_edit_user">Edit</string>

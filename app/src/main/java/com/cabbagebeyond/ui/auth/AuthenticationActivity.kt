@@ -10,6 +10,7 @@ import com.cabbagebeyond.databinding.ActivityAuthenticationBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
+import com.cabbagebeyond.util.startRefreshWorker
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -55,6 +56,7 @@ class AuthenticationActivity : AppCompatActivity() {
 
     private suspend fun updateUserAndNavigateIntoApp() {
         UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
+        startRefreshWorker(applicationContext)
         withContext(Dispatchers.Main) {
             navigateIntoApp()
         }
