@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.EquipmentDao
 import com.cabbagebeyond.data.dto.EquipmentDTO
+import com.cabbagebeyond.data.remote.EquipmentService
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class EquipmentRepository(
     private val equipmentDao: EquipmentDao,
+    private val equipmentService: EquipmentService,
     private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : EquipmentDataSource {
@@ -37,6 +39,14 @@ class EquipmentRepository(
 
     override suspend fun deleteEquipment(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext equipmentDao.deleteEquipment(id)
+    }
+
+    override suspend fun refreshEquipments(): Result<Boolean> = withContext(ioDispatcher) {
+        equipmentService.refreshEquipments()
+    }
+
+    override suspend fun refreshEquipment(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        equipmentService.refreshEquipment(id)
     }
 
     private suspend fun mapList(result: Result<List<EquipmentDTO>>): Result<List<Equipment>> {

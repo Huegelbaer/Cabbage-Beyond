@@ -4,6 +4,7 @@ import android.util.Log
 import com.cabbagebeyond.data.dto.ForceDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class ForceDao {
@@ -16,7 +17,7 @@ class ForceDao {
     suspend fun getForces(): Result<List<ForceDTO>> {
         var result: Result<List<ForceDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val forces = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(ForceDTO::class.java)
@@ -38,7 +39,7 @@ class ForceDao {
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .whereIn(FieldPath.documentId(), ids)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val forces = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(ForceDTO::class.java)
@@ -56,7 +57,7 @@ class ForceDao {
         var result: Result<ForceDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(ForceDTO::class.java)?.let {
                     result = Result.success(it)

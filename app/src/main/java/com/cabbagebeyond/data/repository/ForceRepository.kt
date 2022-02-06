@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.ForceDao
 import com.cabbagebeyond.data.dto.ForceDTO
+import com.cabbagebeyond.data.remote.ForceService
 import com.cabbagebeyond.model.Force
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class ForceRepository(
     private val forceDao: ForceDao,
+    private val forceService: ForceService,
     private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ForceDataSource {
@@ -37,6 +39,14 @@ class ForceRepository(
 
     override suspend fun deleteForce(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext forceDao.deleteForce(id)
+    }
+
+    override suspend fun refreshForces(): Result<Boolean> = withContext(ioDispatcher) {
+        forceService.refreshForces()
+    }
+
+    override suspend fun refreshForce(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        forceService.refreshForce(id)
     }
 
     private suspend fun mapList(result: Result<List<ForceDTO>>): Result<List<Force>> {

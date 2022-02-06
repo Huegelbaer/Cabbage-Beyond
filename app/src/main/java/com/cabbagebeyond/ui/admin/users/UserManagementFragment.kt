@@ -12,11 +12,20 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.cabbagebeyond.R
+import com.cabbagebeyond.data.AbilityDataSource
+import com.cabbagebeyond.data.RoleDataSource
+import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.databinding.FragmentUserManagmentListBinding
+import com.cabbagebeyond.ui.collection.abilities.AbilitiesViewModel
+import org.koin.android.ext.android.inject
 
 class UserManagementFragment : Fragment() {
 
-    private val _viewModel: UserManagementViewModel by activityViewModels()
+    private val _viewModel: UserManagementViewModel by lazy {
+        val userDataSource: UserDataSource by inject()
+        val roleDataSource: RoleDataSource by inject()
+        UserManagementViewModel(userDataSource, roleDataSource)
+    }
 
     private lateinit var _binding: FragmentUserManagmentListBinding
     private lateinit var _adapter: UserManagementAdapter

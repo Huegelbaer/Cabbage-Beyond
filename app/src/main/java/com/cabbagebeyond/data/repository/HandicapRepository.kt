@@ -7,6 +7,7 @@ import com.cabbagebeyond.data.dto.EquipmentDTO
 import com.cabbagebeyond.data.dto.HandicapDTO
 import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.remote.HandicapService
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.Handicap
 import com.cabbagebeyond.model.World
@@ -16,6 +17,7 @@ import kotlinx.coroutines.withContext
 
 class HandicapRepository(
     private val handicapDao: HandicapDao,
+    private val handicapService: HandicapService,
     private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : HandicapDataSource {
@@ -41,6 +43,14 @@ class HandicapRepository(
 
     override suspend fun deleteHandicap(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext handicapDao.deleteHandicap(id)
+    }
+
+    override suspend fun refreshHandicaps(): Result<Boolean> = withContext(ioDispatcher) {
+        handicapService.refreshHandicaps()
+    }
+
+    override suspend fun refreshHandicap(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        handicapService.refreshHandicap(id)
     }
 
     private suspend fun mapList(result: Result<List<HandicapDTO>>): Result<List<Handicap>> {

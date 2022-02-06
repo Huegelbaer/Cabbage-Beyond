@@ -11,6 +11,7 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 
 object FirebaseUtil {
 
@@ -34,6 +35,12 @@ object FirebaseUtil {
         if (USE_EMULATORS) {
             store.useEmulator(BuildConfig.LOCAL_FIREBASE_URL, 8080)
         }
+
+        val settings = FirebaseFirestoreSettings.Builder()
+            .setCacheSizeBytes(FirebaseFirestoreSettings.CACHE_SIZE_UNLIMITED)
+            .build()
+        store.firestoreSettings = settings
+
         return store
     }
 

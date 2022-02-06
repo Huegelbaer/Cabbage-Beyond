@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.RaceDao
 import com.cabbagebeyond.data.dto.RaceDTO
+import com.cabbagebeyond.data.remote.RaceService
 import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class RaceRepository(
     private val raceDao: RaceDao,
+    private val raceService: RaceService,
     private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RaceDataSource {
@@ -32,6 +34,14 @@ class RaceRepository(
 
     override suspend fun deleteRace(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext raceDao.deleteRace(id)
+    }
+
+    override suspend fun refreshRaces(): Result<Boolean> = withContext(ioDispatcher) {
+        raceService.refreshRaces()
+    }
+
+    override suspend fun refreshRace(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        raceService.refreshRace(id)
     }
 
     private suspend fun mapList(result: Result<List<RaceDTO>>): Result<List<Race>> {

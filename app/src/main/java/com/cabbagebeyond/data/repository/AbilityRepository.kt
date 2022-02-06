@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.AbilityDao
 import com.cabbagebeyond.data.dto.AbilityDTO
+import com.cabbagebeyond.data.remote.AbilityService
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class AbilityRepository(
     private val abilityDao: AbilityDao,
+    private val abilityService: AbilityService,
     private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AbilityDataSource {
@@ -37,6 +39,14 @@ class AbilityRepository(
 
     override suspend fun deleteAbility(id: String): Result<Boolean> = withContext(ioDispatcher) {
         abilityDao.deleteAbility(id)
+    }
+
+    override suspend fun refreshAbilities(): Result<Boolean> = withContext(ioDispatcher) {
+        abilityService.refreshAbilities()
+    }
+
+    override suspend fun refreshAbility(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        abilityService.refreshAbility(id)
     }
 
     private suspend fun mapList(result: Result<List<AbilityDTO>>): Result<List<Ability>> {

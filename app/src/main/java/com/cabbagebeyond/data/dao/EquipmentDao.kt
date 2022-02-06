@@ -4,9 +4,11 @@ import android.util.Log
 import com.cabbagebeyond.data.dto.EquipmentDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class EquipmentDao {
+
     companion object {
         private const val COLLECTION_TITLE = EquipmentDTO.COLLECTION_TITLE
         private const val TAG = "EquipmentDao"
@@ -15,7 +17,7 @@ class EquipmentDao {
     suspend fun getEquipments(): Result<List<EquipmentDTO>> {
         var result: Result<List<EquipmentDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val equipments = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(EquipmentDTO::class.java)
@@ -37,7 +39,7 @@ class EquipmentDao {
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .whereIn(FieldPath.documentId(), ids)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val equipments = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(EquipmentDTO::class.java)
@@ -55,7 +57,7 @@ class EquipmentDao {
         var result: Result<EquipmentDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(EquipmentDTO::class.java)?.let {
                     result = Result.success(it)

@@ -6,21 +6,23 @@ interface UserDataSource {
 
     //fun observeUsers(): LiveData<Result<List<User>>>
 
-    suspend fun getUsers(): Result<List<User>>
-
-    //suspend fun refreshUsers()
-
     //fun observeUser(id: String): LiveData<Result<User>>
+
+    suspend fun getUsers(): Result<List<User>>
 
     suspend fun getUser(id: String): Result<User>
 
     suspend fun getUserByEmail(email: String): Result<User>
 
-    //suspend fun refreshUser(id: String)
-
     suspend fun saveUser(user: User)
 
-    //suspend fun deleteAllUsers()
-
     suspend fun deleteUser(id: String)
+
+    /*
+        REMOTE
+     */
+
+    suspend fun refreshUsers(): Result<Boolean>
+
+    suspend fun refreshUser(id: String): Result<Boolean>
 }

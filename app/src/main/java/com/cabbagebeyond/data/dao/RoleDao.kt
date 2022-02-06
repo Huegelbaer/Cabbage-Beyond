@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.RoleDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class RoleDao {
@@ -15,7 +16,7 @@ class RoleDao {
     suspend fun getRoles(): Result<List<RoleDTO>> {
         var result: Result<List<RoleDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val roles = task.documents.mapNotNull { documentSnapshot ->
                     val title = documentSnapshot.get(RoleDTO.FIELD_NAME, String::class.java)
@@ -36,7 +37,7 @@ class RoleDao {
         var result: Result<RoleDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(RoleDTO::class.java)?.let {
                     result = Result.success(it)

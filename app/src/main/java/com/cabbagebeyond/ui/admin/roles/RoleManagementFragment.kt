@@ -11,13 +11,20 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
+import com.cabbagebeyond.data.AbilityDataSource
+import com.cabbagebeyond.data.RoleDataSource
 import com.cabbagebeyond.databinding.FragmentRoleManagementListBinding
 import com.cabbagebeyond.model.Role
 import com.cabbagebeyond.ui.admin.roles.edit.RoleEditDialogFragment
+import com.cabbagebeyond.ui.collection.abilities.AbilitiesViewModel
+import org.koin.android.ext.android.inject
 
 class RoleManagementFragment : Fragment() {
 
-    private val _viewModel: RoleManagementViewModel by activityViewModels()
+    private val _viewModel: RoleManagementViewModel  by lazy {
+        val dataSource: RoleDataSource by inject()
+        RoleManagementViewModel(dataSource)
+    }
 
     private lateinit var _binding: FragmentRoleManagementListBinding
     private lateinit var _adapter: RoleManagementAdapter

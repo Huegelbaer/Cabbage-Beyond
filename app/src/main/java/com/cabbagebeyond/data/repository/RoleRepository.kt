@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.RoleDataSource
 import com.cabbagebeyond.data.dao.RoleDao
 import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.remote.RoleService
 import com.cabbagebeyond.model.Role
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,7 @@ import kotlinx.coroutines.withContext
 
 class RoleRepository(
     private val roleDao: RoleDao,
+    private val roleService: RoleService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RoleDataSource {
 
@@ -28,5 +30,13 @@ class RoleRepository(
 
     override suspend fun deleteRole(id: String) = withContext(ioDispatcher) {
         roleDao.deleteRole(id)
+    }
+
+    override suspend fun refreshRoles(): Result<Boolean> = withContext(ioDispatcher) {
+        roleService.refreshRoles()
+    }
+
+    override suspend fun refreshRole(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        roleService.refreshRole(id)
     }
 }
