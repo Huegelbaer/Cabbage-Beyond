@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.TalentDao
 import com.cabbagebeyond.data.dto.TalentDTO
+import com.cabbagebeyond.data.remote.TalentService
 import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -12,6 +13,7 @@ import kotlinx.coroutines.withContext
 
 class TalentRepository(
     private val talentDao: TalentDao,
+    private val talentService: TalentService,
     private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TalentDataSource {
@@ -37,6 +39,14 @@ class TalentRepository(
 
     override suspend fun deleteTalent(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext talentDao.deleteTalent(id)
+    }
+
+    override suspend fun refreshTalents(): Result<Boolean> = withContext(ioDispatcher) {
+        talentService.refreshTalents()
+    }
+
+    override suspend fun refreshTalent(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        talentService.refreshTalent(id)
     }
 
     private suspend fun mapList(result: Result<List<TalentDTO>>): Result<List<Talent>> {

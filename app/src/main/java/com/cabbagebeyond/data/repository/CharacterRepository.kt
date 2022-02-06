@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.repository
 import com.cabbagebeyond.data.*
 import com.cabbagebeyond.data.dao.CharacterDao
 import com.cabbagebeyond.data.dto.CharacterDTO
+import com.cabbagebeyond.data.remote.CharacterService
 import com.cabbagebeyond.model.*
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -10,6 +11,7 @@ import kotlinx.coroutines.withContext
 
 class CharacterRepository(
     private val characterDao: CharacterDao,
+    private val characterService: CharacterService,
     private val abilityDataSource: AbilityDataSource,
     private val equipmentDataSource: EquipmentDataSource,
     private val forceDataSource: ForceDataSource,
@@ -61,6 +63,14 @@ class CharacterRepository(
 
     override suspend fun deleteCharacter(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext characterDao.deleteCharacter(id)
+    }
+
+    override suspend fun refreshCharacters(): Result<Boolean> = withContext(ioDispatcher) {
+        characterService.refreshCharacters()
+    }
+
+    override suspend fun refreshCharacter(id: String): Result<Boolean> = withContext(ioDispatcher) {
+        characterService.refreshCharacter(id)
     }
 
 

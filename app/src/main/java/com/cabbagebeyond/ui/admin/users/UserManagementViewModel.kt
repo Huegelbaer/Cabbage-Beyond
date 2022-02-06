@@ -1,17 +1,16 @@
 package com.cabbagebeyond.ui.admin.users
 
 import androidx.lifecycle.*
-import com.cabbagebeyond.data.dao.RoleDao
-import com.cabbagebeyond.data.dao.UserDao
-import com.cabbagebeyond.data.repository.RoleRepository
-import com.cabbagebeyond.data.repository.UserRepository
+import com.cabbagebeyond.data.RoleDataSource
+import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.model.Role
 import com.cabbagebeyond.model.User
-import com.cabbagebeyond.model.World
-import com.cabbagebeyond.util.FirebaseUtil
 import kotlinx.coroutines.launch
 
-class UserManagementViewModel: ViewModel() {
+class UserManagementViewModel(
+    private val userDataSource: UserDataSource,
+    private val roleDataSource: RoleDataSource
+) : ViewModel() {
 
     data class Data(var user: User, var roles: List<Role>)
 
@@ -23,15 +22,9 @@ class UserManagementViewModel: ViewModel() {
     private val _md = MediatorLiveData<List<Data>>()
     val users: LiveData<List<Data>>
         get() = _md
-  //  val users = MediatorLiveData<List<Data>>()
-
-    private lateinit var userRepository: UserRepository
-    private lateinit var roleRepository: RoleRepository
+    //  val users = MediatorLiveData<List<Data>>()
 
     init {
-
-        userRepository = UserRepository(UserDao())
-        roleRepository = RoleRepository(RoleDao())
 
         viewModelScope.launch {
             fetchUsersAndRoles()
@@ -39,10 +32,10 @@ class UserManagementViewModel: ViewModel() {
     }
 
     private suspend fun fetchUsersAndRoles() {
-        val firstValue = userRepository.getUsers()
+        val firstValue = userDataSource.getUsers()
         _users.value = firstValue.getOrDefault(listOf())
 
-        val secondValue = roleRepository.getRoles()
+        val secondValue = roleDataSource.getRoles()
         _roles.value = secondValue.getOrDefault(listOf())
 
         var isFirstEmitted = false
@@ -79,20 +72,20 @@ class UserManagementViewModel: ViewModel() {
 
     private fun save(user: User) {
         viewModelScope.launch {
-            userRepository.saveUser(user)
+            userDataSource.saveUser(user)
             reloadUsers()
         }
     }
 
     fun delete(user: Data) {
         viewModelScope.launch {
-            userRepository.deleteUser(user.user.id)
+            userDataSource.deleteUser(user.user.id)
             reloadUsers()
         }
-        _users.value = _users.value?.filterNot { it.id == user.user.id}
+        _users.value = _users.value?.filterNot { it.id == user.user.id }
     }
-    
+
     private suspend fun reloadUsers() {
-        _users.value = userRepository.getUsers().getOrDefault(listOf())
+        _users.value = userDataSource.getUsers().getOrDefault(listOf())
     }
 }

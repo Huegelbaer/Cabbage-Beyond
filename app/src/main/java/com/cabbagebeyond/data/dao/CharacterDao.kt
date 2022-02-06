@@ -2,7 +2,6 @@ package com.cabbagebeyond.data.dao
 
 import android.util.Log
 import com.cabbagebeyond.data.dto.CharacterDTO
-import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
@@ -45,7 +44,7 @@ class CharacterDao {
         var result: Result<CharacterDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val character = map(task)
                 result = Result.success(character)
@@ -95,13 +94,10 @@ class CharacterDao {
     }
 
 
-    private suspend fun loadCharacters(
-        query: Query,
-        source: Source = Source.DEFAULT
-    ): Result<List<CharacterDTO>> {
+    private suspend fun loadCharacters(query: Query): Result<List<CharacterDTO>> {
         var result: Result<List<CharacterDTO>> = Result.success(mutableListOf())
         query
-            .get(source)
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val characters = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
@@ -118,8 +114,7 @@ class CharacterDao {
     private suspend fun getCharactersOrdered(fieldName: String): Result<List<CharacterDTO>> {
         return loadCharacters(
             FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-                .orderBy(fieldName),
-            Source.CACHE
+                .orderBy(fieldName)
         )
     }
 

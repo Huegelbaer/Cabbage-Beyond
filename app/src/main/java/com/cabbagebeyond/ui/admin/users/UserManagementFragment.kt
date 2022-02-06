@@ -5,18 +5,23 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.cabbagebeyond.R
+import com.cabbagebeyond.data.RoleDataSource
+import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.databinding.FragmentUserManagmentListBinding
+import org.koin.android.ext.android.inject
 
 class UserManagementFragment : Fragment() {
 
-    private val _viewModel: UserManagementViewModel by activityViewModels()
+    private val _viewModel: UserManagementViewModel by lazy {
+        val userDataSource: UserDataSource by inject()
+        val roleDataSource: RoleDataSource by inject()
+        UserManagementViewModel(userDataSource, roleDataSource)
+    }
 
     private lateinit var _binding: FragmentUserManagmentListBinding
     private lateinit var _adapter: UserManagementAdapter

@@ -4,6 +4,7 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dao.WorldDao
 import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.remote.WorldService
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -11,6 +12,7 @@ import kotlinx.coroutines.withContext
 
 class WorldRepository(
     private val worldDao: WorldDao,
+    private val worldService: WorldService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : WorldDataSource {
 
@@ -19,17 +21,9 @@ class WorldRepository(
         return@withContext result.mapCatching { it.asDomainModel() }
     }
 
-    override suspend fun refreshWorlds() = withContext(ioDispatcher) {
-        worldDao.refreshWorlds()
-    }
-
     override suspend fun getWorld(id: String): Result<World> = withContext(ioDispatcher) {
         val result = worldDao.getWorld(id)
         return@withContext result.mapCatching { it.asDomainModel() }
-    }
-
-    override suspend fun refreshWorld(id: String) {
-        worldDao.refreshWorld(id)
     }
 
     override suspend fun saveWorld(world: World): Result<Boolean> = withContext(ioDispatcher) {
@@ -38,5 +32,13 @@ class WorldRepository(
 
     override suspend fun deleteWorld(id: String): Result<Boolean> = withContext(ioDispatcher) {
         return@withContext worldDao.deleteWorld(id)
+    }
+
+    override suspend fun refreshWorlds() = withContext(ioDispatcher) {
+        worldService.refreshWorlds()
+    }
+
+    override suspend fun refreshWorld(id: String) {
+        worldService.refreshWorld(id)
     }
 }

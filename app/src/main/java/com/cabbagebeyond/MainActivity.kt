@@ -12,10 +12,15 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.OutOfQuotaPolicy
+import androidx.work.WorkManager
 import com.cabbagebeyond.databinding.ActivityMainBinding
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
 import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
+import com.cabbagebeyond.util.RefreshDataWorker
+import com.cabbagebeyond.util.startRefreshWorker
 import com.google.android.gms.tasks.OnCompleteListener
 
 class MainActivity : AppCompatActivity() {
@@ -67,9 +72,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_logout) {
-            logoutUserAndNavigateToStartScreen()
-            return true
+        when (item.itemId) {
+            R.id.menu_logout -> {
+                logoutUserAndNavigateToStartScreen()
+                return true
+            }
+            R.id.action_synchronize -> {
+                refreshData()
+                return true
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -86,5 +97,9 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         })
+    }
+
+    private fun refreshData() {
+        startRefreshWorker(applicationContext)
     }
 }

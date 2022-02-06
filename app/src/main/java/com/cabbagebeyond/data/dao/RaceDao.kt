@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.RaceDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class RaceDao {
@@ -15,7 +16,7 @@ class RaceDao {
     suspend fun getRaces(): Result<List<RaceDTO>> {
         var result: Result<List<RaceDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val races = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(RaceDTO::class.java)
@@ -33,7 +34,7 @@ class RaceDao {
         var result: Result<RaceDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(RaceDTO::class.java)?.let {
                     result = Result.success(it)

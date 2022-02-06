@@ -16,7 +16,7 @@ class WorldDao {
     suspend fun getWorlds(): Result<List<WorldDTO>> {
         var result: Result<List<WorldDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val worlds = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(WorldDTO::class.java)
@@ -28,13 +28,6 @@ class WorldDao {
             }
             .await()
         return result
-    }
-
-    fun refreshWorlds() {
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get(Source.SERVER)
-            .addOnSuccessListener { }
-            .addOnFailureListener { }
     }
 
     suspend fun getWorld(id: String): Result<WorldDTO> {
@@ -54,14 +47,6 @@ class WorldDao {
             }
             .await()
         return result
-    }
-
-    fun refreshWorld(id: String) {
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .get(Source.SERVER)
-            .addOnSuccessListener { }
-            .addOnFailureListener { }
     }
 
     suspend fun saveWorld(world: WorldDTO): Result<Boolean> {

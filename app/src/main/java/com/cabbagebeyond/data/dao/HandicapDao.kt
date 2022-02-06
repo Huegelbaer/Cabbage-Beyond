@@ -4,6 +4,7 @@ import android.util.Log
 import com.cabbagebeyond.data.dto.HandicapDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class HandicapDao {
@@ -16,7 +17,7 @@ class HandicapDao {
     suspend fun getHandicaps(): Result<List<HandicapDTO>> {
         var result: Result<List<HandicapDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val handicaps = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(HandicapDTO::class.java)
@@ -38,7 +39,7 @@ class HandicapDao {
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .whereIn(FieldPath.documentId(), ids)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val handicaps = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(HandicapDTO::class.java)
@@ -56,7 +57,7 @@ class HandicapDao {
         var result: Result<HandicapDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(HandicapDTO::class.java)?.let {
                     result = Result.success(it)
