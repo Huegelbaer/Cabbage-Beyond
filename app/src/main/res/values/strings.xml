@@ -100,7 +100,7 @@
     <string name="enter_description">Enter description</string>
 
     <string name="action_sign_in">Sign in</string>
-    <string name="welcome">"Welcome !"</string>
+    <string name="welcome">"Welcome to"</string>
     <string name="character_name">Name</string>
     <string name="attribute">Attribute</string>
 
