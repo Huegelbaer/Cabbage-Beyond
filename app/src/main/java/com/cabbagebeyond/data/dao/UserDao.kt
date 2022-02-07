@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.UserDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
 class UserDao {
@@ -15,7 +16,7 @@ class UserDao {
     suspend fun getUsers(): Result<List<UserDTO>> {
         var result: Result<List<UserDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val users = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject(UserDTO::class.java)
@@ -33,7 +34,7 @@ class UserDao {
         var result: Result<UserDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.toObject(UserDTO::class.java)?.let {
                     result = Result.success(it)
@@ -52,7 +53,7 @@ class UserDao {
         var result: Result<UserDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .whereEqualTo(UserDTO.FIELD_EMAIL, email)
-            .get()
+            .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 task.documents.firstOrNull()?.toObject(UserDTO::class.java)?.let {
                     result = Result.success(it)
