@@ -2,9 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.cabbagebeyond">
 
-    <uses-feature android:name="android.hardware.camera" android:required="false" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
-    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.CAMERA" />
 
     <application
         android:name=".MyApp"
@@ -17,10 +19,9 @@
         android:theme="@style/Theme.CabbageBeyond">
 
         <activity
-            android:name=".ui.auth.AuthenticationActivity"
+            android:name=".RoutingActivity"
             android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.CabbageBeyond.NoActionBar">
+            android:theme="@style/Theme.App.Starting" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,12 +29,8 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.CabbageBeyond.NoActionBar">
-        </activity>
+        <activity android:name=".ui.auth.AuthenticationActivity" />
+        <activity android:name=".MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"
