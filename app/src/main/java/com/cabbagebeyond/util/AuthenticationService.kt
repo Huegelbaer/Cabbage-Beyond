@@ -28,6 +28,7 @@ object AuthenticationService {
             .createSignInIntentBuilder()
             .setAvailableProviders(providers)
             .setLogo(R.drawable.ic_launcher_foreground)
+            .setTheme(R.style.Theme_CabbageBeyond)
             .build()
     }
 
