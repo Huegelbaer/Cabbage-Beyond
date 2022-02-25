@@ -27,7 +27,6 @@ class AuthenticationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         binding = ActivityAuthenticationBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
         binding.loginButton.setOnClickListener {
             startActivityForResult(AuthenticationService.loginIntent(), SIGN_IN_REQUEST_CODE)
@@ -37,6 +36,8 @@ class AuthenticationActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 updateUserAndNavigateIntoApp()
             }
+        } else {
+            setContentView(binding.root)
         }
     }
 
