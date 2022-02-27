@@ -11,7 +11,12 @@ import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
-class WorldDetailsViewModel(givenWorld: World, private val worldDataSource: WorldDataSource, user: User, app: Application): DetailsViewModel(user, app) {
+class WorldDetailsViewModel(
+    givenWorld: World,
+    private val worldDataSource: WorldDataSource,
+    user: User,
+    app: Application
+) : DetailsViewModel(user, app) {
 
     var world = MutableLiveData(givenWorld)
 

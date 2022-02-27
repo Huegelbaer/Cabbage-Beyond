@@ -9,7 +9,6 @@ class UserService {
 
     companion object {
         private const val COLLECTION_TITLE = UserDTO.COLLECTION_TITLE
-        private const val TAG = "UserService"
     }
 
     suspend fun refreshUsers(): Result<Boolean> {

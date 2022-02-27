@@ -39,17 +39,17 @@ class HandicapsFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner, Observer {
+        _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
-        _viewModel.selectedHandicap.observe(viewLifecycleOwner, Observer {
+        _viewModel.selectedHandicap.observe(viewLifecycleOwner) {
             it?.let {
                 showDetails(it)
             }
-        })
+        }
 
         return _binding.root
     }

@@ -22,16 +22,16 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" >
+                android:layout_height="wrap_content">
 
                 <include
-                    layout="@layout/content_view_character_details"
                     android:id="@+id/read_group"
+                    layout="@layout/content_view_character_details"
                     app:character="@={viewModel.character}" />
 
                 <include
-                    layout="@layout/content_view_character_details_edit"
                     android:id="@+id/edit_group"
+                    layout="@layout/content_view_character_details_edit"
                     app:character="@={viewModel.character}" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
@@ -47,10 +47,13 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{() -> viewModel.onClickFab()}"
+            app:descriptionContent="@{@string/edit_description}"
+            app:descriptionParameter="@{viewModel.character.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_edit"
-            app:visibility="@{viewModel.userCanEdit}" />
+            app:visibility="@{viewModel.userCanEdit}"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

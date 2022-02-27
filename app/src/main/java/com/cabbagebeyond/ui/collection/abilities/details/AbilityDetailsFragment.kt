@@ -35,7 +35,13 @@ class AbilityDetailsFragment : DetailsFragment() {
 
         val dataSource: AbilityDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
-        viewModel = AbilityDetailsViewModel(ability, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application)
+        viewModel = AbilityDetailsViewModel(
+            ability,
+            dataSource,
+            worldDataSource,
+            UserService.currentUser,
+            requireActivity().application
+        )
 
         _binding.viewModel = _viewModel
         _binding.ability = _viewModel.ability.value
@@ -90,6 +96,10 @@ class AbilityDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(AbilityDetailsFragmentDirections.actionAbilityDetailsToOcr(_viewModel.properties))
+        findNavController().navigate(
+            AbilityDetailsFragmentDirections.actionAbilityDetailsToOcr(
+                _viewModel.properties
+            )
+        )
     }
 }

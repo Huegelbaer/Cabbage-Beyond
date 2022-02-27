@@ -19,7 +19,6 @@ import com.github.mikephil.charting.components.YAxis
 import android.graphics.Typeface
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.R
-import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import com.github.mikephil.charting.formatter.ValueFormatter
 
 
@@ -46,7 +45,7 @@ class CharacterDetailsFragment : DetailsFragment() {
 
         val dataSource: CharacterDataSource by inject()
         viewModel = CharacterDetailsViewModel(
-            character, dataSource,UserService.currentUser, requireActivity().application
+            character, dataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel
@@ -99,7 +98,7 @@ class CharacterDetailsFragment : DetailsFragment() {
 
         val chart = _binding.readGroup.attributeChart
 
-       // chart.setBackgroundColor(resources.getColor(android.R.color.holo_blue_bright))
+        // chart.setBackgroundColor(resources.getColor(android.R.color.holo_blue_bright))
         chart.description.isEnabled = false
         chart.webLineWidth = 1f
         chart.webColor = resources.getColor(R.color.primaryColor)
@@ -171,7 +170,7 @@ class CharacterDetailsFragment : DetailsFragment() {
         _binding.readGroup.attributeChart.invalidate()
     }
 
-    class MyXAxisValueF(private val mValues: Array<String>): ValueFormatter() {
+    class MyXAxisValueF(private val mValues: Array<String>) : ValueFormatter() {
 
         override fun getFormattedValue(value: Float): String {
             return mValues[value.toInt()]
@@ -179,6 +178,10 @@ class CharacterDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(CharacterDetailsFragmentDirections.actionCharacterDetailsToOcr(_viewModel.properties))
+        findNavController().navigate(
+            CharacterDetailsFragmentDirections.actionCharacterDetailsToOcr(
+                _viewModel.properties
+            )
+        )
     }
 }

@@ -10,7 +10,6 @@ class TalentService {
 
     companion object {
         private const val COLLECTION_TITLE = TalentDTO.COLLECTION_TITLE
-        private const val TAG = "TalentService"
     }
 
     suspend fun refreshTalents(): Result<Boolean> {

@@ -9,7 +9,6 @@ class HandicapService {
 
     companion object {
         private const val COLLECTION_TITLE = HandicapDTO.COLLECTION_TITLE
-        private const val TAG = "HandicapService"
     }
 
     suspend fun refreshHandicaps(): Result<Boolean> {

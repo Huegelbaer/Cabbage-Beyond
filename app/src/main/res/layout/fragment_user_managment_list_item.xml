@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="data"
             type="com.cabbagebeyond.ui.admin.users.UserManagementViewModel.Data" />
@@ -44,11 +45,12 @@
 
         <ImageButton
             android:id="@+id/user_edit_button"
+            style="@style/IconButton"
             android:onClick="@{() -> clickListener.onClick(data)}"
             app:descriptionContent="@{@string/edit_description}"
             app:descriptionParameter="@{data.user.name}"
             app:srcCompat="@drawable/ic_edit"
-            style="@style/IconButton" />
+            tools:ignore="ContentDescription" />
 
     </LinearLayout>
 </layout>

@@ -31,18 +31,25 @@ class UserManagementAdapter(private val clickListener: UserClickListener) :
         companion object {
             fun from(parent: ViewGroup): UserViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FragmentUserManagmentListItemBinding.inflate(layoutInflater, parent, false)
+                val binding =
+                    FragmentUserManagmentListItemBinding.inflate(layoutInflater, parent, false)
                 return UserViewHolder(binding)
             }
         }
     }
 
     companion object DiffCallback : DiffUtil.ItemCallback<UserManagementViewModel.Data>() {
-        override fun areItemsTheSame(oldItem: UserManagementViewModel.Data, newItem: UserManagementViewModel.Data): Boolean {
+        override fun areItemsTheSame(
+            oldItem: UserManagementViewModel.Data,
+            newItem: UserManagementViewModel.Data
+        ): Boolean {
             return oldItem === newItem
         }
 
-        override fun areContentsTheSame(oldItem: UserManagementViewModel.Data, newItem: UserManagementViewModel.Data): Boolean {
+        override fun areContentsTheSame(
+            oldItem: UserManagementViewModel.Data,
+            newItem: UserManagementViewModel.Data
+        ): Boolean {
             return oldItem.user.id == newItem.user.id
         }
     }

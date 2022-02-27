@@ -1,6 +1,5 @@
 package com.cabbagebeyond.services
 
-import android.util.Log
 import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.util.FirebaseUtil
@@ -21,10 +20,6 @@ class UserService {
         val instance = UserService()
         val currentUser: User
             get() = instance._currentUser
-    }
-
-    init {
-
     }
 
     suspend fun updateUser(firebaseUser: FirebaseUser) {
@@ -49,13 +44,10 @@ class UserService {
     }
 
     private suspend fun loadCurrentUser(email: String): User {
-        var user: User = backupUser(email)
-
         val result = scope.async {
             dataSource.getUserByEmail(email)
         }.await()
-        user = result.getOrDefault(backupUser(email))
-        return user
+        return result.getOrDefault(backupUser(email))
     }
 
     private fun backupUser(email: String): User {

@@ -20,9 +20,9 @@ class RoleDao {
             .addOnSuccessListener { task ->
                 val roles = task.documents.mapNotNull { documentSnapshot ->
                     val title = documentSnapshot.get(RoleDTO.FIELD_NAME, String::class.java)
-                    val features = documentSnapshot.get(RoleDTO.FIELD_FEATURES)
+                    val features = documentSnapshot.get(RoleDTO.FIELD_FEATURES) as List<String>
 //                    documentSnapshot.toObject(RoleDTO::class.java)
-                    RoleDTO(title!!, features!! as List<String>, documentSnapshot.id)
+                    RoleDTO(title!!, features, documentSnapshot.id)
                 }
                 result = Result.success(roles)
             }
@@ -52,7 +52,7 @@ class RoleDao {
         return result
     }
 
-    suspend fun saveRole(role: RoleDTO) {
+    fun saveRole(role: RoleDTO) {
         val entity = role.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
@@ -62,7 +62,7 @@ class RoleDao {
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteRole(id: String) {
+    fun deleteRole(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()

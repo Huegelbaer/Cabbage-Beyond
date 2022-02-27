@@ -375,10 +375,13 @@
             android:clickable="true"
             android:focusable="true"
             android:onClick="@{() -> viewModel.onClickFab()}"
+            app:descriptionContent="@{@string/edit_description}"
+            app:descriptionParameter="@{viewModel.force.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:srcCompat="@drawable/ic_edit"
-            app:visibility="@{viewModel.userCanEdit}" />
+            app:visibility="@{viewModel.userCanEdit}"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

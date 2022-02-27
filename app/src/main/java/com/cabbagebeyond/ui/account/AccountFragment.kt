@@ -4,10 +4,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.ArrayAdapter
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.cabbagebeyond.MainActivity
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.data.UserDataSource

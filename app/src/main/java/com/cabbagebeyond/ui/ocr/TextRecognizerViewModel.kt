@@ -9,7 +9,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 
-class TextRecognizerViewModel(): ViewModel() {
+class TextRecognizerViewModel: ViewModel() {
 
     enum class State {
         RESET, RUNNING, FINISHED

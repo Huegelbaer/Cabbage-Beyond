@@ -16,8 +16,7 @@ data class Handicap(
         parcel.readString()!!,
         parcel.readParcelable(World::class.java.classLoader)!!,
         parcel.readString()!!
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)

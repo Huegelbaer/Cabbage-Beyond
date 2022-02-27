@@ -3,7 +3,6 @@ package com.cabbagebeyond.ui.collection.worlds
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.cabbagebeyond.databinding.FragmentWorldsListItemBinding
 import com.cabbagebeyond.model.World

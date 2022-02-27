@@ -48,7 +48,7 @@ class StoryDao {
         return result
     }
 
-    suspend fun saveStory(story: StoryDTO) {
+    fun saveStory(story: StoryDTO) {
         val entity = story.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
@@ -58,7 +58,7 @@ class StoryDao {
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteStory(id: String) {
+    fun deleteStory(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()

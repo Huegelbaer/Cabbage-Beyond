@@ -9,7 +9,6 @@ class CharacterService {
 
     companion object {
         private const val COLLECTION_TITLE = CharacterDTO.COLLECTION_TITLE
-        private const val TAG = "CharacterService"
     }
 
     suspend fun refreshCharacters(): Result<Boolean> {

@@ -11,7 +11,6 @@ import com.cabbagebeyond.databinding.HandicapDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
-import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class HandicapDetailsFragment : DetailsFragment() {
@@ -37,7 +36,7 @@ class HandicapDetailsFragment : DetailsFragment() {
         val dataSource: HandicapDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = HandicapDetailsViewModel(
-            handicap, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application
+            handicap, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

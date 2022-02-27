@@ -40,17 +40,17 @@ class ForcesFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner, Observer {
+        _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
-        _viewModel.selectedForce.observe(viewLifecycleOwner, Observer {
+        _viewModel.selectedForce.observe(viewLifecycleOwner) {
             it?.let {
                 showDetails(it)
             }
-        })
+        }
 
         return _binding.root
     }

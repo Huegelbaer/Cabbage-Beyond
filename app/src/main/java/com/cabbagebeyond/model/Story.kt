@@ -8,5 +8,4 @@ data class Story(
     var owner: String,
     var world: String,
     val id: String
-) {
-}
+)

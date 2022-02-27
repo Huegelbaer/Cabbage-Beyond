@@ -32,12 +32,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                tools:ignore="UseCompoundDrawables">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
+                    tools:ignore="ContentDescription"
                     tools:srcCompat="@tools:sample/avatars" />
 
                 <TextView
@@ -62,14 +64,7 @@
                 android:text="@{world.description}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                 tools:text="Gürte deinen Sechsschüsser und sattel auf, Partner. Es steht eine Abrechnung bevor, die mit heißem Blei zu begleichen ist." />
-            <!--
-                <com.google.android.material.button.MaterialButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/action_2"
-                    style="?attr/borderlessButtonStyle"
-                    />
-            -->
+
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>

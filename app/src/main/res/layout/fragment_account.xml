@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="account"
             type="com.cabbagebeyond.ui.account.AccountViewModel.Account" />
@@ -69,7 +70,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
             android:ems="10"
+            android:importantForAutofill="no"
             android:inputType="textPersonName"
+            android:labelFor="@id/nickname_title"
             android:text="@{account.name}"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"

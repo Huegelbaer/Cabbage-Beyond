@@ -9,5 +9,4 @@ data class Session(
     var owner: String,
     var story: String,
     val id: String
-) {
-}
+)

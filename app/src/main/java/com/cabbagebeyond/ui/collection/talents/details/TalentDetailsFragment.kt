@@ -11,8 +11,6 @@ import com.cabbagebeyond.databinding.TalentDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
-import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
-import com.cabbagebeyond.ui.collection.talents.TalentsViewModel
 import org.koin.android.ext.android.inject
 
 class TalentDetailsFragment : DetailsFragment() {
@@ -39,7 +37,7 @@ class TalentDetailsFragment : DetailsFragment() {
         val dataSource: TalentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = TalentDetailsViewModel(
-            talent, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application
+            talent, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

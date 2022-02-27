@@ -9,7 +9,6 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentWorldDetailsBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
-import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class WorldDetailsFragment : DetailsFragment() {
@@ -61,6 +60,10 @@ class WorldDetailsFragment : DetailsFragment() {
     }
 
     override fun navigateToOcr() {
-        findNavController().navigate(WorldDetailsFragmentDirections.actionWorldDetailsToOcr(_viewModel.properties))
+        findNavController().navigate(
+            WorldDetailsFragmentDirections.actionWorldDetailsToOcr(
+                _viewModel.properties
+            )
+        )
     }
 }

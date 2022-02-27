@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
@@ -41,17 +40,17 @@ class CharacterListFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner, Observer {
+        _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
-        _viewModel.selectedCharacter.observe(viewLifecycleOwner, Observer {
+        _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
             it?.let {
                 showCharacterDetails(it)
             }
-        })
+        }
 
         setHasOptionsMenu(true)
 

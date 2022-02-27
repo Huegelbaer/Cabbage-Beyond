@@ -8,7 +8,6 @@ class ForceService {
 
     companion object {
         private const val COLLECTION_TITLE = ForceDTO.COLLECTION_TITLE
-        private const val TAG = "ForceService"
     }
 
     suspend fun refreshForces(): Result<Boolean> {

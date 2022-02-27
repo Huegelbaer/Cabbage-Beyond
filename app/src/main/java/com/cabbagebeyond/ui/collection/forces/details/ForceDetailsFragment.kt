@@ -11,7 +11,6 @@ import com.cabbagebeyond.databinding.ForceDetailsFragmentBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
-import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
 import org.koin.android.ext.android.inject
 
 class ForceDetailsFragment : DetailsFragment() {
@@ -37,7 +36,7 @@ class ForceDetailsFragment : DetailsFragment() {
         val dataSource: ForceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = ForceDetailsViewModel(
-            force, dataSource, worldDataSource, UserService.currentUser!!, requireActivity().application
+            force, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

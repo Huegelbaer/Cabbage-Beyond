@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.data.WorldDataSource
@@ -40,17 +39,17 @@ class WorldsFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner, Observer { worlds ->
+        _viewModel.items.observe(viewLifecycleOwner) { worlds ->
             worlds?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
-        _viewModel.selectedWorld.observe(viewLifecycleOwner, Observer { world ->
+        _viewModel.selectedWorld.observe(viewLifecycleOwner) { world ->
             world?.let {
                 navigateToDetails(it)
             }
-        })
+        }
 
         return _binding.root
     }

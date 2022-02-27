@@ -11,7 +11,6 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
 import com.cabbagebeyond.databinding.FragmentRoleEditBinding
@@ -112,9 +111,9 @@ class RoleEditDialogFragment : DialogFragment(), AdapterView.OnItemSelectedListe
             adapter = _adapter
         }
 
-        _selectedFeatures.observe(this, Observer {
+        _selectedFeatures.observe(this) {
             _adapter.submitList(it)
-        })
+        }
     }
 
     companion object {

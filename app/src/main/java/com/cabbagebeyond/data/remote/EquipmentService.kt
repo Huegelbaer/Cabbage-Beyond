@@ -10,7 +10,6 @@ class EquipmentService {
 
     companion object {
         private const val COLLECTION_TITLE = EquipmentDTO.COLLECTION_TITLE
-        private const val TAG = "EquipmentService"
     }
 
     suspend fun refreshEquipments(): Result<Boolean> {

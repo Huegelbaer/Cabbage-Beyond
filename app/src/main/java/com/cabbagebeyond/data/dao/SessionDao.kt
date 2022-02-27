@@ -48,7 +48,7 @@ class SessionDao {
         return result
     }
 
-    suspend fun saveSession(session: SessionDTO) {
+    fun saveSession(session: SessionDTO) {
         val entity = session.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
@@ -58,7 +58,7 @@ class SessionDao {
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    suspend fun deleteSession(id: String) {
+    fun deleteSession(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()

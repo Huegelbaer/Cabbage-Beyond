@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.RoleDataSource
 import com.cabbagebeyond.data.UserDataSource
@@ -42,11 +41,11 @@ class UserManagementFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.users.observe(viewLifecycleOwner, Observer { users ->
+        _viewModel.users.observe(viewLifecycleOwner) { users ->
             users?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
         return _binding.root
     }

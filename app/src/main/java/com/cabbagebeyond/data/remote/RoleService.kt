@@ -9,7 +9,6 @@ class RoleService {
 
     companion object {
         private const val COLLECTION_TITLE = RoleDTO.COLLECTION_TITLE
-        private const val TAG = "RoleService"
     }
 
     suspend fun refreshRoles(): Result<Boolean> {

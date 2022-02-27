@@ -19,8 +19,8 @@ fun bindTextViewToListOfStrings(textView: TextView, roles: List<String>) {
 }
 
 @BindingAdapter("descriptionContent", "descriptionParameter")
-fun bindContentDescription(button: ImageButton, content: String, parameter: String) {
-    button.contentDescription = String.format(content, parameter)
+fun bindContentDescription(view: View, content: String, parameter: String) {
+    view.contentDescription = String.format(content, parameter)
 }
 
 @BindingAdapter("srcCompat")

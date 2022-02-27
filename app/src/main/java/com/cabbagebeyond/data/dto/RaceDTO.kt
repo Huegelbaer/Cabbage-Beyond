@@ -1,7 +1,5 @@
 package com.cabbagebeyond.data.dto
 
-import com.cabbagebeyond.model.Race
-import com.cabbagebeyond.model.User
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
 import java.util.*

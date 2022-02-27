@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.databinding.FragmentAbilitiesListBinding
@@ -39,17 +38,17 @@ class AbilitiesListFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner, Observer {
+        _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
-        _viewModel.selectedAbility.observe(viewLifecycleOwner, Observer {
+        _viewModel.selectedAbility.observe(viewLifecycleOwner) {
             it?.let {
                 showDetails(it)
             }
-        })
+        }
 
         return _binding.root
     }

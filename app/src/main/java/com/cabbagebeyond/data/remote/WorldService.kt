@@ -8,7 +8,6 @@ class WorldService {
 
     companion object {
         private const val COLLECTION_TITLE = WorldDTO.COLLECTION_TITLE
-        private const val TAG = "WorldService"
     }
 
     fun refreshWorlds() {

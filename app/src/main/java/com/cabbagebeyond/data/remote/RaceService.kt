@@ -9,7 +9,6 @@ class RaceService {
 
     companion object {
         private const val COLLECTION_TITLE = RaceDTO.COLLECTION_TITLE
-        private const val TAG = "RaceService"
     }
 
     suspend fun refreshRaces(): Result<Boolean> {

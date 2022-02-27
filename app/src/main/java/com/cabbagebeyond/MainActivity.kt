@@ -5,25 +5,17 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.TextView
-import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.OutOfQuotaPolicy
-import androidx.work.WorkManager
 import com.cabbagebeyond.databinding.ActivityMainBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
 import com.cabbagebeyond.util.AuthenticationService
-import com.cabbagebeyond.util.FirebaseUtil
-import com.cabbagebeyond.util.RefreshDataWorker
 import com.cabbagebeyond.util.startRefreshWorker
-import com.google.android.gms.tasks.OnCompleteListener
 
 class MainActivity : AppCompatActivity() {
 
@@ -44,8 +36,6 @@ class MainActivity : AppCompatActivity() {
 
         updateNavigationHeader()
 
-        val drawerLayout: DrawerLayout = binding.drawerLayout
-        val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -63,10 +53,10 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_sessions,
                 R.id.nav_account,
                 R.id.nav_admin_panel
-            ), drawerLayout
+            ), binding.drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
+        binding.navView.setupWithNavController(navController)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -95,12 +85,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun logoutUserAndNavigateToStartScreen() {
-        AuthenticationService.logout(this, OnCompleteListener {
+        AuthenticationService.logout(this) {
             val intent = Intent(this, AuthenticationActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
             startActivity(intent)
             finish()
-        })
+        }
     }
 
     private fun refreshData() {

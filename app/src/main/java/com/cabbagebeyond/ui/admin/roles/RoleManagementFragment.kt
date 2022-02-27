@@ -7,16 +7,12 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.RoleDataSource
 import com.cabbagebeyond.databinding.FragmentRoleManagementListBinding
 import com.cabbagebeyond.model.Role
 import com.cabbagebeyond.ui.admin.roles.edit.RoleEditDialogFragment
-import com.cabbagebeyond.ui.collection.abilities.AbilitiesViewModel
 import org.koin.android.ext.android.inject
 
 class RoleManagementFragment : Fragment() {
@@ -45,11 +41,11 @@ class RoleManagementFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.roles.observe(viewLifecycleOwner, Observer { roles ->
+        _viewModel.roles.observe(viewLifecycleOwner) { roles ->
             roles?.let {
                 _adapter.submitList(roles)
             }
-        })
+        }
 
         _binding.addRole.setOnClickListener {
             val role = Role("", listOf())

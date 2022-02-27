@@ -42,7 +42,8 @@
             app:layout_constraintBottom_toTopOf="@+id/features"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_edit" />
+            app:srcCompat="@drawable/ic_edit"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/features"

@@ -1,6 +1,5 @@
 package com.cabbagebeyond.data.remote
 
-import com.cabbagebeyond.data.dao.AbilityDao
 import com.cabbagebeyond.data.dto.AbilityDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.Source
@@ -10,7 +9,6 @@ class AbilityService {
 
     companion object {
         private const val COLLECTION_TITLE = AbilityDTO.COLLECTION_TITLE
-        private const val TAG = "AbilityService"
     }
 
     suspend fun refreshAbilities(): Result<Boolean> {

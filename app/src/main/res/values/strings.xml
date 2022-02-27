@@ -134,5 +134,8 @@
 
     <string name="ocr_add_property_dialog_title">Which property is the selected text?</string>
     <string name="ocr_add_property_dialog_add_button">Add</string>
+    <string name="content_description_add_role">Create a new role</string>
+    <string name="content_description_add_feature">Add a feature</string>
+    <string name="content_description_show_details_of">Show details of %s</string>
 
 </resources>

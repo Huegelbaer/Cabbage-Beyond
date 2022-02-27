@@ -6,7 +6,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.databinding.FragmentRacesListBinding
@@ -39,17 +38,17 @@ class RacesFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner, Observer {
+        _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
             }
-        })
+        }
 
-        _viewModel.selectedRace.observe(viewLifecycleOwner, Observer {
+        _viewModel.selectedRace.observe(viewLifecycleOwner) {
             it?.let {
                 showDetails(it)
             }
-        })
+        }
 
         return _binding.root
     }

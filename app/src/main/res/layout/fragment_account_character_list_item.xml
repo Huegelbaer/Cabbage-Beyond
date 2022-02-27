@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="character"
             type="com.cabbagebeyond.model.Character" />
@@ -16,8 +18,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingVertical="@dimen/little_margin"
-        android:onClick="@{() -> clickListener.onClick(character)}" >
+        android:onClick="@{() -> clickListener.onClick(character)}"
+        android:paddingVertical="@dimen/little_margin">
 
         <TextView
             android:id="@+id/textView2"
@@ -35,11 +37,14 @@
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:tint="@color/secondaryColor"
+            app:descriptionContent="@{@string/content_description_show_details_of}"
+            app:descriptionParameter="@{character.name}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_forward" />
+            app:srcCompat="@drawable/ic_arrow_forward"
+            app:tint="@color/secondaryColor"
+            tools:ignore="ContentDescription" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
