@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,6 +17,7 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import com.cabbagebeyond.databinding.ActivityMainBinding
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
 import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
@@ -39,7 +41,9 @@ class MainActivity : AppCompatActivity() {
         binding.appBarMain.fab.setOnClickListener {
             logoutUserAndNavigateToStartScreen()
         }
-        
+
+        updateNavigationHeader()
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -101,5 +105,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun refreshData() {
         startRefreshWorker(applicationContext)
+    }
+
+    private fun updateNavigationHeader() {
+        val usernameTextView = binding.navView.getHeaderView(0)
+            .findViewById<TextView>(R.id.nav_header_user_name)
+        usernameTextView?.text = UserService.currentUser.email
     }
 }
