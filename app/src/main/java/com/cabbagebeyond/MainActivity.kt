@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -15,6 +16,7 @@ import com.cabbagebeyond.databinding.ActivityMainBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
 import com.cabbagebeyond.util.AuthenticationService
+import com.cabbagebeyond.util.Feature
 import com.cabbagebeyond.util.startRefreshWorker
 
 class MainActivity : AppCompatActivity() {
@@ -35,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateNavigationHeader()
+        setVisibilityOfContentMenu()
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
@@ -101,5 +104,10 @@ class MainActivity : AppCompatActivity() {
         val usernameTextView = binding.navView.getHeaderView(0)
             .findViewById<TextView>(R.id.nav_header_user_name)
         usernameTextView?.text = UserService.currentUser.email
+    }
+
+    private fun setVisibilityOfContentMenu() {
+        val hasFeature = UserService.currentUser.features.contains(Feature.DETAIL_STORY_SAVAGE_WORLDS.value)
+        binding.navView.menu.findItem(R.id.menu_story_content).isVisible = hasFeature
     }
 }
