@@ -2,6 +2,7 @@ package com.cabbagebeyond.services
 
 import com.cabbagebeyond.data.UserDataSource
 import com.cabbagebeyond.model.User
+import com.cabbagebeyond.util.Feature
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.*
@@ -54,4 +55,14 @@ class UserService {
         return User(email, email, listOf(), listOf(), "")
     }
 
+    fun userHasAccessToContent(): Boolean {
+        return currentUser.features.containsAll(listOf(
+            Feature.DETAIL_STORY_SAVAGE_WORLDS.value,
+            Feature.DETAIL_SESSION_SAVAGE_WORLDS.value
+        ))
+    }
+
+    fun userIsAdmin(): Boolean {
+        return currentUser.features.contains(Feature.CONFIGURE_APP.value)
+    }
 }

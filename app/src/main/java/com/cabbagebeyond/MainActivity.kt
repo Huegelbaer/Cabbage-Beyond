@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateNavigationHeader()
+        updateVisibilityOfMenuItemDependsOnUserFeatures()
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Passing each menu ID as a set of Ids because each
@@ -101,5 +102,13 @@ class MainActivity : AppCompatActivity() {
         val usernameTextView = binding.navView.getHeaderView(0)
             .findViewById<TextView>(R.id.nav_header_user_name)
         usernameTextView?.text = UserService.currentUser.email
+    }
+
+    private fun updateVisibilityOfMenuItemDependsOnUserFeatures() {
+        val accessToContent = UserService.instance.userHasAccessToContent()
+        binding.navView.menu.findItem(R.id.menu_story_content).isVisible = accessToContent
+
+        val isAdmin = UserService.instance.userIsAdmin()
+        binding.navView.menu.findItem(R.id.nav_admin_panel).isVisible = isAdmin
     }
 }
