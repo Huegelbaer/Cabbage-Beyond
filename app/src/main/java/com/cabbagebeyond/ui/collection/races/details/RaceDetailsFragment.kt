@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.databinding.RaceDetailsFragmentBinding
+import com.cabbagebeyond.databinding.FragmentRaceDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
@@ -22,14 +22,14 @@ class RaceDetailsFragment : DetailsFragment() {
     private val _viewModel: RaceDetailsViewModel
         get() = viewModel as RaceDetailsViewModel
 
-    private lateinit var _binding: RaceDetailsFragmentBinding
+    private lateinit var _binding: FragmentRaceDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = RaceDetailsFragmentBinding.inflate(inflater)
+        _binding = FragmentRaceDetailsBinding.inflate(inflater)
 
         val race = RaceDetailsFragmentArgs.fromBundle(requireArguments()).race
 

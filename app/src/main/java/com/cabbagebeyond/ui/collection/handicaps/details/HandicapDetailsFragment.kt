@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.databinding.HandicapDetailsFragmentBinding
+import com.cabbagebeyond.databinding.FragmentHandicapDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
@@ -22,14 +22,14 @@ class HandicapDetailsFragment : DetailsFragment() {
     private val _viewModel: HandicapDetailsViewModel
         get() = viewModel as HandicapDetailsViewModel
 
-    private lateinit var _binding: HandicapDetailsFragmentBinding
+    private lateinit var _binding: FragmentHandicapDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = HandicapDetailsFragmentBinding.inflate(inflater)
+        _binding = FragmentHandicapDetailsBinding.inflate(inflater)
 
         val handicap = HandicapDetailsFragmentArgs.fromBundle(requireArguments()).handicap
 

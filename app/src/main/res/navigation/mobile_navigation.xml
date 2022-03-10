@@ -130,7 +130,7 @@
     <fragment
         android:id="@+id/equipmentDetailsFragment"
         android:name="com.cabbagebeyond.ui.collection.equipments.details.EquipmentDetailsFragment"
-        tools:layout="@layout/equipment_details_fragment" >
+        tools:layout="@layout/fragment_equipment_details" >
         <argument
             android:name="equipment"
             app:argType="com.cabbagebeyond.model.Equipment" />
@@ -161,7 +161,7 @@
     <fragment
         android:id="@+id/raceDetailsFragment"
         android:name="com.cabbagebeyond.ui.collection.races.details.RaceDetailsFragment"
-        tools:layout="@layout/race_details_fragment" >
+        tools:layout="@layout/fragment_race_details" >
         <argument
             android:name="race"
             app:argType="com.cabbagebeyond.model.Race" />
@@ -172,7 +172,7 @@
     <fragment
         android:id="@+id/talentDetailsFragment"
         android:name="com.cabbagebeyond.ui.collection.talents.details.TalentDetailsFragment"
-        tools:layout="@layout/talent_details_fragment" >
+        tools:layout="@layout/fragment_talent_details" >
         <argument
             android:name="talent"
             app:argType="com.cabbagebeyond.model.Talent" />

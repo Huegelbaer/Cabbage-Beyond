@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.databinding.EquipmentDetailsFragmentBinding
+import com.cabbagebeyond.databinding.FragmentEquipmentDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
@@ -22,14 +22,14 @@ class EquipmentDetailsFragment : DetailsFragment() {
     private val _viewModel: EquipmentDetailsViewModel
         get() = viewModel as EquipmentDetailsViewModel
 
-    private lateinit var _binding: EquipmentDetailsFragmentBinding
+    private lateinit var _binding: FragmentEquipmentDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = EquipmentDetailsFragmentBinding.inflate(inflater)
+        _binding = FragmentEquipmentDetailsBinding.inflate(inflater)
 
         val equipment = EquipmentDetailsFragmentArgs.fromBundle(requireArguments()).equipment
 

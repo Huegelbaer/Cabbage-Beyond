@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.data.CharacterDataSource
-import com.cabbagebeyond.databinding.CharacterDetailsFragmentBinding
+import com.cabbagebeyond.databinding.FragmentCharacterDetailsBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
 import org.koin.android.ext.android.inject
@@ -32,14 +32,14 @@ class CharacterDetailsFragment : DetailsFragment() {
         get() = viewModel as CharacterDetailsViewModel
 
     private lateinit var _adapter: CharacterDetailsAdapter
-    private lateinit var _binding: CharacterDetailsFragmentBinding
+    private lateinit var _binding: FragmentCharacterDetailsBinding
 
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = CharacterDetailsFragmentBinding.inflate(inflater)
+        _binding = FragmentCharacterDetailsBinding.inflate(inflater)
 
         val character = CharacterDetailsFragmentArgs.fromBundle(requireArguments()).character
 

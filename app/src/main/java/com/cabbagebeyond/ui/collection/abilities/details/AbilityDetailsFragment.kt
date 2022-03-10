@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.databinding.AbilityDetailsFragmentBinding
+import com.cabbagebeyond.databinding.FragmentAbilityDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
@@ -22,14 +22,14 @@ class AbilityDetailsFragment : DetailsFragment() {
     private val _viewModel: AbilityDetailsViewModel
         get() = viewModel as AbilityDetailsViewModel
 
-    private lateinit var _binding: AbilityDetailsFragmentBinding
+    private lateinit var _binding: FragmentAbilityDetailsBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = AbilityDetailsFragmentBinding.inflate(inflater)
+        _binding = FragmentAbilityDetailsBinding.inflate(inflater)
 
         val ability = AbilityDetailsFragmentArgs.fromBundle(requireArguments()).ability
 
