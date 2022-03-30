@@ -9,6 +9,8 @@
     <color name="primaryTextColor">#212121</color>
     <color name="secondaryTextColor">#363636</color>
 
+    <color name="onPrimaryColor">#FFFFFF</color>
+
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

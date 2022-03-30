@@ -52,4 +52,44 @@
         <item name="android:backgroundTint">@color/white</item>
         <item name="tint">@color/secondaryColor</item>
     </style>
+
+    <!-- Onboarding -->
+
+    <style name="Onboarding">
+        <item name="tint">@color/secondaryColor</item>
+        <item name="android:textColor">@color/onPrimaryColor</item>
+    </style>
+
+    <style name="Onboarding.Image">
+        <item name="tint">@color/onPrimaryColor</item>
+        <item name="android:maxHeight">160dp</item>
+        <item name="android:maxWidth">160dp</item>
+    </style>
+
+    <style name="Onboarding.Title" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/onPrimaryColor</item>
+    </style>
+
+    <style name="Onboarding.Body" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:textColor">@color/onPrimaryColor</item>
+    </style>
+
+    <style name="Onboarding.Button" parent="Onboarding">
+        <item name="android:minHeight">@dimen/image_button_size</item>
+        <item name="android:minWidth">@dimen/image_button_size</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="Onboarding.Button.Icon" parent="Onboarding.Button">
+        <item name="android:backgroundTint">@color/fui_transparent</item>
+    </style>
+
+    <style name="Onboarding.Button.Text" parent="Onboarding.Button">
+        <item name="android:textColor">@color/secondaryColor</item>
+    </style>
+
 </resources>

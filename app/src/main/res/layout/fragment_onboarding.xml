@@ -7,6 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.onboarding.OnboardingFragment"
+    android:background="@color/primaryColor"
     app:layoutDescription="@xml/fragment_onboarding_scene">
 
     <androidx.viewpager2.widget.ViewPager2
@@ -22,6 +23,7 @@
 
     <Button
         android:id="@+id/button_next"
+        style="@style/Onboarding.Button.Text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/default_margin"
@@ -34,6 +36,7 @@
         android:id="@+id/button_previous"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Onboarding.Button.Text"
         android:layout_marginStart="@dimen/default_margin"
         android:layout_marginBottom="@dimen/default_margin"
         android:text="@string/button_previous"
@@ -42,12 +45,11 @@
 
     <ImageButton
         android:id="@+id/button_skip"
-        style="@style/IconButton"
+        style="@style/Onboarding.Button.Icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/default_margin"
         android:layout_marginEnd="@dimen/default_margin"
-        android:scaleType="fitCenter"
         android:src="@drawable/ic_close"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
