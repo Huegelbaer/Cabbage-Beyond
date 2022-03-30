@@ -10,7 +10,6 @@ import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.onboarding.OnboardingFragment
 import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
-import com.cabbagebeyond.util.navigateIntoApp
 import com.cabbagebeyond.util.startRefreshWorker
 import kotlinx.coroutines.launch
 
@@ -32,9 +31,7 @@ class AuthenticationActivity : AppCompatActivity() {
         }
 
         if (AuthenticationService.isUserAlreadyLoggedIn()) {
-            lifecycleScope.launch {
-                updateUserAndNavigateIntoApp()
-            }
+            updateUserAndShowOnboarding()
         } else {
             setContentView(binding.root)
         }
@@ -52,23 +49,16 @@ class AuthenticationActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUserAndNavigateIntoApp() {
-        lifecycleScope.launch {
-            updateUser()
-        }
-        navigateIntoApp(this)
-    }
-
-    private suspend fun updateUser() {
-        UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
-        startRefreshWorker(applicationContext)
-    }
-
     private fun updateUserAndShowOnboarding() {
         lifecycleScope.launch {
             updateUser()
         }
         showOnboarding()
+    }
+
+    private suspend fun updateUser() {
+        UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
+        startRefreshWorker(applicationContext)
     }
 
     private fun showOnboarding() {
