@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@id/button_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <PropertySet android:alpha="0.0" />
+        </Constraint>
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@id/button_previous"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/default_margin"
+            android:layout_marginBottom="@dimen/default_margin"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <PropertySet android:alpha="1.0" />
+        </Constraint>
+    </ConstraintSet>
+
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@id/start"
+        app:motionInterpolator="easeInOut">
+
+        <KeyFrameSet>
+
+            <!-- Page One -->
+
+            <KeyAttribute
+                android:rotation="0"
+                app:framePosition="0"
+                app:motionTarget="@id/button_skip" />
+
+            <KeyAttribute
+                android:translationX="-50dp"
+                app:framePosition="0"
+                app:motionTarget="@id/button_previous" />
+
+            <!-- Page Two -->
+
+            <KeyAttribute
+                android:rotation="180"
+                app:framePosition="33"
+                app:motionTarget="@id/button_skip" />
+
+            <KeyAttribute
+                android:alpha="1"
+                app:framePosition="33"
+                app:motionTarget="@id/button_previous" />
+
+            <KeyAttribute
+                android:translationX="0dp"
+                app:framePosition="33"
+                app:motionTarget="@id/button_previous" />
+
+            <!-- Page Three -->
+
+            <KeyAttribute
+                android:rotation="360"
+                app:framePosition="66"
+                app:motionTarget="@id/button_skip" />
+            
+            <!-- Page Four -->
+
+            <KeyAttribute
+                android:rotation="540"
+                app:framePosition="100"
+                app:motionTarget="@id/button_skip" />
+        </KeyFrameSet>
+    </Transition>
+
+</MotionScene>

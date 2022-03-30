@@ -137,5 +137,17 @@
     <string name="content_description_add_role">Create a new role</string>
     <string name="content_description_add_feature">Add a feature</string>
     <string name="content_description_show_details_of">Show details of %s</string>
+    <string name="button_next">Next</string>
+    <string name="button_finish">Finish</string>
+    <string name="button_previous">Previous</string>
+    <string name="button_skip_content_description">Skip on boarding guide</string>
 
+    <string name="onboarding_collection_title">Collection</string>
+    <string name="onboarding_collection_description">You can browse through all the necessary content for your pen and paper adventure.</string>
+    <string name="onboarding_roles_title">Different roles</string>
+    <string name="onboarding_roles_description">As a reader, you can only browse through the content. You need the admin role to edit it. Ask your administrator if you would like to receive the role.</string>
+    <string name="onboarding_ocr_title">Scan your books\n(Admin Feature)</string>
+    <string name="onboarding_ocr_description">Entering all content can be very time-consuming. To relieve you of the work, you can photograph the pages and mark the required text passages.</string>
+    <string name="onboarding_stories_coming_soon_title">Manage your story and sessions\n(coming soon)</string>
+    <string name="onboarding_stories_coming_soon_description">In the future you can also maintain your stories via the app.</string>
 </resources>
