@@ -1,7 +1,5 @@
 package com.cabbagebeyond.ui.onboarding
 
-import android.app.AlertDialog
-import android.app.Dialog
 import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,6 +9,7 @@ import android.view.ViewGroup
 import androidx.viewpager2.widget.ViewPager2
 import com.cabbagebeyond.R
 import com.cabbagebeyond.databinding.FragmentOnboardingBinding
+import com.cabbagebeyond.util.navigateIntoApp
 
 class OnboardingFragment : Fragment() {
 
@@ -75,7 +74,6 @@ class OnboardingFragment : Fragment() {
     }
 
     private fun finishOnboarding() {
-        AlertDialog.Builder(context).setPositiveButton("OK") { _, _ -> }
-            .show()
+        navigateIntoApp(requireActivity())
     }
 }

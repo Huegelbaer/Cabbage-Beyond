@@ -7,9 +7,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.auth.AuthenticationActivity
-import com.cabbagebeyond.util.AuthenticationService
-import com.cabbagebeyond.util.FirebaseUtil
-import com.cabbagebeyond.util.startRefreshWorker
+import com.cabbagebeyond.util.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -43,14 +41,7 @@ class RoutingActivity : AppCompatActivity() {
         UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
         startRefreshWorker(applicationContext)
         withContext(Dispatchers.Main) {
-            navigateIntoApp()
+            navigateIntoApp(this@RoutingActivity)
         }
-    }
-
-    private fun navigateIntoApp() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
-        startActivity(intent)
-        finish()
     }
 }

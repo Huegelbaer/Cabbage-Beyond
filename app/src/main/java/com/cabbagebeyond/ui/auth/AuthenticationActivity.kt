@@ -5,15 +5,14 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
-import com.cabbagebeyond.MainActivity
 import com.cabbagebeyond.databinding.ActivityAuthenticationBinding
 import com.cabbagebeyond.services.UserService
+import com.cabbagebeyond.ui.onboarding.OnboardingFragment
 import com.cabbagebeyond.util.AuthenticationService
 import com.cabbagebeyond.util.FirebaseUtil
+import com.cabbagebeyond.util.navigateIntoApp
 import com.cabbagebeyond.util.startRefreshWorker
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class AuthenticationActivity : AppCompatActivity() {
 
@@ -46,27 +45,36 @@ class AuthenticationActivity : AppCompatActivity() {
 
         if (requestCode == SIGN_IN_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                lifecycleScope.launch {
-                    updateUserAndNavigateIntoApp()
-                }
+                updateUserAndShowOnboarding()
             } else {
                 AuthenticationService.logLoginError(data)
             }
         }
     }
 
-    private suspend fun updateUserAndNavigateIntoApp() {
-        UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
-        startRefreshWorker(applicationContext)
-        withContext(Dispatchers.Main) {
-            navigateIntoApp()
+    private fun updateUserAndNavigateIntoApp() {
+        lifecycleScope.launch {
+            updateUser()
         }
+        navigateIntoApp(this)
     }
 
-    private fun navigateIntoApp() {
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
-        startActivity(intent)
-        finish()
+    private suspend fun updateUser() {
+        UserService.instance.updateUser(FirebaseUtil.auth.currentUser!!)
+        startRefreshWorker(applicationContext)
+    }
+
+    private fun updateUserAndShowOnboarding() {
+        lifecycleScope.launch {
+            updateUser()
+        }
+        showOnboarding()
+    }
+
+    private fun showOnboarding() {
+        supportFragmentManager
+            .beginTransaction()
+            .replace(android.R.id.content, OnboardingFragment())
+            .commit()
     }
 }

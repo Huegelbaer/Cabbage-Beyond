@@ -1,6 +1,5 @@
 package com.cabbagebeyond
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -13,8 +12,8 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.appcompat.app.AppCompatActivity
 import com.cabbagebeyond.databinding.ActivityMainBinding
 import com.cabbagebeyond.services.UserService
-import com.cabbagebeyond.ui.auth.AuthenticationActivity
 import com.cabbagebeyond.util.AuthenticationService
+import com.cabbagebeyond.util.navigateToAuthentication
 import com.cabbagebeyond.util.startRefreshWorker
 
 class MainActivity : AppCompatActivity() {
@@ -87,10 +86,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun logoutUserAndNavigateToStartScreen() {
         AuthenticationService.logout(this) {
-            val intent = Intent(this, AuthenticationActivity::class.java)
-            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_TASK_ON_HOME
-            startActivity(intent)
-            finish()
+            navigateToAuthentication(this)
         }
     }
 
