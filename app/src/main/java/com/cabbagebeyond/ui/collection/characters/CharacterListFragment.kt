@@ -1,10 +1,13 @@
 package com.cabbagebeyond.ui.collection.characters
 
+import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Context
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,6 +15,10 @@ import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.databinding.FragmentCharacterListBinding
 import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.World
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipGroup
 import org.koin.android.ext.android.inject
 
 class CharacterListFragment : Fragment() {
@@ -49,6 +56,15 @@ class CharacterListFragment : Fragment() {
         _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
             it?.let {
                 showCharacterDetails(it)
+            }
+        }
+
+        _viewModel.interaction.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it) {
+                    is CharacterListViewModel.Interaction.OpenFilter -> showFilterDialog(it.races, it.types, it.worlds)
+                }
+                _viewModel.onInteractionCompleted()
             }
         }
 
@@ -108,7 +124,55 @@ class CharacterListFragment : Fragment() {
                 _viewModel.onSelectSort(CharacterListViewModel.SortType.WORLD)
                 true
             }
+            R.id.app_bar_filter_list -> {
+                _viewModel.onSelectFilter()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    @SuppressLint("ResourceAsColor")
+    private fun showFilterDialog(races: List<Race>, types: List<String>, worlds: List<World>) {
+        val viewInflated = layoutInflater.inflate(R.layout.content_view_filter_characters, null)
+        val racesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_race_chip_group)
+        val typesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_type_chip_group)
+        val worldsChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_world_chip_group)
+
+        races.forEachIndexed { index, race ->
+            val chip = createChip(race.name, index)
+            racesChipGroup.addView(chip)
+        }
+
+        types.forEachIndexed { index, type ->
+            val chip = createChip(type, index)
+            typesChipGroup.addView(chip)
+        }
+
+        worlds.forEachIndexed { index, world ->
+            val chip = createChip(world.name, index)
+            worldsChipGroup.addView(chip)
+        }
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.menu_filter)
+            .setView(viewInflated)
+            .setPositiveButton(R.string.menu_filter) { dialog, which ->
+
+            }
+            .setNegativeButton(R.string.dialog_button_cancel, null)
+            .show()
+    }
+
+    private fun createChip(title: String, index: Int): Chip {
+        return Chip(context).apply {
+            tag = index
+            text = title
+            isClickable = true
+            isCheckable = true
+            isCheckedIconVisible = false
+            isFocusable = true
+            chipBackgroundColor = ColorStateList.valueOf(resources.getColor(R.color.selector_chip_background))
         }
     }
 

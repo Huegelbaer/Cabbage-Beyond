@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.data.*
 import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.World
 import kotlinx.coroutines.launch
 
 class CharacterListViewModel(
@@ -15,6 +17,14 @@ class CharacterListViewModel(
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE
     }
+
+    sealed class Interaction {
+        data class OpenFilter(val races: List<Race>, val types: List<String>, val worlds: List<World>) : Interaction()
+    }
+
+    private var _interaction = MutableLiveData<Interaction?>()
+    val interaction: LiveData<Interaction?>
+        get() = _interaction
 
     private var _characters: List<Character> = listOf()
     private var _items = MutableLiveData<List<Character>>()
@@ -64,6 +74,18 @@ class CharacterListViewModel(
             _characters = result.getOrDefault(listOf())
             _items.value = _characters
         }
+    }
+
+    fun onSelectFilter() {
+        val races = _characters.mapNotNull { it.race }.toSet().toList()
+        val types = _characters.map { it.type }.toSet().toList()
+        val worlds = _characters.mapNotNull { it.world }.toSet().toList()
+
+        _interaction.value = Interaction.OpenFilter(races, types, worlds)
+    }
+
+    fun onInteractionCompleted() {
+        _interaction.value = null
     }
 
     fun onCharacterClicked(character: Character) {

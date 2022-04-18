@@ -29,11 +29,10 @@
                 android:title="@string/character_world" />
         </menu>
     </item>
-    
-    <!--
+
     <item
         android:id="@+id/app_bar_filter_list"
         android:icon="@drawable/ic_filter_list"
         android:title="@string/menu_filter" />
-        -->
+
 </menu>
