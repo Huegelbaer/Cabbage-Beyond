@@ -20,6 +20,8 @@ import com.cabbagebeyond.model.World
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import org.koin.android.ext.android.inject
+import kotlin.reflect.KFunction
+import kotlin.reflect.KProperty1
 
 class CharacterListFragment : Fragment() {
 
@@ -62,7 +64,13 @@ class CharacterListFragment : Fragment() {
         _viewModel.interaction.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
-                    is CharacterListViewModel.Interaction.OpenFilter -> showFilterDialog(it.races, it.types, it.worlds)
+                    is CharacterListViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(
+                            FilterData(it.races, it.selectedRace),
+                            FilterData(it.types, it.selectedType),
+                            FilterData(it.worlds, it.selectedWorld)
+                        )
+                    }
                 }
                 _viewModel.onInteractionCompleted()
             }
@@ -132,45 +140,64 @@ class CharacterListFragment : Fragment() {
         }
     }
 
+    class FilterData<T: Any>(var values: List<T>, var selected: T?)
+
     @SuppressLint("ResourceAsColor")
-    private fun showFilterDialog(races: List<Race>, types: List<String>, worlds: List<World>) {
+    private fun showFilterDialog(races: FilterData<Race>, types: FilterData<String>, worlds: FilterData<World>) {
         val viewInflated = layoutInflater.inflate(R.layout.content_view_filter_characters, null)
         val racesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_race_chip_group)
         val typesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_type_chip_group)
         val worldsChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_world_chip_group)
 
-        races.forEachIndexed { index, race ->
-            val chip = createChip(race.name, index)
-            racesChipGroup.addView(chip)
-        }
-
-        types.forEachIndexed { index, type ->
-            val chip = createChip(type, index)
-            typesChipGroup.addView(chip)
-        }
-
-        worlds.forEachIndexed { index, world ->
-            val chip = createChip(world.name, index)
-            worldsChipGroup.addView(chip)
-        }
+        prepareChipGroup(racesChipGroup, races, Race::name)
+        prepareChipGroup(typesChipGroup, types, String::toString)
+        prepareChipGroup(worldsChipGroup, worlds, World::name)
 
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.menu_filter)
             .setView(viewInflated)
             .setPositiveButton(R.string.menu_filter) { dialog, which ->
-
+                val selectedRace = races.values.getOrNull(racesChipGroup.checkedChipId)
+                val selectedType = types.values.getOrNull(typesChipGroup.checkedChipId)
+                val selectedWorld = worlds.values.getOrNull(worldsChipGroup.checkedChipId)
+                _viewModel.filter(selectedRace, selectedType, selectedWorld)
             }
             .setNegativeButton(R.string.dialog_button_cancel, null)
             .show()
     }
 
+    private fun <T : Any> prepareChipGroup(chipGroup: ChipGroup, data: FilterData<T>, titleProperty: KProperty1<T, String>) {
+        data.values.forEachIndexed { index, it ->
+            val title = titleProperty.get(it)
+            val chip = createChip(title, index)
+            chipGroup.addView(chip)
+        }
+        data.selected?.let {
+            val index = data.values.indexOf(it)
+            chipGroup.check(index)
+        }
+    }
+
+    private fun <T : Any> prepareChipGroup(chipGroup: ChipGroup, data: FilterData<T>, titleProperty: KFunction<String>) {
+        data.values.forEachIndexed { index, it ->
+            val title = titleProperty.call(it)
+            val chip = createChip(title, index)
+            chipGroup.addView(chip)
+        }
+        data.selected?.let {
+            val index = data.values.indexOf(it)
+            chipGroup.check(index)
+        }
+    }
+
     private fun createChip(title: String, index: Int): Chip {
         return Chip(context).apply {
+            id = index
             tag = index
             text = title
             isClickable = true
             isCheckable = true
-            isCheckedIconVisible = false
+            isCheckedIconVisible = true
             isFocusable = true
             chipBackgroundColor = ColorStateList.valueOf(resources.getColor(R.color.selector_chip_background))
         }

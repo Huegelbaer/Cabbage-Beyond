@@ -18,9 +18,17 @@ class CharacterListViewModel(
         NAME, RACE, TYPE, WORLD, NONE
     }
 
-    sealed class Interaction {
-        data class OpenFilter(val races: List<Race>, val types: List<String>, val worlds: List<World>) : Interaction()
+    object Filter {
+        var selectedRace: Race? = null
+        var selectedType: String? = null
+        var selectedWorld: World? = null
     }
+
+    sealed class Interaction {
+        data class OpenFilter(val races: List<Race>, val types: List<String>, val worlds: List<World>, val selectedRace: Race?, val selectedType: String?, val selectedWorld: World?) : Interaction()
+    }
+
+    private var _activeFilter = Filter
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -81,7 +89,29 @@ class CharacterListViewModel(
         val types = _characters.map { it.type }.toSet().toList()
         val worlds = _characters.mapNotNull { it.world }.toSet().toList()
 
-        _interaction.value = Interaction.OpenFilter(races, types, worlds)
+        _interaction.value = Interaction.OpenFilter(races, types, worlds, _activeFilter.selectedRace, _activeFilter.selectedType, _activeFilter.selectedWorld)
+    }
+
+    fun filter(race: Race?, type: String?, world: World?) {
+        _activeFilter.selectedRace = race
+        _activeFilter.selectedType = type
+        _activeFilter.selectedWorld = world
+
+        viewModelScope.launch {
+            _items.value = _characters.filter { character ->
+                val iRace = race?.let { race ->
+                    character.race == race
+                } ?: true
+                val iType = type?.let { type ->
+                    character.type == type
+                } ?: true
+                val iWorld = world?.let { world ->
+                    character.world == world
+                } ?: true
+
+                iRace && iType && iWorld
+            }
+        }
     }
 
     fun onInteractionCompleted() {
