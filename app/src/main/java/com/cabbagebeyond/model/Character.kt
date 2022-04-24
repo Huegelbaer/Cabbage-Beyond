@@ -2,6 +2,7 @@ package com.cabbagebeyond.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 
 data class Character(
@@ -26,11 +27,15 @@ data class Character(
     var forces: List<Force>,
     var handicaps: List<Handicap>,
     var talents: List<Talent>,
-    var type: String,
+    var type: Type?,
     var owner: String,
     var world: World?,
     val id: String
 ): Parcelable {
+
+    @Parcelize enum class Type(val value : String) : Parcelable {
+        PLAYER("Spieler"), NPC("NPC"), MONSTER("Monster")
+    }
 
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
@@ -54,7 +59,7 @@ data class Character(
         listOf(),
         listOf(),
         listOf(),
-        parcel.readString()!!,
+        parcel.readParcelable(Type::class.java.classLoader),
         parcel.readString()!!,
         parcel.readParcelable(World::class.java.classLoader),
         parcel.readString()!!
@@ -64,7 +69,6 @@ data class Character(
         parcel.readTypedList(forces, Force.CREATOR)
         parcel.readTypedList(handicaps, Handicap.CREATOR)
         parcel.readTypedList(talents, Talent.CREATOR)
-
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -89,7 +93,7 @@ data class Character(
         parcel.writeTypedArray(forces.toTypedArray(), flags)
         parcel.writeTypedArray(handicaps.toTypedArray(), flags)
         parcel.writeTypedArray(talents.toTypedArray(), flags)
-        parcel.writeString(type)
+        parcel.writeParcelable(type, flags)
         parcel.writeString(owner)
         parcel.writeParcelable(world, flags)
         parcel.writeString(id)

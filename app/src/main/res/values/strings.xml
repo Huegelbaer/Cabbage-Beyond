@@ -52,6 +52,10 @@
     <string name="select_attribute">Select an attribute</string>
     <string name="select_world">Select a world</string>
 
+    <string name="character_type_player">Player</string>
+    <string name="character_type_npc">NPC</string>
+    <string name="character_type_monster">Monster</string>
+
     <string-array name="attributes">
         <item>Strength</item>
         <item>Verstand</item>

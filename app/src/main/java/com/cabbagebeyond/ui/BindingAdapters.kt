@@ -1,11 +1,12 @@
 package com.cabbagebeyond.ui
 
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.cabbagebeyond.model.Role
 import android.view.View
 import android.widget.ImageView
+import com.cabbagebeyond.R
+import com.cabbagebeyond.model.Character
 
 
 @BindingAdapter("roleList")
@@ -34,5 +35,19 @@ fun bindVisibility(view: View, isVisible: Boolean?) {
         true -> View.VISIBLE
         false -> View.INVISIBLE
         null -> View.GONE
+    }
+}
+
+@BindingAdapter("characterType")
+fun bindTextViewToCharacterType(textView: TextView, type: Character.Type) {
+    val resourceId = getTitleIdForCharacterType(type)
+    textView.text = textView.context.getString(resourceId)
+}
+
+fun getTitleIdForCharacterType(type: Character.Type): Int  {
+    return when (type) {
+        Character.Type.PLAYER -> R.string.character_type_player
+        Character.Type.NPC -> R.string.character_type_npc
+        Character.Type.MONSTER -> R.string.character_type_monster
     }
 }

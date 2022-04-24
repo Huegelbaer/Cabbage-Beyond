@@ -1,31 +1,36 @@
 package com.cabbagebeyond.ui.collection.characters
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
+import com.cabbagebeyond.R
 import com.cabbagebeyond.data.*
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.launch
+import kotlin.reflect.KProperty1
 
 class CharacterListViewModel(
+    private val app: Application,
     private val characterDataSource: CharacterDataSource
-) : ViewModel() {
+) : AndroidViewModel(app) {
 
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE
     }
 
+    class CharacterType(var type: Character.Type, var title: String)
+
+    class FilterData<T: Any>(var values: List<T>, var selected: T?, var title: KProperty1<T, String>)
+
     object Filter {
         var selectedRace: Race? = null
-        var selectedType: String? = null
+        var selectedType: CharacterType? = null
         var selectedWorld: World? = null
     }
 
     sealed class Interaction {
-        data class OpenFilter(val races: List<Race>, val types: List<String>, val worlds: List<World>, val selectedRace: Race?, val selectedType: String?, val selectedWorld: World?) : Interaction()
+        data class OpenFilter(val races: FilterData<Race>, val types: FilterData<CharacterType>, val worlds: FilterData<World>) : Interaction()
     }
 
     private var _activeFilter = Filter
@@ -86,15 +91,31 @@ class CharacterListViewModel(
 
     fun onSelectFilter() {
         val races = _characters.mapNotNull { it.race }.toSet().toList()
-        val types = _characters.map { it.type }.toSet().toList()
+        val types = Character.Type.values().map {
+            createCharacterType(it)
+        }
         val worlds = _characters.mapNotNull { it.world }.toSet().toList()
 
-        _interaction.value = Interaction.OpenFilter(races, types, worlds, _activeFilter.selectedRace, _activeFilter.selectedType, _activeFilter.selectedWorld)
+        _interaction.value = Interaction.OpenFilter(
+            FilterData(races, _activeFilter.selectedRace, Race::name),
+            FilterData(types, _activeFilter.selectedType, CharacterType::title),
+            FilterData(worlds, _activeFilter.selectedWorld, World::name)
+        )
     }
 
-    fun filter(race: Race?, type: String?, world: World?) {
+    private fun createCharacterType(type: Character.Type): CharacterType {
+        val titleId = when (type) {
+            Character.Type.PLAYER -> R.string.character_type_player
+            Character.Type.NPC -> R.string.character_type_npc
+            Character.Type.MONSTER -> R.string.character_type_monster
+        }
+        val title = app.resources.getString(titleId)
+        return CharacterType(type, title)
+    }
+
+    fun filter(race: Race?, characterType: CharacterType?, world: World?) {
         _activeFilter.selectedRace = race
-        _activeFilter.selectedType = type
+        _activeFilter.selectedType = characterType
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
@@ -102,8 +123,8 @@ class CharacterListViewModel(
                 val iRace = race?.let { race ->
                     character.race == race
                 } ?: true
-                val iType = type?.let { type ->
-                    character.type == type
+                val iType = characterType?.let { type ->
+                    character.type == type.type
                 } ?: true
                 val iWorld = world?.let { world ->
                     character.world == world

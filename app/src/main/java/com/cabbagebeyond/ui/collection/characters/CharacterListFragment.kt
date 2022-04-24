@@ -20,14 +20,12 @@ import com.cabbagebeyond.model.World
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 import org.koin.android.ext.android.inject
-import kotlin.reflect.KFunction
-import kotlin.reflect.KProperty1
 
 class CharacterListFragment : Fragment() {
 
     private val _viewModel: CharacterListViewModel by lazy {
         val dataSource: CharacterDataSource by inject()
-        CharacterListViewModel(dataSource)
+        CharacterListViewModel(requireActivity().application, dataSource)
     }
 
     private lateinit var _binding: FragmentCharacterListBinding
@@ -65,11 +63,7 @@ class CharacterListFragment : Fragment() {
             it?.let {
                 when (it) {
                     is CharacterListViewModel.Interaction.OpenFilter -> {
-                        showFilterDialog(
-                            FilterData(it.races, it.selectedRace),
-                            FilterData(it.types, it.selectedType),
-                            FilterData(it.worlds, it.selectedWorld)
-                        )
+                        showFilterDialog(it.races, it.types, it.worlds)
                     }
                 }
                 _viewModel.onInteractionCompleted()
@@ -140,23 +134,21 @@ class CharacterListFragment : Fragment() {
         }
     }
 
-    class FilterData<T: Any>(var values: List<T>, var selected: T?)
-
     @SuppressLint("ResourceAsColor")
-    private fun showFilterDialog(races: FilterData<Race>, types: FilterData<String>, worlds: FilterData<World>) {
+    private fun showFilterDialog(races: CharacterListViewModel.FilterData<Race>, types: CharacterListViewModel.FilterData<CharacterListViewModel.CharacterType>, worlds: CharacterListViewModel.FilterData<World>) {
         val viewInflated = layoutInflater.inflate(R.layout.content_view_filter_characters, null)
         val racesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_race_chip_group)
         val typesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_type_chip_group)
         val worldsChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_world_chip_group)
 
-        prepareChipGroup(racesChipGroup, races, Race::name)
-        prepareChipGroup(typesChipGroup, types, String::toString)
-        prepareChipGroup(worldsChipGroup, worlds, World::name)
+        prepareChipGroup(racesChipGroup, races)
+        prepareChipGroup(typesChipGroup, types)
+        prepareChipGroup(worldsChipGroup, worlds)
 
         AlertDialog.Builder(requireContext())
             .setTitle(R.string.menu_filter)
             .setView(viewInflated)
-            .setPositiveButton(R.string.menu_filter) { dialog, which ->
+            .setPositiveButton(R.string.menu_filter) { _, _ ->
                 val selectedRace = races.values.getOrNull(racesChipGroup.checkedChipId)
                 val selectedType = types.values.getOrNull(typesChipGroup.checkedChipId)
                 val selectedWorld = worlds.values.getOrNull(worldsChipGroup.checkedChipId)
@@ -166,21 +158,9 @@ class CharacterListFragment : Fragment() {
             .show()
     }
 
-    private fun <T : Any> prepareChipGroup(chipGroup: ChipGroup, data: FilterData<T>, titleProperty: KProperty1<T, String>) {
+    private fun <T : Any> prepareChipGroup(chipGroup: ChipGroup, data: CharacterListViewModel.FilterData<T>) {
         data.values.forEachIndexed { index, it ->
-            val title = titleProperty.get(it)
-            val chip = createChip(title, index)
-            chipGroup.addView(chip)
-        }
-        data.selected?.let {
-            val index = data.values.indexOf(it)
-            chipGroup.check(index)
-        }
-    }
-
-    private fun <T : Any> prepareChipGroup(chipGroup: ChipGroup, data: FilterData<T>, titleProperty: KFunction<String>) {
-        data.values.forEachIndexed { index, it ->
-            val title = titleProperty.call(it)
+            val title = data.title.get(it)
             val chip = createChip(title, index)
             chipGroup.addView(chip)
         }

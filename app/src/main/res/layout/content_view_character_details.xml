@@ -62,7 +62,7 @@
             android:id="@+id/type_value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="@{character.type}"
+            app:characterType="@{character.type}"
             android:textAppearance="@style/TextAppearance.Property.Value"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@id/guideline"
