@@ -7,21 +7,19 @@ import com.cabbagebeyond.data.*
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
-import kotlin.reflect.KProperty1
 
 class CharacterListViewModel(
     private val app: Application,
     private val characterDataSource: CharacterDataSource
-) : AndroidViewModel(app) {
+) : CollectionListViewModel(app) {
 
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE
     }
 
     class CharacterType(var type: Character.Type, var title: String)
-
-    class FilterData<T: Any>(var values: List<T>, var selected: T?, var title: KProperty1<T, String>)
 
     object Filter {
         var selectedRace: Race? = null
@@ -55,13 +53,13 @@ class CharacterListViewModel(
         }
     }
 
-    fun onSearchCharacter(query: String) {
+    override fun onSearch(query: String) {
         _items.value = _characters.filter {
             it.name.contains(query) || it.description.contains(query)
         }
     }
 
-    fun onSearchCanceled() {
+    override fun onSearchCanceled() {
         _items.value = _characters
     }
 
@@ -89,7 +87,7 @@ class CharacterListViewModel(
         }
     }
 
-    fun onSelectFilter() {
+    override fun onSelectFilter() {
         val races = _characters.mapNotNull { it.race }.toSet().toList()
         val types = Character.Type.values().map {
             createCharacterType(it)
