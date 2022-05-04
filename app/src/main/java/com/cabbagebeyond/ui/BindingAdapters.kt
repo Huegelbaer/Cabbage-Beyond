@@ -6,6 +6,7 @@ import com.cabbagebeyond.model.Role
 import android.view.View
 import android.widget.ImageView
 import com.cabbagebeyond.R
+import com.cabbagebeyond.model.Attribute
 import com.cabbagebeyond.model.Character
 
 
@@ -44,10 +45,26 @@ fun bindTextViewToCharacterType(textView: TextView, type: Character.Type) {
     textView.text = textView.context.getString(resourceId)
 }
 
-fun getTitleIdForCharacterType(type: Character.Type): Int  {
+private fun getTitleIdForCharacterType(type: Character.Type): Int  {
     return when (type) {
         Character.Type.PLAYER -> R.string.character_type_player
         Character.Type.NPC -> R.string.character_type_npc
         Character.Type.MONSTER -> R.string.character_type_monster
+    }
+}
+
+@BindingAdapter("abilityAttribute")
+fun bindTextViewToAbilityAttribute(textView: TextView, attribute: Attribute) {
+    val resourceId = getTitleIdForAbilityAttribute(attribute)
+    textView.text = textView.context.getString(resourceId)
+}
+
+fun getTitleIdForAbilityAttribute(attribute: Attribute): Int  {
+    return when (attribute) {
+        Attribute.STRENGTH -> R.string.attribute_strength
+        Attribute.INTELLECT -> R.string.attribute_intellect
+        Attribute.CONSTITUTION -> R.string.attribute_constitution
+        Attribute.DEXTERITY -> R.string.attribute_dexterity
+        Attribute.WILLPOWER -> R.string.attribute_willpower
     }
 }

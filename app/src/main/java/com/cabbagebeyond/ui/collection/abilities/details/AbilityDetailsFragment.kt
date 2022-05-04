@@ -64,7 +64,7 @@ class AbilityDetailsFragment : DetailsFragment() {
         }
 
         _viewModel.attributes.observe(viewLifecycleOwner) { attributes ->
-            setupSpinner(ability.attribute, attributes.map { it }, _binding.attributeSpinner) { index ->
+            setupSpinner(ability.attribute.name, attributes.map { it.title }, _binding.attributeSpinner) { index ->
                 _viewModel.onAttributeSelected(attributes[index])
             }
         }

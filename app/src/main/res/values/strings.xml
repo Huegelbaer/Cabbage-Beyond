@@ -56,13 +56,11 @@
     <string name="character_type_npc">NPC</string>
     <string name="character_type_monster">Monster</string>
 
-    <string-array name="attributes">
-        <item>Strength</item>
-        <item>Verstand</item>
-        <item>Constitution</item>
-        <item>Dexterity</item>
-        <item>Willpower</item>
-    </string-array>
+    <string name="attribute_strength">Strength</string>
+    <string name="attribute_intellect">Intellect</string>
+    <string name="attribute_constitution">Constitution</string>
+    <string name="attribute_dexterity">Dexterity</string>
+    <string name="attribute_willpower">Willpower</string>
 
     <string-array name="types_of_weapons">
         <item>Weapon</item>
