@@ -8,7 +8,6 @@ import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentAbilityDetailsBinding
-import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
 import org.koin.android.ext.android.inject
@@ -64,12 +63,18 @@ class AbilityDetailsFragment : DetailsFragment() {
             }
         }
 
-        _viewModel.attributes.observe(viewLifecycleOwner) {
-            setupAttributeSpinner(ability.attribute, it ?: listOf())
+        _viewModel.attributes.observe(viewLifecycleOwner) { attributes ->
+            setupSpinner(ability.attribute, attributes.map { it }, _binding.attributeSpinner) { index ->
+                _viewModel.onAttributeSelected(attributes[index])
+            }
         }
 
-        _viewModel.worlds.observe(viewLifecycleOwner) {
-            setupWorldSpinner(ability.world, it ?: listOf())
+        _viewModel.worlds.observe(viewLifecycleOwner) { worlds ->
+            setupSpinner(ability.world?.name ?: "", worlds.mapNotNull { it?.name }, _binding.worldSpinner) { index ->
+                worlds?.getOrNull(index)?.let {
+                    _viewModel.onWorldSelected(it)
+                }
+            }
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -81,18 +86,6 @@ class AbilityDetailsFragment : DetailsFragment() {
         setHasOptionsMenu(true)
 
         return _binding.root
-    }
-
-    private fun setupAttributeSpinner(attribute: String, attributes: List<String>) {
-        setupStringSpinner(attribute, attributes, _binding.attributeSpinner) {
-            _viewModel.onAttributeSelected(it)
-        }
-    }
-
-    private fun setupWorldSpinner(world: World?, worlds: List<World?>) {
-        super.setupWorldSpinner(world, worlds, _binding.worldSpinner) {
-            _viewModel.onWorldSelected(it)
-        }
     }
 
     override fun navigateToOcr() {

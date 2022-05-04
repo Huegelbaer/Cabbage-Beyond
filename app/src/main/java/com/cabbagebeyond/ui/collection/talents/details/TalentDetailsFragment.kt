@@ -79,20 +79,20 @@ class TalentDetailsFragment : DetailsFragment() {
     }
 
     private fun setupRankSpinner(rank: String, ranks: List<String>) {
-        setupStringSpinner(rank, ranks, _binding.requirementSpinner) {
-            _viewModel.onRankSelected(it)
+        setupSpinner(rank, ranks, _binding.requirementSpinner) {
+            _viewModel.onRankSelected(ranks[it])
         }
     }
 
     private fun setupTypeSpinner(type: String, types: List<String>) {
-        setupStringSpinner(type, types, _binding.typeSpinner) {
-            _viewModel.onTypeSelected(it)
+        setupSpinner(type, types, _binding.typeSpinner) {
+            _viewModel.onTypeSelected(types[it])
         }
     }
 
     private fun setupWorldSpinner(world: World?, worlds: List<World?>) {
-        super.setupWorldSpinner(world, worlds, _binding.worldSpinner) {
-            _viewModel.onWorldSelected(it)
+        setupSpinner(world?.name ?: "", worlds.mapNotNull { it?.name }, _binding.worldSpinner) {
+            _viewModel.onWorldSelected(worlds[it])
         }
     }
 
