@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.FragmentAbilityDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
 import org.koin.android.ext.android.inject
 
 class AbilityDetailsFragment : DetailsFragment() {
@@ -96,7 +97,7 @@ class AbilityDetailsFragment : DetailsFragment() {
         }
     }
 
-    private fun setupAttributeSpinner(preSelection: AbilityDetailsViewModel.AbilityAttribute?, attributes: List<AbilityDetailsViewModel.AbilityAttribute>) {
+    private fun setupAttributeSpinner(preSelection: AbilityAttribute?, attributes: List<AbilityAttribute>) {
         if (attributes.isNullOrEmpty()) return
 
         setupSpinner(

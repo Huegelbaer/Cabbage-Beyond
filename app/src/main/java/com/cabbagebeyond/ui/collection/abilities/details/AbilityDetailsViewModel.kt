@@ -12,6 +12,7 @@ import com.cabbagebeyond.model.Attribute
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
 import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
@@ -23,7 +24,6 @@ class AbilityDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, app) {
 
-    data class AbilityAttribute(var attribute: Attribute, var title: String)
     data class WorldSelection(var selected: World?, var values: List<World?>)
     data class AttributeSelection(var selected: AbilityAttribute?, var values: List<AbilityAttribute>)
 
@@ -67,12 +67,14 @@ class AbilityDetailsViewModel(
 
     private fun loadAttributes() {
         // for MVP the attributes are stored as enum.
-        val attributes = Attribute.values().map { createAbilityAttribute(it) }
+        val application = getApplication<Application>()
+        val attributes = Attribute.values().map { AbilityAttribute.create(it, application) }
         updateAttributeSelection(attributes)
     }
 
     private fun updateAttributeSelection(attributes: List<AbilityAttribute>) {
-        val currentSelected = ability.value?.attribute?.let { createAbilityAttribute(it) }
+        val application = getApplication<Application>()
+        val currentSelected = ability.value?.attribute?.let { AbilityAttribute.create(it, application) }
         _attributes.value = AttributeSelection(currentSelected, attributes)
     }
 
@@ -115,17 +117,5 @@ class AbilityDetailsViewModel(
                 "description" -> ability.value?.description += property.value
             }
         }
-    }
-
-    private fun createAbilityAttribute(attribute: Attribute): AbilityAttribute {
-        val titleId = when (attribute) {
-            Attribute.STRENGTH -> R.string.attribute_strength
-            Attribute.INTELLECT -> R.string.attribute_intellect
-            Attribute.CONSTITUTION -> R.string.attribute_constitution
-            Attribute.DEXTERITY -> R.string.attribute_dexterity
-            Attribute.WILLPOWER -> R.string.attribute_willpower
-        }
-        val title = getApplication<Application>().resources.getString(titleId)
-        return AbilityAttribute(attribute, title)
     }
 }

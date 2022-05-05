@@ -1,17 +1,30 @@
 package com.cabbagebeyond.ui.collection.abilities
 
+import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.model.Ability
+import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class AbilitiesViewModel(
+    private val app: Application,
     private val abilityDataSource: AbilityDataSource
-) : ViewModel() {
+) : CollectionListViewModel(app) {
 
+    object Filter {
+        var selectedAttribute: AbilityAttribute? = null
+        var selectedWorld: World? = null
+    }
+
+    sealed class Interaction {
+        data class OpenFilter(val attributes: FilterData<AbilityAttribute>, val worlds: FilterData<World>) : Interaction()
+    }
+
+    private var _abilities: List<Ability> = listOf()
     private var _items = MutableLiveData<List<Ability>>()
     val items: LiveData<List<Ability>>
         get() = _items
@@ -20,9 +33,16 @@ class AbilitiesViewModel(
     val selectedAbility: LiveData<Ability?>
         get() = _selectedAbility
 
+    private var _interaction = MutableLiveData<Interaction?>()
+    val interaction: LiveData<Interaction?>
+        get() = _interaction
+
+    private var _activeFilter = Filter
+
     init {
         viewModelScope.launch {
-            _items.value = abilityDataSource.getAbilities().getOrDefault(listOf())
+            _abilities = abilityDataSource.getAbilities().getOrDefault(listOf())
+            _items.value = _abilities
         }
     }
 
@@ -32,5 +52,38 @@ class AbilitiesViewModel(
 
     fun onNavigationCompleted() {
         _selectedAbility.value = null
+    }
+
+
+    override fun onSelectFilter() {
+        val attributes = _abilities.map { AbilityAttribute.create(it.attribute, app) }.toSet().toList()
+        val worlds = _abilities.mapNotNull { it.world }.toSet().toList()
+
+        _interaction.value = Interaction.OpenFilter(
+            FilterData(attributes, _activeFilter.selectedAttribute, AbilityAttribute::title),
+            FilterData(worlds, _activeFilter.selectedWorld, World::name)
+        )
+    }
+
+    fun filter(attribute: AbilityAttribute?, world: World?) {
+        _activeFilter.selectedAttribute = attribute
+        _activeFilter.selectedWorld = world
+
+        viewModelScope.launch {
+            _items.value = _abilities.filter { ability ->
+                val iAttribute = attribute?.let { attribute ->
+                     ability.attribute == attribute.attribute
+                } ?: true
+                val iWorld = world?.let { world ->
+                    ability.world == world
+                } ?: true
+
+                iAttribute && iWorld
+            }
+        }
+    }
+
+    fun onInteractionCompleted() {
+        _interaction.value = null
     }
 }

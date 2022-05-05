@@ -60,19 +60,8 @@ open class CollectionListFragment : Fragment() {
             R.id.app_bar_search -> {
                 true
             }
-            R.id.app_bar_sort_name -> {
-                true
-            }
-            R.id.app_bar_sort_race -> {
-                true
-            }
-            R.id.app_bar_sort_type -> {
-                true
-            }
-            R.id.app_bar_sort_world -> {
-                true
-            }
             R.id.app_bar_filter_list -> {
+                viewModel.onSelectFilter()
                 true
             }
             else -> super.onOptionsItemSelected(item)
