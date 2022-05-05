@@ -72,11 +72,13 @@ class CharacterListFragment : CollectionListFragment() {
         return _binding.root
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.collection_characters_sort, menu)
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.app_bar_search -> {
-                true
-            }
             R.id.app_bar_sort_name -> {
                 _viewModel.onSelectSort(CharacterListViewModel.SortType.NAME)
                 true
@@ -91,10 +93,6 @@ class CharacterListFragment : CollectionListFragment() {
             }
             R.id.app_bar_sort_world -> {
                 _viewModel.onSelectSort(CharacterListViewModel.SortType.WORLD)
-                true
-            }
-            R.id.app_bar_filter_list -> {
-                _viewModel.onSelectFilter()
                 true
             }
             else -> super.onOptionsItemSelected(item)
