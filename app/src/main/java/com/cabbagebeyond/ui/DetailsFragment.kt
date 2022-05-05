@@ -11,7 +11,6 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.cabbagebeyond.R
-import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.ocr.TextRecognizerFragment
 import com.cabbagebeyond.util.CollectionProperty
 import com.google.android.material.snackbar.Snackbar
@@ -45,7 +44,7 @@ open class DetailsFragment : Fragment() {
 
     protected open fun navigateToOcr() {}
 
-    protected fun setupSpinner(attribute: String, attributes: List<String>, spinner: Spinner, onSelected: ((index: Int) -> Unit)) {
+    protected fun setupSpinner(attribute: String?, attributes: List<String>, spinner: Spinner, onSelected: ((index: Int) -> Unit)) {
         setupSpinner(attribute, attributes, spinner, object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(

@@ -23,22 +23,21 @@ class AbilityDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, app) {
 
-    class AbilityAttribute(var attribute: Attribute, var title: String)
+    data class AbilityAttribute(var attribute: Attribute, var title: String)
+    data class WorldSelection(var selected: World?, var values: List<World?>)
+    data class AttributeSelection(var selected: AbilityAttribute?, var values: List<AbilityAttribute>)
 
     var ability = MutableLiveData(givenAbility)
 
-    private var _worlds = MutableLiveData<List<World?>>()
-    val worlds: LiveData<List<World?>>
+    private var _worlds = MutableLiveData<WorldSelection>()
+    val worlds: LiveData<WorldSelection>
         get() = _worlds
 
-    private var _attributes = MutableLiveData<List<AbilityAttribute>>()
-    val attributes: LiveData<List<AbilityAttribute>>
+    private var _attributes = MutableLiveData<AttributeSelection>()
+    val attributes: LiveData<AttributeSelection>
         get() = _attributes
 
     init {
-        // for MVP the attributes are stored as enum.
-        val stringArray = Attribute.values().map { createAbilityAttribute(it) }
-        _attributes.value = stringArray.toList()
 
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
@@ -49,24 +48,32 @@ class AbilityDetailsViewModel(
 
     override fun onEdit() {
         super.onEdit()
-        if (_worlds.value == null) {
-            loadWorlds()
-        }
-        if (_attributes.value == null) {
-            loadAttributes()
-        }
+        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+
+        _attributes.value?.values?.let { updateAttributeSelection(it) } ?: loadAttributes()
     }
 
     private fun loadWorlds() {
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            _worlds.value = worlds
+            updateWorldSelection(worlds)
         }
     }
 
-    private fun loadAttributes() {
+    private fun updateWorldSelection(worlds: List<World?>) {
+        _worlds.value = WorldSelection(ability.value?.world, worlds)
+    }
 
+    private fun loadAttributes() {
+        // for MVP the attributes are stored as enum.
+        val attributes = Attribute.values().map { createAbilityAttribute(it) }
+        updateAttributeSelection(attributes)
+    }
+
+    private fun updateAttributeSelection(attributes: List<AbilityAttribute>) {
+        val currentSelected = ability.value?.attribute?.let { createAbilityAttribute(it) }
+        _attributes.value = AttributeSelection(currentSelected, attributes)
     }
 
     override fun onSave() {

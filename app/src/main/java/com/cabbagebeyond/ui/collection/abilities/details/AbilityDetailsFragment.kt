@@ -8,6 +8,7 @@ import androidx.navigation.fragment.findNavController
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentAbilityDetailsBinding
+import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
 import org.koin.android.ext.android.inject
@@ -64,17 +65,11 @@ class AbilityDetailsFragment : DetailsFragment() {
         }
 
         _viewModel.attributes.observe(viewLifecycleOwner) { attributes ->
-            setupSpinner(ability.attribute.name, attributes.map { it.title }, _binding.attributeSpinner) { index ->
-                _viewModel.onAttributeSelected(attributes[index])
-            }
+            setupAttributeSpinner(attributes.selected, attributes.values)
         }
 
         _viewModel.worlds.observe(viewLifecycleOwner) { worlds ->
-            setupSpinner(ability.world?.name ?: "", worlds.mapNotNull { it?.name }, _binding.worldSpinner) { index ->
-                worlds?.getOrNull(index)?.let {
-                    _viewModel.onWorldSelected(it)
-                }
-            }
+            setupWorldSpinner(worlds.selected, worlds.values)
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -86,6 +81,31 @@ class AbilityDetailsFragment : DetailsFragment() {
         setHasOptionsMenu(true)
 
         return _binding.root
+    }
+
+    private fun setupWorldSpinner(preSelection: World?, worlds: List<World?>) {
+        if (worlds.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.name,
+            worlds.mapNotNull { it?.name ?: "" },
+            _binding.worldSpinner
+        ) { index ->
+            val world = worlds.getOrNull(index)
+            _viewModel.onWorldSelected(world)
+        }
+    }
+
+    private fun setupAttributeSpinner(preSelection: AbilityDetailsViewModel.AbilityAttribute?, attributes: List<AbilityDetailsViewModel.AbilityAttribute>) {
+        if (attributes.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.title,
+            attributes.map { it.title },
+            _binding.attributeSpinner
+        ) { index ->
+            _viewModel.onAttributeSelected(attributes[index])
+        }
     }
 
     override fun navigateToOcr() {
