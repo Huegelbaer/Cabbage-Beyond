@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.TalentDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
@@ -20,7 +21,7 @@ class TalentDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val talents = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(TalentDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(talents)
             }
@@ -42,7 +43,7 @@ class TalentDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val talents = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(TalentDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(talents)
             }
@@ -59,11 +60,8 @@ class TalentDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(TalentDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val talent = map(task)
+                result = Result.success(talent)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -105,5 +103,17 @@ class TalentDao {
             }
             .await()
         return result
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): TalentDTO {
+        return TalentDTO(
+            documentSnapshot.get(TalentDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(TalentDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(TalentDTO.FIELD_RANG_REQUIREMENT, String::class.java) ?: "",
+            documentSnapshot.get(TalentDTO.FIELD_REQUIREMENTS, String::class.java) ?: "",
+            documentSnapshot.get(TalentDTO.FIELD_TYPE, String::class.java) ?: "",
+            documentSnapshot.get(TalentDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }
