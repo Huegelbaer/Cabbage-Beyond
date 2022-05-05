@@ -56,6 +56,7 @@
     <string name="character_type_npc">NPC</string>
     <string name="character_type_monster">Monster</string>
 
+    <!-- Ability attributes -->
     <string name="attribute_strength">Strength</string>
     <string name="attribute_intellect">Intellect</string>
     <string name="attribute_constitution">Constitution</string>
@@ -68,13 +69,12 @@
         <item>Others</item>
     </string-array>
 
-    <string-array name="ranks">
-        <item>Rookie</item>
-        <item>Advanced</item>
-        <item>Veteran</item>
-        <item>Hero</item>
-        <item>Legend</item>
-    </string-array>
+    <!-- Ranks -->
+    <string name="rank_rookie">Rookie</string>
+    <string name="rank_advanced">Advanced</string>
+    <string name="rank_veteran">Veteran</string>
+    <string name="rank_hero">Hero</string>
+    <string name="rank_legend">Legend</string>
 
     <string-array name="types_of_handicap">
         <item>slight</item>
@@ -82,18 +82,27 @@
         <item>slight or heavy</item>
     </string-array>
 
-    <string-array name="types_of_talents">
-        <item>background</item>
-        <item>leader</item>
-        <item>expert</item>
-        <item>fight</item>
-        <item>force</item>
-        <item>race</item>
-        <item>social</item>
-        <item>supernatural</item>
-        <item>wildcard</item>
-        <item>legendary</item>
-    </string-array>
+    <!-- Types of talents -->
+    <string name="talent_type_background">Background</string>
+    <string name="talent_type_leader">Leader</string>
+    <string name="talent_type_expert">Expert</string>
+    <string name="talent_type_fight">Fight</string>
+    <string name="talent_type_force">Force</string>
+    <string name="talent_type_race">Race</string>
+    <string name="talent_type_social">Social</string>
+    <string name="talent_type_supernatural">Supernatural</string>
+    <string name="talent_type_wildcard">Wildcard</string>
+    <string name="talent_type_legendary">Legendary</string>
+    <string name="talent_type_dragon">Dragon</string>
+    <string name="talent_type_athletic">Athletic</string>
+    <string name="talent_type_perception">Perception</string>
+    <string name="talent_type_illusion">Illusion</string>
+    <string name="talent_type_provoke">Provoke</string>
+    <string name="talent_type_thievery">Thievery</string>
+    <string name="talent_type_stealth">Stealth</string>
+    <string name="talent_type_territory">Territory</string>
+    <string name="talent_type_intellect">Intellect</string>
+    <string name="talent_type_strength">Strength</string>
 
     <!-- -->
     <string name="property_name">Name</string>

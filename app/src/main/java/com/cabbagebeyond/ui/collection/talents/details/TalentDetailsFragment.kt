@@ -11,6 +11,8 @@ import com.cabbagebeyond.databinding.FragmentTalentDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.talents.TalentRank
+import com.cabbagebeyond.ui.collection.talents.TalentType
 import org.koin.android.ext.android.inject
 
 class TalentDetailsFragment : DetailsFragment() {
@@ -18,7 +20,6 @@ class TalentDetailsFragment : DetailsFragment() {
     companion object {
         fun newInstance() = TalentDetailsFragment()
     }
-
 
     private val _viewModel: TalentDetailsViewModel
         get() = viewModel as TalentDetailsViewModel
@@ -56,15 +57,15 @@ class TalentDetailsFragment : DetailsFragment() {
         }
 
         _viewModel.ranks.observe(viewLifecycleOwner) {
-            setupRankSpinner(talent.rangRequirement, it ?: listOf())
+            setupRankSpinner(it.selected, it.values)
         }
 
         _viewModel.types.observe(viewLifecycleOwner) {
-            setupTypeSpinner(talent.type, it ?: listOf())
+            setupTypeSpinner(it.selected, it.values)
         }
 
         _viewModel.worlds.observe(viewLifecycleOwner) {
-            setupWorldSpinner(talent.world, it ?: listOf())
+            setupWorldSpinner(it.selected, it.values)
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -78,21 +79,39 @@ class TalentDetailsFragment : DetailsFragment() {
         return _binding.root
     }
 
-    private fun setupRankSpinner(rank: String, ranks: List<String>) {
-        setupSpinner(rank, ranks, _binding.requirementSpinner) {
-            _viewModel.onRankSelected(ranks[it])
+    private fun setupRankSpinner(preSelection: TalentRank?, ranks: List<TalentRank>) {
+        if (ranks.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.title,
+            ranks.map { it.title },
+            _binding.requirementSpinner
+        ) { index ->
+            _viewModel.onRankSelected(ranks[index])
         }
     }
 
-    private fun setupTypeSpinner(type: String, types: List<String>) {
-        setupSpinner(type, types, _binding.typeSpinner) {
-            _viewModel.onTypeSelected(types[it])
+    private fun setupTypeSpinner(preSelection: TalentType?, types: List<TalentType>) {
+        if (types.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.title,
+            types.map { it.title },
+            _binding.typeSpinner
+        ) { index ->
+            _viewModel.onTypeSelected(types[index])
         }
     }
 
-    private fun setupWorldSpinner(world: World?, worlds: List<World?>) {
-        setupSpinner(world?.name ?: "", worlds.mapNotNull { it?.name }, _binding.worldSpinner) {
-            _viewModel.onWorldSelected(worlds[it])
+    private fun setupWorldSpinner(preSelection: World?, worlds: List<World?>) {
+        if (worlds.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.name,
+            worlds.map { it?.name ?: "" },
+            _binding.worldSpinner
+        ) { index ->
+            _viewModel.onWorldSelected(worlds[index])
         }
     }
 

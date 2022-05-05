@@ -8,6 +8,7 @@ import com.cabbagebeyond.R
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.model.Force
+import com.cabbagebeyond.model.Rank
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
@@ -33,10 +34,6 @@ class ForceDetailsViewModel(
         get() = _ranks
 
     init {
-        // for MVP the types are stored in resources.
-        val stringArray = app.applicationContext.resources.getStringArray(R.array.ranks)
-        _ranks.value = stringArray.toList()
-
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
             CollectionProperty("requirement", R.string.requirement_title, ""),
@@ -54,6 +51,10 @@ class ForceDetailsViewModel(
         if (_ranks.value == null) {
             loadRanks()
         }
+
+        // for MVP the types are stored in resources.
+        val stringArray = Rank.values().map { it.name }
+        _ranks.value = stringArray.toList()
     }
 
     private fun loadWorlds() {

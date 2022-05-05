@@ -2,12 +2,13 @@ package com.cabbagebeyond.ui
 
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.cabbagebeyond.model.Role
 import android.view.View
 import android.widget.ImageView
 import com.cabbagebeyond.R
-import com.cabbagebeyond.model.Attribute
-import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.model.*
+import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
+import com.cabbagebeyond.ui.collection.talents.TalentRank
+import com.cabbagebeyond.ui.collection.talents.TalentType
 
 
 @BindingAdapter("roleList")
@@ -55,16 +56,15 @@ private fun getTitleIdForCharacterType(type: Character.Type): Int  {
 
 @BindingAdapter("abilityAttribute")
 fun bindTextViewToAbilityAttribute(textView: TextView, attribute: Attribute) {
-    val resourceId = getTitleIdForAbilityAttribute(attribute)
-    textView.text = textView.context.getString(resourceId)
+    textView.text = AbilityAttribute.create(attribute, textView.context).title
 }
 
-fun getTitleIdForAbilityAttribute(attribute: Attribute): Int  {
-    return when (attribute) {
-        Attribute.STRENGTH -> R.string.attribute_strength
-        Attribute.INTELLECT -> R.string.attribute_intellect
-        Attribute.CONSTITUTION -> R.string.attribute_constitution
-        Attribute.DEXTERITY -> R.string.attribute_dexterity
-        Attribute.WILLPOWER -> R.string.attribute_willpower
-    }
+@BindingAdapter("talentType")
+fun bindTextViewToTalentType(textView: TextView, type: Talent.Type?) {
+    textView.text = if (type != null) TalentType.create(type, textView.context).title else ""
+}
+
+@BindingAdapter("talentRank")
+fun bindTextViewToTalentRank(textView: TextView, rank: Rank?) {
+    textView.text = if (rank != null) TalentRank.create(rank, textView.context).title else ""
 }
