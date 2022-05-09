@@ -88,6 +88,7 @@ class CharacterListViewModel(
     }
 
     override fun onSelectFilter() {
+        val application = getApplication<Application>()
         val races = _characters.mapNotNull { it.race }.toSet().toList()
         val types = Character.Type.values().map {
             createCharacterType(it)
@@ -95,9 +96,9 @@ class CharacterListViewModel(
         val worlds = _characters.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(races, _activeFilter.selectedRace, Race::name),
-            FilterData(types, _activeFilter.selectedType, CharacterType::title),
-            FilterData(worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(application.resources.getString(R.string.character_race), races, _activeFilter.selectedRace, Race::name),
+            FilterData(application.resources.getString(R.string.character_type), types, _activeFilter.selectedType, CharacterType::title),
+            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
         )
     }
 

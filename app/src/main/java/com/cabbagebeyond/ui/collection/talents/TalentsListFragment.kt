@@ -1,21 +1,20 @@
 package com.cabbagebeyond.ui.collection.talents
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.navigation.fragment.findNavController
-import com.cabbagebeyond.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.databinding.FragmentTalentsListBinding
 import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
-import com.google.android.material.chip.ChipGroup
 import org.koin.android.ext.android.inject
+
 
 class TalentsListFragment : CollectionListFragment() {
 
@@ -73,26 +72,26 @@ class TalentsListFragment : CollectionListFragment() {
     }
 
     private fun showFilterDialog(types: CollectionListViewModel.FilterData<TalentType>, ranks: CollectionListViewModel.FilterData<TalentRank>, worlds: CollectionListViewModel.FilterData<World>) {
-        val viewInflated = layoutInflater.inflate(R.layout.content_view_talents_filter, null)
-        val typesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_type_chip_group)
-        val ranksChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_rank_chip_group)
-        val worldsChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_world_chip_group)
 
-        prepareChipGroup(typesChipGroup, types)
-        prepareChipGroup(ranksChipGroup, ranks)
-        prepareChipGroup(worldsChipGroup, worlds)
+        var selectedType = types.selected
+        var selectedRank = ranks.selected
+        var selectedWorld = worlds.selected
 
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.menu_filter)
-            .setView(viewInflated)
-            .setPositiveButton(R.string.menu_filter) { _, _ ->
-                val selectedType = types.values.getOrNull(typesChipGroup.checkedChipId)
-                val selectedRank = ranks.values.getOrNull(typesChipGroup.checkedChipId)
-                val selectedWorld = worlds.values.getOrNull(worldsChipGroup.checkedChipId)
-                _viewModel.filter(selectedType, selectedRank, selectedWorld)
-            }
-            .setNegativeButton(R.string.dialog_button_cancel, null)
-            .show()
+        val dialog = FilterDialogFragment(onFilter = {
+            _viewModel.filter(selectedType, selectedRank, selectedWorld)
+        })
+
+        dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
+            selectedType = it
+        }
+        dialog.addFilterChipGroup(ranks.title, ranks.values, ranks.selected, ranks.titleProperty) {
+            selectedRank = it
+        }
+        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+            selectedWorld = it
+        }
+
+        dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
     private fun showDetails(talent: Talent) {

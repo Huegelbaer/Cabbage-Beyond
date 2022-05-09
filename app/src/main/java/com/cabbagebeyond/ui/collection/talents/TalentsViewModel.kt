@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.cabbagebeyond.R
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.World
@@ -56,14 +57,15 @@ class TalentsViewModel(
     }
 
     override fun onSelectFilter() {
+        val application = getApplication<Application>()
         val types = _talents.mapNotNull { talent -> talent.type?.let { TalentType.create(it, app) } }.toSet().toList()
         val ranks = _talents.mapNotNull { talent -> talent.rangRequirement?.let { TalentRank.create(it, app) } }.toSet().toList()
         val worlds = _talents.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(types, _activeFilter.selectedType, TalentType::title),
-            FilterData(ranks, _activeFilter.selectedRank, TalentRank::title),
-            FilterData(worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(application.resources.getString(R.string.character_type), types, _activeFilter.selectedType, TalentType::title),
+            FilterData(application.resources.getString(R.string.talent_rang_requirement), ranks, _activeFilter.selectedRank, TalentRank::title),
+            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
         )
     }
 

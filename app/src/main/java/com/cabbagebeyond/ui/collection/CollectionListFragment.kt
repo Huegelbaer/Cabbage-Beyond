@@ -67,34 +67,4 @@ open class CollectionListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-    fun <T : Any> prepareChipGroup(
-        chipGroup: ChipGroup,
-        data: CollectionListViewModel.FilterData<T>
-    ) {
-        data.values.forEachIndexed { index, it ->
-            val title = data.title.get(it)
-            val chip = createChip(title, index)
-            chipGroup.addView(chip)
-        }
-        data.selected?.let {
-            val index = data.values.indexOf(it)
-            chipGroup.check(index)
-        }
-    }
-
-    private fun createChip(title: String, index: Int): Chip {
-        return Chip(context).apply {
-            id = index
-            tag = index
-            text = title
-            isClickable = true
-            isCheckable = true
-            isCheckedIconVisible = true
-            isFocusable = true
-            chipBackgroundColor =
-                ColorStateList.valueOf(resources.getColor(R.color.selector_chip_background))
-        }
-    }
-
 }

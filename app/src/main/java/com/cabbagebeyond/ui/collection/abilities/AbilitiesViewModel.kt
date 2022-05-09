@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.cabbagebeyond.R
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.World
@@ -56,12 +57,13 @@ class AbilitiesViewModel(
 
 
     override fun onSelectFilter() {
+        val application = getApplication<Application>()
         val attributes = _abilities.map { AbilityAttribute.create(it.attribute, app) }.toSet().toList()
         val worlds = _abilities.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(attributes, _activeFilter.selectedAttribute, AbilityAttribute::title),
-            FilterData(worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(application.resources.getString(R.string.attribute), attributes, _activeFilter.selectedAttribute, AbilityAttribute::title),
+            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
         )
     }
 

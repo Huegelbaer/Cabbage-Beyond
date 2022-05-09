@@ -2,21 +2,15 @@ package com.cabbagebeyond.ui.collection.abilities
 
 import android.os.Bundle
 import android.view.*
-import androidx.appcompat.app.AlertDialog
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.navigation.fragment.findNavController
-import com.cabbagebeyond.R
+import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.databinding.FragmentAbilitiesListBinding
 import com.cabbagebeyond.model.Ability
-import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
-import com.cabbagebeyond.ui.collection.abilities.details.AbilityDetailsViewModel
-import com.cabbagebeyond.ui.collection.characters.CharacterListViewModel
-import com.google.android.material.chip.ChipGroup
 import org.koin.android.ext.android.inject
 
 class AbilitiesListFragment : CollectionListFragment() {
@@ -75,23 +69,22 @@ class AbilitiesListFragment : CollectionListFragment() {
     }
 
     private fun showFilterDialog(attributes: CollectionListViewModel.FilterData<AbilityAttribute>, worlds: CollectionListViewModel.FilterData<World>) {
-        val viewInflated = layoutInflater.inflate(R.layout.content_view_abilities_filter, null)
-        val attributesChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_attribute_chip_group)
-        val worldsChipGroup = viewInflated.findViewById<ChipGroup>(R.id.filter_world_chip_group)
 
-        prepareChipGroup(attributesChipGroup, attributes)
-        prepareChipGroup(worldsChipGroup, worlds)
+        var selectedAttribute = attributes.selected
+        var selectedWorld = worlds.selected
 
-        AlertDialog.Builder(requireContext())
-            .setTitle(R.string.menu_filter)
-            .setView(viewInflated)
-            .setPositiveButton(R.string.menu_filter) { _, _ ->
-                val selectedAttribute = attributes.values.getOrNull(attributesChipGroup.checkedChipId)
-                val selectedWorld = worlds.values.getOrNull(worldsChipGroup.checkedChipId)
-                _viewModel.filter(selectedAttribute, selectedWorld)
-            }
-            .setNegativeButton(R.string.dialog_button_cancel, null)
-            .show()
+        val dialog = FilterDialogFragment(onFilter = {
+            _viewModel.filter(selectedAttribute, selectedWorld)
+        })
+
+        dialog.addFilterChipGroup(attributes.title, attributes.values, attributes.selected, attributes.titleProperty) {
+            selectedAttribute = it
+        }
+        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+            selectedWorld = it
+        }
+
+        dialog.show(requireActivity().supportFragmentManager, "ability_dialog_filter")
     }
 
     private fun showDetails(ability: Ability) {
