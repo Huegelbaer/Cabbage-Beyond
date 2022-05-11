@@ -71,7 +71,7 @@ fun List<HandicapDTO>.asDomainModel(worlds: List<World>): List<Handicap> {
 }
 
 fun HandicapDTO.asDomainModel(world: World?): Handicap {
-    return Handicap(name, description, type, world, id)
+    return Handicap(name, description, valueToHandicapType(type), world, id)
 }
 
 fun List<Handicap>.asDatabaseModel(): List<HandicapDTO> {
@@ -81,5 +81,23 @@ fun List<Handicap>.asDatabaseModel(): List<HandicapDTO> {
 }
 
 fun Handicap.asDatabaseModel(): HandicapDTO {
-    return HandicapDTO(name, description, type, world?.id ?: "", id)
+    return HandicapDTO(name, description, type?.asDatabaseModel() ?: "", world?.id ?: "", id)
+}
+
+
+fun valueToHandicapType(dtoValue: String?): Handicap.Type? {
+    return when(dtoValue) {
+        "Leicht" -> Handicap.Type.SLIGHT
+        "Leicht/Schwer" -> Handicap.Type.SLIGHT_OR_HEAVY
+        "Schwer" -> Handicap.Type.HEAVY
+        else -> null
+    }
+}
+
+fun Handicap.Type.asDatabaseModel(): String {
+    return when(this) {
+        Handicap.Type.SLIGHT -> "Leicht"
+        Handicap.Type.SLIGHT_OR_HEAVY -> "Leicht/Schwer"
+        Handicap.Type.HEAVY -> "Schwer"
+    }
 }

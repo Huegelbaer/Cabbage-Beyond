@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Handicap
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.ui.collection.handicaps.HandicapType
 import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
@@ -22,48 +23,57 @@ class HandicapDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, app) {
 
+    data class TypeSelection(var selected: HandicapType?, var values: List<HandicapType>)
+    data class WorldSelection(var selected: World?, var values: List<World?>)
+
     var handicap = MutableLiveData(_givenHandicap)
 
-    private var _worlds = MutableLiveData<List<World?>>()
-    val worlds: LiveData<List<World?>>
+    private var _worlds = MutableLiveData<WorldSelection>()
+    val worlds: LiveData<WorldSelection>
         get() = _worlds
 
-    private var _types = MutableLiveData<List<String>>()
-    val types: LiveData<List<String>>
+    private var _types = MutableLiveData<TypeSelection>()
+    val types: LiveData<TypeSelection>
         get() = _types
 
     init {
-        // for MVP the types are stored in resources.
-        val stringArray = app.applicationContext.resources.getStringArray(R.array.types_of_handicap)
-        _types.value = stringArray.toList()
 
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
-            CollectionProperty("type", R.string.character_type, ""),
+       //     CollectionProperty("type", R.string.character_type, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
     }
 
     override fun onEdit() {
         super.onEdit()
-        if (_worlds.value == null) {
-            loadWorlds()
-        }
-        if (_types.value == null) {
-            loadTypes()
-        }
+
+        _types.value?.values?.let { updateTypeSelection(it) } ?: loadTypes()
+        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+    }
+
+    private fun loadTypes() {
+        val application = getApplication<Application>()
+        val types = Handicap.Type.values().map { HandicapType.create(it, application) }
+        updateTypeSelection(types)
+    }
+
+    private fun updateTypeSelection(types: List<HandicapType>) {
+        val application = getApplication<Application>()
+        val currentSelected = handicap.value?.type?.let { HandicapType.create(it, application) }
+        _types.value = TypeSelection(currentSelected, types)
     }
 
     private fun loadWorlds() {
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            _worlds.value = worlds
+            updateWorldSelection(worlds)
         }
     }
 
-    private fun loadTypes() {
-
+    private fun updateWorldSelection(worlds: List<World?>) {
+        _worlds.value = WorldSelection(handicap.value?.world, worlds)
     }
 
     override fun onSave() {
@@ -85,8 +95,8 @@ class HandicapDetailsViewModel(
         }
     }
 
-    fun onTypeSelected(rank: String) {
-        handicap.value?.type = rank
+    fun onTypeSelected(type: HandicapType) {
+        handicap.value?.type = type.type
     }
 
     fun onWorldSelected(world: World?) {
@@ -99,7 +109,7 @@ class HandicapDetailsViewModel(
         for (property in properties) {
             when (property.key) {
                 "name" -> handicap.value?.name = property.value
-                "type" -> handicap.value?.type = property.value
+           //     "type" -> handicap.value?.type = property.value
                 "description" -> handicap.value?.description += property.value
             }
         }

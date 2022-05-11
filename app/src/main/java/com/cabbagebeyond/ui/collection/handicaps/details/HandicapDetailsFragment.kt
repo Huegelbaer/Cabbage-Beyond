@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.FragmentHandicapDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.handicaps.HandicapType
 import org.koin.android.ext.android.inject
 
 class HandicapDetailsFragment : DetailsFragment() {
@@ -55,11 +56,11 @@ class HandicapDetailsFragment : DetailsFragment() {
         }
 
         _viewModel.types.observe(viewLifecycleOwner) {
-            setupTypesSpinner(handicap.type, it ?: listOf())
+            setupTypesSpinner(it.selected, it.values)
         }
 
         _viewModel.worlds.observe(viewLifecycleOwner) {
-            setupWorldSpinner(handicap.world, it ?: listOf())
+            setupWorldSpinner(it.selected, it.values)
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -73,8 +74,14 @@ class HandicapDetailsFragment : DetailsFragment() {
         return _binding.root
     }
 
-    private fun setupTypesSpinner(type: String, types: List<String>) {
-        setupSpinner(type, types, _binding.typeSpinner) {
+    private fun setupTypesSpinner(preSelection: HandicapType?, types: List<HandicapType>) {
+        if (types.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.title,
+            types.map { it.title },
+            _binding.typeSpinner
+        ) {
             _viewModel.onTypeSelected(types[it])
         }
     }

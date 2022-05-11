@@ -7,6 +7,7 @@ import android.widget.ImageView
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.*
 import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
+import com.cabbagebeyond.ui.collection.handicaps.HandicapType
 import com.cabbagebeyond.ui.collection.talents.TalentRank
 import com.cabbagebeyond.ui.collection.talents.TalentType
 
@@ -67,4 +68,9 @@ fun bindTextViewToTalentType(textView: TextView, type: Talent.Type?) {
 @BindingAdapter("talentRank")
 fun bindTextViewToTalentRank(textView: TextView, rank: Rank?) {
     textView.text = if (rank != null) TalentRank.create(rank, textView.context).title else ""
+}
+
+@BindingAdapter("handicapType")
+fun bindTextViewToHandicapType(textView: TextView, type: Handicap.Type?) {
+    textView.text = if (type != null) HandicapType.create(type, textView.context).title else ""
 }

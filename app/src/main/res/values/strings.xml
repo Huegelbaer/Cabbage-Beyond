@@ -76,11 +76,10 @@
     <string name="rank_hero">Hero</string>
     <string name="rank_legend">Legend</string>
 
-    <string-array name="types_of_handicap">
-        <item>slight</item>
-        <item>heavy</item>
-        <item>slight or heavy</item>
-    </string-array>
+    <!-- Handicaps -->
+    <string name="handicap_type_slight">Slight</string>
+    <string name="handicap_type_slight_or_heavy">Slight or heavy</string>
+    <string name="handicap_type_heavy">Heavy</string>
 
     <!-- Types of talents -->
     <string name="talent_type_background">Background</string>
