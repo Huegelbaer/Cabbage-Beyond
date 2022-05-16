@@ -63,11 +63,10 @@
     <string name="attribute_dexterity">Dexterity</string>
     <string name="attribute_willpower">Willpower</string>
 
-    <string-array name="types_of_weapons">
-        <item>Weapon</item>
-        <item>Armor</item>
-        <item>Others</item>
-    </string-array>
+    <!-- Equipment types-->
+    <string name="equipment_type_weapon">Weapon</string>
+    <string name="equipment_type_armor">Armor</string>
+    <string name="equipment_type_others">Others</string>
 
     <!-- Ranks -->
     <string name="rank_rookie">Rookie</string>

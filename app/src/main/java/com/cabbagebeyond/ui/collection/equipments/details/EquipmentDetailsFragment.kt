@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.FragmentEquipmentDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.equipments.EquipmentType
 import org.koin.android.ext.android.inject
 
 class EquipmentDetailsFragment : DetailsFragment() {
@@ -59,11 +60,11 @@ class EquipmentDetailsFragment : DetailsFragment() {
         }
 
         _viewModel.types.observe(viewLifecycleOwner) {
-            setupTypeSpinner(equipment.type, it ?: listOf())
+            setupTypeSpinner(it.selected, it.values)
         }
 
         _viewModel.worlds.observe(viewLifecycleOwner) {
-            setupWorldSpinner(equipment.world, it ?: listOf())
+            setupWorldSpinner(it.selected, it.values)
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -77,14 +78,14 @@ class EquipmentDetailsFragment : DetailsFragment() {
         return _binding.root
     }
 
-    private fun setupTypeSpinner(type: String, types: List<String>) {
-        setupSpinner(type, types, _binding.typeSpinner) {
-            _viewModel.onTypeSelected(types[it])
+    private fun setupTypeSpinner(preSelection: EquipmentType?, types: List<EquipmentType>) {
+        setupSpinner(preSelection?.title, types.map { it.title }, _binding.typeSpinner) { index ->
+            _viewModel.onTypeSelected(types[index])
         }
     }
 
-    private fun setupWorldSpinner(world: World?, worlds: List<World?>) {
-        setupSpinner(world?.name ?: "", worlds.mapNotNull { it?.name }, _binding.worldSpinner) {
+    private fun setupWorldSpinner(preSelection: World?, worlds: List<World?>) {
+        setupSpinner(preSelection?.name ?: "", worlds.mapNotNull { it?.name }, _binding.worldSpinner) {
             _viewModel.onWorldSelected(worlds[it])
         }
     }

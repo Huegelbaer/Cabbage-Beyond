@@ -2,6 +2,7 @@ package com.cabbagebeyond.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 data class Equipment(
     var name: String,
@@ -9,17 +10,25 @@ data class Equipment(
     var cost: String,
     var weight: Double,
     var requirements: List<String>,
-    var type: String,
+    var type: Type?,
     var world: World?,
     val id: String
 ): Parcelable {
+
+    @Parcelize
+    enum class Type(val value: String) : Parcelable {
+        WEAPON("Waffe"),
+        ARMOR("Rüstung"),
+        OTHERS("Sonstiges")
+    }
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readDouble(),
         parcel.createStringArrayList()!!,
-        parcel.readString()!!,
+        parcel.readParcelable<Type>(Type::class.java.classLoader)!!,
         parcel.readParcelable(World::class.java.classLoader),
         parcel.readString()!!
     )
@@ -30,7 +39,7 @@ data class Equipment(
         parcel.writeString(cost)
         parcel.writeDouble(weight)
         parcel.writeStringList(requirements)
-        parcel.writeString(type)
+        parcel.writeParcelable(type, flags)
         parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }

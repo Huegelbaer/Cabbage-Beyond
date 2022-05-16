@@ -7,6 +7,7 @@ import android.widget.ImageView
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.*
 import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
+import com.cabbagebeyond.ui.collection.equipments.EquipmentType
 import com.cabbagebeyond.ui.collection.forces.ForceRank
 import com.cabbagebeyond.ui.collection.handicaps.HandicapType
 import com.cabbagebeyond.ui.collection.talents.TalentRank
@@ -79,4 +80,9 @@ fun bindTextViewToHandicapType(textView: TextView, type: Handicap.Type?) {
 @BindingAdapter("forceRank")
 fun bindTextViewToForceRank(textView: TextView, type: Rank?) {
     textView.text = if (type != null) ForceRank.create(type, textView.context).title else ""
+}
+
+@BindingAdapter("equipmentType")
+fun bindTextViewToEquipmentType(textView: TextView, type: Equipment.Type?) {
+    textView.text = if (type != null) EquipmentType.create(type, textView.context).title else ""
 }

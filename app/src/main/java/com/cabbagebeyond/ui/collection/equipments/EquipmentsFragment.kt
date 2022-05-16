@@ -1,30 +1,25 @@
 package com.cabbagebeyond.ui.collection.equipments
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
-import com.cabbagebeyond.data.AbilityDataSource
+import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.EquipmentDataSource
-import com.cabbagebeyond.databinding.FragmentAbilitiesListBinding
 import com.cabbagebeyond.databinding.FragmentEquipmentsListBinding
 import com.cabbagebeyond.model.Equipment
-import com.cabbagebeyond.ui.collection.abilities.AbilitiesRecyclerViewAdapter
-import com.cabbagebeyond.ui.collection.abilities.AbilitiesViewModel
-import com.cabbagebeyond.ui.collection.abilities.AbilityClickListener
+import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.collection.CollectionListFragment
+import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
 
-class EquipmentsFragment : Fragment() {
+class EquipmentsFragment : CollectionListFragment() {
 
-    private val _viewModel: EquipmentsViewModel by lazy {
-        val dataSource: EquipmentDataSource by inject()
-        EquipmentsViewModel(dataSource)
-    }
+    private val _viewModel: EquipmentsViewModel
+        get() = viewModel as EquipmentsViewModel
 
     private lateinit var _binding: FragmentEquipmentsListBinding
     private lateinit var _adapter: EquipmentsRecyclerViewAdapter
@@ -34,6 +29,9 @@ class EquipmentsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentEquipmentsListBinding.inflate(inflater)
+
+        val dataSource: EquipmentDataSource by inject()
+        viewModel = EquipmentsViewModel(requireActivity().application, dataSource)
 
         val clickListener = EquipmentClickListener {
             _viewModel.onEquipmentClicked(it)
@@ -57,7 +55,39 @@ class EquipmentsFragment : Fragment() {
             }
         }
 
+        _viewModel.interaction.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it) {
+                    is EquipmentsViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(it.types, it.worlds)
+                    }
+                }
+                _viewModel.onInteractionCompleted()
+            }
+        }
+
+        setHasOptionsMenu(true)
+
         return _binding.root
+    }
+
+    private fun showFilterDialog(types: CollectionListViewModel.FilterData<EquipmentType>, worlds: CollectionListViewModel.FilterData<World>) {
+
+        var selectedType = types.selected
+        var selectedWorld = worlds.selected
+
+        val dialog = FilterDialogFragment(onFilter = {
+            _viewModel.filter(selectedType, selectedWorld)
+        })
+
+        dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
+            selectedType = it
+        }
+        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+            selectedWorld = it
+        }
+
+        dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
     private fun showDetails(equipment: Equipment) {
