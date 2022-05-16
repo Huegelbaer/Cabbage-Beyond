@@ -57,7 +57,7 @@
                 style="@style/ListAppearance.Property.Value"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="@{force.rangRequirement}"
+                app:forceRank="@{force.rangRequirement}"
                 app:layout_constraintEnd_toEndOf="@id/rang_requirement_title"
                 app:layout_constraintStart_toStartOf="@id/rang_requirement_title"
                 app:layout_constraintTop_toBottomOf="@id/rang_requirement_title"

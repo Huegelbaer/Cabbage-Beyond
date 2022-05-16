@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.FragmentForceDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.forces.ForceRank
 import org.koin.android.ext.android.inject
 
 class ForceDetailsFragment : DetailsFragment() {
@@ -55,11 +56,11 @@ class ForceDetailsFragment : DetailsFragment() {
         }
 
         _viewModel.ranks.observe(viewLifecycleOwner) {
-            setupRankSpinner(force.rangRequirement, it ?: listOf())
+            setupRankSpinner(it.selected, it.values)
         }
 
         _viewModel.worlds.observe(viewLifecycleOwner) {
-            setupWorldSpinner(force.world, it ?: listOf())
+            setupWorldSpinner(it.selected, it.values)
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -73,9 +74,15 @@ class ForceDetailsFragment : DetailsFragment() {
         return _binding.root
     }
 
-    private fun setupRankSpinner(rank: String, ranks: List<String>) {
-        setupSpinner(rank, ranks, _binding.requirementSpinner) {
-            _viewModel.onRankSelected(ranks[it])
+    private fun setupRankSpinner(preSelection: ForceRank?, ranks: List<ForceRank>) {
+        if (ranks.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.title,
+            ranks.map { it.title },
+            _binding.requirementSpinner
+        ) { index ->
+            _viewModel.onRankSelected(ranks[index])
         }
     }
 

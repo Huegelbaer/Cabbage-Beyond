@@ -72,7 +72,7 @@ fun List<ForceDTO>.asDomainModel(worlds: List<World>): List<Force> {
 }
 
 fun ForceDTO.asDomainModel(world: World?): Force {
-    return Force(name, description, cost, duration, rangRequirement, range, shaping, world, id)
+    return Force(name, description, cost, duration, valueToTalentRank(rangRequirement), range, shaping, world, id)
 }
 
 fun List<Force>.asDatabaseModel(): List<ForceDTO> {
@@ -82,5 +82,5 @@ fun List<Force>.asDatabaseModel(): List<ForceDTO> {
 }
 
 fun Force.asDatabaseModel(): ForceDTO {
-    return ForceDTO(name, description, cost, duration, rangRequirement, range, shaping, world?.id ?: "", id)
+    return ForceDTO(name, description, cost, duration, rangRequirement?.asDatabaseModel() ?: "", range, shaping, world?.id ?: "", id)
 }

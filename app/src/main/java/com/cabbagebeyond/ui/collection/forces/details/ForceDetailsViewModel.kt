@@ -12,6 +12,7 @@ import com.cabbagebeyond.model.Rank
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.ui.collection.forces.ForceRank
 import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
@@ -23,14 +24,17 @@ class ForceDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, app) {
 
+    data class RankSelection(var selected: ForceRank?, var values: List<ForceRank>)
+    data class WorldSelection(var selected: World?, var values: List<World?>)
+
     var force = MutableLiveData(givenForce)
 
-    private var _worlds = MutableLiveData<List<World?>>()
-    val worlds: LiveData<List<World?>>
+    private var _worlds = MutableLiveData<WorldSelection>()
+    val worlds: LiveData<WorldSelection>
         get() = _worlds
 
-    private var _ranks = MutableLiveData<List<String>>()
-    val ranks: LiveData<List<String>>
+    private var _ranks = MutableLiveData<RankSelection>()
+    val ranks: LiveData<RankSelection>
         get() = _ranks
 
     init {
@@ -45,28 +49,34 @@ class ForceDetailsViewModel(
 
     override fun onEdit() {
         super.onEdit()
-        if (_worlds.value == null) {
-            loadWorlds()
-        }
-        if (_ranks.value == null) {
-            loadRanks()
-        }
 
-        // for MVP the types are stored in resources.
-        val stringArray = Rank.values().map { it.name }
-        _ranks.value = stringArray.toList()
+        _ranks.value?.values?.let { updateRankSelection(it) } ?: loadRanks()
+        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+
+    }
+
+    private fun loadRanks() {
+        val application = getApplication<Application>()
+        val attributes = Rank.values().map { ForceRank.create(it, application) }
+        updateRankSelection(attributes)
+    }
+
+    private fun updateRankSelection(ranks: List<ForceRank>) {
+        val application = getApplication<Application>()
+        val currentSelected = force.value?.rangRequirement?.let { ForceRank.create(it, application) }
+        _ranks.value = RankSelection(currentSelected, ranks)
     }
 
     private fun loadWorlds() {
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            _worlds.value = worlds
+            updateWorldSelection(worlds)
         }
     }
 
-    private fun loadRanks() {
-
+    private fun updateWorldSelection(worlds: List<World?>) {
+        _worlds.value = WorldSelection(force.value?.world, worlds)
     }
 
     override fun onSave() {
@@ -88,8 +98,8 @@ class ForceDetailsViewModel(
         }
     }
 
-    fun onRankSelected(rank: String) {
-        force.value?.rangRequirement = rank
+    fun onRankSelected(rank: ForceRank) {
+        force.value?.rangRequirement = rank.rank
     }
 
     fun onWorldSelected(world: World?) {
@@ -102,7 +112,7 @@ class ForceDetailsViewModel(
         for (property in properties) {
             when (property.key) {
                 "name" -> force.value?.name = property.value
-                "requirement" -> force.value?.rangRequirement = property.value
+          //      "requirement" -> force.value?.rangRequirement = property.value
                 "cost" -> force.value?.cost = property.value
                 "range" -> force.value?.range = property.value
                 "description" -> force.value?.description += property.value
