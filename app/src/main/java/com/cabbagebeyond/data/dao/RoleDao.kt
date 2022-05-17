@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.RoleDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
@@ -19,10 +20,7 @@ class RoleDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val roles = task.documents.mapNotNull { documentSnapshot ->
-                    val title = documentSnapshot.get(RoleDTO.FIELD_NAME, String::class.java)
-                    val features = documentSnapshot.get(RoleDTO.FIELD_FEATURES) as List<String>
-//                    documentSnapshot.toObject(RoleDTO::class.java)
-                    RoleDTO(title!!, features, documentSnapshot.id)
+                    map(documentSnapshot)
                 }
                 result = Result.success(roles)
             }
@@ -39,11 +37,8 @@ class RoleDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(RoleDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val role = map(task)
+                result = Result.success(role)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -68,5 +63,13 @@ class RoleDao {
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): RoleDTO {
+        return RoleDTO(
+            documentSnapshot.get(RoleDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(RoleDTO.FIELD_FEATURES) as List<String>,
+            documentSnapshot.id
+        )
     }
 }

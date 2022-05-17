@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.RaceDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
@@ -19,7 +20,7 @@ class RaceDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val races = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(RaceDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(races)
             }
@@ -36,11 +37,8 @@ class RaceDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(RaceDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val race = map(task)
+                result = Result.success(race)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -81,5 +79,15 @@ class RaceDao {
             }
             .await()
         return result
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): RaceDTO {
+        return RaceDTO(
+            documentSnapshot.get(RaceDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(RaceDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(RaceDTO.FIELD_RACE_FEATURES) as List<String>,
+            documentSnapshot.get(RaceDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }

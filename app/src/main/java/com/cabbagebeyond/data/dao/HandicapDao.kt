@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.HandicapDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
@@ -20,7 +21,7 @@ class HandicapDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val handicaps = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(HandicapDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(handicaps)
             }
@@ -42,7 +43,7 @@ class HandicapDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val handicaps = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(HandicapDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(handicaps)
             }
@@ -59,11 +60,8 @@ class HandicapDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(HandicapDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val handicap = map(task)
+                result = Result.success(handicap)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -104,5 +102,15 @@ class HandicapDao {
             }
             .await()
         return result
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): HandicapDTO {
+        return HandicapDTO(
+            documentSnapshot.get(HandicapDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(HandicapDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(HandicapDTO.FIELD_TYPE, String::class.java) ?: "",
+            documentSnapshot.get(HandicapDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }

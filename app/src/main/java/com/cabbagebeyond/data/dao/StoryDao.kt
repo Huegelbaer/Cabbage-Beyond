@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.StoryDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.tasks.await
 
 class StoryDao {
@@ -18,7 +19,7 @@ class StoryDao {
             .get()
             .addOnSuccessListener { task ->
                 val stories = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(StoryDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(stories)
             }
@@ -35,11 +36,8 @@ class StoryDao {
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(StoryDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val story = map(task)
+                result = Result.success(story)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -64,5 +62,17 @@ class StoryDao {
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): StoryDTO {
+        return StoryDTO(
+            documentSnapshot.get(StoryDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(StoryDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(StoryDTO.FIELD_STORY, String::class.java) ?: "",
+            documentSnapshot.get(StoryDTO.FIELD_OWNER, String::class.java) ?: "",
+            documentSnapshot.get(StoryDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.get(StoryDTO.FIELD_RULEBOOK, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }
