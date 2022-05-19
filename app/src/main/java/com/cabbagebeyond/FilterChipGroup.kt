@@ -67,16 +67,10 @@ class FilterChipGroup constructor(
     }
 
     private fun createChip(title: String, index: Int): Chip {
-        return Chip(context).apply {
+        return (inflate(context, R.layout.view_filter_chip, null) as Chip).apply {
             id = index
             tag = index
             text = title
-            isClickable = true
-            isCheckable = true
-            isCheckedIconVisible = true
-            isFocusable = true
-            chipBackgroundColor =
-                ColorStateList.valueOf(resources.getColor(R.color.selector_chip_background))
         }
     }
 }
