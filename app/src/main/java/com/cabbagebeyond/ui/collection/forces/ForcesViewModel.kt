@@ -19,16 +19,27 @@ class ForcesViewModel(
     object Filter {
         var selectedRank: ForceRank? = null
         var selectedWorld: World? = null
+
+        fun reset() {
+            selectedRank = null
+            selectedRank = null
+        }
     }
 
     sealed class Interaction {
         data class OpenFilter(val ranks: FilterData<ForceRank>, val worlds: FilterData<World>) : Interaction()
     }
 
+    data class EmptyListState(val title: String, val message: String, val button: String?, val action: (() -> Unit)?)
+
     private var _forces = listOf<Force>()
     private var _items = MutableLiveData<List<Force>>()
     val items: LiveData<List<Force>>
         get() = _items
+
+    private var _emptyListState = MutableLiveData<EmptyListState>()
+    val emptyListState: LiveData<EmptyListState>
+        get() = _emptyListState
 
     private var _selectedForce = MutableLiveData<Force?>()
     val selectedForce: LiveData<Force?>
@@ -44,6 +55,14 @@ class ForcesViewModel(
         viewModelScope.launch {
             _forces = forceDataSource.getForces().getOrDefault(listOf())
             _items.value = _forces
+            if (_forces.isEmpty()) {
+                val resources = getApplication<Application>()
+                _emptyListState.value = EmptyListState(
+                    resources.getString(R.string.empty_state_list_title),
+                    resources.getString(R.string.empty_state_list_message),
+                    resources.getString(R.string.empty_state_list_reset_button),
+                null)
+            }
         }
     }
 
@@ -71,7 +90,7 @@ class ForcesViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _forces.filter { force ->
+            val filteredItems = _forces.filter { force ->
                 val iRank = rank?.let { rank ->
                     force.rangRequirement == rank.rank
                 } ?: true
@@ -81,7 +100,25 @@ class ForcesViewModel(
 
                 iRank && iWorld
             }
+            _items.value = filteredItems
+            _emptyListState.value = if (filteredItems.isEmpty()) {
+                val result = listOf(rank?.title, world?.name).joinToString(" & ") { "'$it'" }
+                val resources = getApplication<Application>().resources
+                EmptyListState(
+                    resources.getString(R.string.empty_state_filtered_list_title),
+                    resources.getString(R.string.empty_state_filtered_list_message, result),
+                    resources.getString(R.string.empty_state_filtered_list_reset_button)) {
+                    resetFilter()
+                }
+            } else {
+                null
+            }
         }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.reset()
+        _items.value = _forces
     }
 
     fun onInteractionCompleted() {

@@ -102,6 +102,15 @@
     <string name="talent_type_intellect">Intellect</string>
     <string name="talent_type_strength">Strength</string>
 
+    <!-- Empty State -->
+    <string name="empty_state_list_title" />
+    <string name="empty_state_list_message">No entries yet…\n ry to synchronise manually or start adding entries on your own!</string>
+    <string name="empty_state_list_reset_button">Start synchronize</string>
+
+    <string name="empty_state_filtered_list_title">Oops!</string>
+    <string name="empty_state_filtered_list_message">Your filters %s did not match any entries.</string>
+    <string name="empty_state_filtered_list_reset_button">Reset filter</string>
+
     <!-- -->
     <string name="property_name">Name</string>
     <string name="talent_rang_requirement">Rank requirement</string>
