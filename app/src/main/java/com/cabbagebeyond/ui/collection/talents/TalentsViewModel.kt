@@ -45,6 +45,9 @@ class TalentsViewModel(
         viewModelScope.launch {
             _talents = talentDataSource.getTalents().getOrDefault(listOf())
             _items.value = _talents
+            if (_talents.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
@@ -75,7 +78,7 @@ class TalentsViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _talents.filter { talent ->
+            val filteredItems = _talents.filter { talent ->
                 val iType = type?.let { type ->
                     talent.type == type.type
                 } ?: true
@@ -88,10 +91,26 @@ class TalentsViewModel(
 
                 iType && iRank && iWorld
             }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(type?.title, rank?.title, world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
         }
     }
 
     fun onInteractionCompleted() {
         _interaction.value = null
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedType = null
+        _activeFilter.selectedRank = null
+        _activeFilter.selectedWorld = null
+        _items.value = _talents
     }
 }
