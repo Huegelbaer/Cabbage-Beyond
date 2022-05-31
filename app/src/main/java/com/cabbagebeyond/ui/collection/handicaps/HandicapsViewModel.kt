@@ -44,6 +44,9 @@ class HandicapsViewModel(
         viewModelScope.launch {
             _handicaps = handicapsDataSource.getHandicaps().getOrDefault(listOf())
             _items.value = _handicaps
+            if (_handicaps.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
@@ -71,7 +74,7 @@ class HandicapsViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _handicaps.filter { handicap ->
+            val filteredItems = _handicaps.filter { handicap ->
                 val iType = type?.let { type ->
                     handicap.type == type.type
                 } ?: true
@@ -81,7 +84,22 @@ class HandicapsViewModel(
 
                 iType && iWorld
             }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(type?.title, world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
         }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedType = null
+        _activeFilter.selectedWorld = null
+        _items.value = _handicaps
     }
 
     fun onInteractionCompleted() {
