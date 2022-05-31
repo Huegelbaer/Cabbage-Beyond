@@ -42,28 +42,7 @@ class CharacterListFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner) {
-            it?.let {
-                _adapter.submitList(it)
-            }
-        }
-
-        _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
-            it?.let {
-                showCharacterDetails(it)
-            }
-        }
-
-        _viewModel.interaction.observe(viewLifecycleOwner) {
-            it?.let {
-                when (it) {
-                    is CharacterListViewModel.Interaction.OpenFilter -> {
-                        showFilterDialog(it.races, it.types, it.worlds)
-                    }
-                }
-                _viewModel.onInteractionCompleted()
-            }
-        }
+        setupViewModelObservers()
 
         setHasOptionsMenu(true)
 
@@ -95,6 +74,46 @@ class CharacterListFragment : CollectionListFragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun setupViewModelObservers() {
+        super.setupViewModelObservers()
+
+        _viewModel.items.observe(viewLifecycleOwner) {
+            it?.let {
+                _adapter.submitList(it)
+            }
+        }
+
+        _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
+            it?.let {
+                showCharacterDetails(it)
+            }
+        }
+
+        _viewModel.interaction.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it) {
+                    is CharacterListViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(it.races, it.types, it.worlds)
+                    }
+                }
+                _viewModel.onInteractionCompleted()
+            }
+        }
+    }
+
+    override fun showEmptyState(
+        title: String,
+        message: String,
+        buttonTitle: String?,
+        action: (() -> Unit)?
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    override fun showList() {
+        TODO("Not yet implemented")
     }
 
     private fun showFilterDialog(races: CollectionListViewModel.FilterData<Race>, types: CollectionListViewModel.FilterData<CharacterListViewModel.CharacterType>, worlds: CollectionListViewModel.FilterData<World>) {

@@ -43,17 +43,19 @@ class ForcesFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
+        setupViewModelObservers()
+
+        setHasOptionsMenu(true)
+
+        return _binding.root
+    }
+
+    override fun setupViewModelObservers() {
+        super.setupViewModelObservers()
+
         _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
-            }
-        }
-
-        _viewModel.emptyListState.observe(viewLifecycleOwner) {
-            it?.let {
-                showEmptyState(it)
-            } ?: run {
-                showList()
             }
         }
 
@@ -79,22 +81,23 @@ class ForcesFragment : CollectionListFragment() {
                 _viewModel.onInteractionCompleted()
             }
         }
-
-        setHasOptionsMenu(true)
-
-        return _binding.root
     }
 
-    private fun showList() {
+    override fun showList() {
         _binding.list.visibility = View.VISIBLE
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showEmptyState(it: ForcesViewModel.EmptyListState) {
+    override fun showEmptyState(
+        title: String,
+        message: String,
+        buttonTitle: String?,
+        action: (() -> Unit)?
+    ) {
         _binding.list.visibility = View.GONE
         _binding.emptyStateView.root.visibility = View.VISIBLE
-        _binding.emptyStateView.model = EmptyListStateModel(it.title, it.message, it.button) {
-            it.action?.let { it() }
+        _binding.emptyStateView.model = EmptyListStateModel(title, message, buttonTitle) {
+            action?.let { it() }
         }
     }
 

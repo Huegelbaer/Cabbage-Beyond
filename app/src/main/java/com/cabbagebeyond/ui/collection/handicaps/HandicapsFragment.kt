@@ -42,6 +42,16 @@ class HandicapsFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
+        setupViewModelObservers()
+
+        setHasOptionsMenu(true)
+
+        return _binding.root
+    }
+
+    override fun setupViewModelObservers() {
+        super.setupViewModelObservers()
+
         _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
                 _adapter.submitList(it)
@@ -64,10 +74,19 @@ class HandicapsFragment : CollectionListFragment() {
                 _viewModel.onInteractionCompleted()
             }
         }
+    }
 
-        setHasOptionsMenu(true)
+    override fun showEmptyState(
+        title: String,
+        message: String,
+        buttonTitle: String?,
+        action: (() -> Unit)?
+    ) {
+        TODO("Not yet implemented")
+    }
 
-        return _binding.root
+    override fun showList() {
+        TODO("Not yet implemented")
     }
 
     private fun showFilterDialog(types: CollectionListViewModel.FilterData<HandicapType>, worlds: CollectionListViewModel.FilterData<World>) {

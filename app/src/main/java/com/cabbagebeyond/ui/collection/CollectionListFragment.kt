@@ -11,7 +11,7 @@ import com.cabbagebeyond.R
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipGroup
 
-open class CollectionListFragment : Fragment() {
+abstract class CollectionListFragment : Fragment() {
 
     protected open lateinit var viewModel: CollectionListViewModel
 
@@ -67,4 +67,18 @@ open class CollectionListFragment : Fragment() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+    open fun setupViewModelObservers() {
+        viewModel.emptyListState.observe(viewLifecycleOwner) {
+            it?.let {
+                showEmptyState(it.title, it.message, it.button, it.action)
+            } ?: run {
+                showList()
+            }
+        }
+    }
+
+    abstract fun showEmptyState(title: String, message: String, buttonTitle: String?, action: (() -> Unit)?)
+
+    abstract fun showList()
 }
