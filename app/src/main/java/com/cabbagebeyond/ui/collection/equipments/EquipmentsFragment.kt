@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.databinding.FragmentEquipmentsListBinding
@@ -83,11 +84,16 @@ class EquipmentsFragment : CollectionListFragment() {
         buttonTitle: String?,
         action: (() -> Unit)?
     ) {
-        TODO("Not yet implemented")
+        _binding.list.visibility = View.GONE
+        _binding.emptyStateView.root.visibility = View.VISIBLE
+        _binding.emptyStateView.model = EmptyListStateModel(title, message, buttonTitle) {
+            action?.let { it() }
+        }
     }
 
     override fun showList() {
-        TODO("Not yet implemented")
+        _binding.list.visibility = View.VISIBLE
+        _binding.emptyStateView.root.visibility = View.GONE
     }
 
     private fun showFilterDialog(types: CollectionListViewModel.FilterData<EquipmentType>, worlds: CollectionListViewModel.FilterData<World>) {

@@ -44,6 +44,9 @@ class EquipmentsViewModel(
         viewModelScope.launch {
             _equipments = equipmentDataSource.getEquipments().getOrDefault(listOf())
             _items.value = _equipments
+            if (_equipments.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
@@ -72,7 +75,7 @@ class EquipmentsViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _equipments.filter { equipment ->
+            val filteredItems = _equipments.filter { equipment ->
                 val iType = type?.let { type ->
                     equipment.type == type.type
                 } ?: true
@@ -82,7 +85,22 @@ class EquipmentsViewModel(
 
                 iType && iWorld
             }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(type?.title, world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
         }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedType = null
+        _activeFilter.selectedWorld = null
+        _items.value = _equipments
     }
 
     fun onInteractionCompleted() {
