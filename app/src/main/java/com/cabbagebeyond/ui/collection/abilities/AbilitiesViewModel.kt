@@ -44,6 +44,9 @@ class AbilitiesViewModel(
         viewModelScope.launch {
             _abilities = abilityDataSource.getAbilities().getOrDefault(listOf())
             _items.value = _abilities
+            if (_abilities.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
@@ -72,7 +75,7 @@ class AbilitiesViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _abilities.filter { ability ->
+            val filteredItems = _abilities.filter { ability ->
                 val iAttribute = attribute?.let { attribute ->
                      ability.attribute == attribute.attribute
                 } ?: true
@@ -82,7 +85,22 @@ class AbilitiesViewModel(
 
                 iAttribute && iWorld
             }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(attribute?.title, world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
         }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedAttribute = null
+        _activeFilter.selectedWorld = null
+        _items.value = _abilities
     }
 
     fun onInteractionCompleted() {
