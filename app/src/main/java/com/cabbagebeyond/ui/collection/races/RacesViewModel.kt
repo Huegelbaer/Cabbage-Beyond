@@ -43,6 +43,9 @@ class RacesViewModel(
         viewModelScope.launch {
             _races = raceDataSource.getRaces().getOrDefault(listOf())
             _items.value = _races
+            if (_races.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
@@ -67,12 +70,26 @@ class RacesViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _races.filter { handicap ->
+            val filteredItems = _races.filter { handicap ->
                 world?.let { world ->
                     handicap.world == world
                 } ?: true
             }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
         }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedWorld = null
+        _items.value = _races
     }
 
     fun onInteractionCompleted() {
