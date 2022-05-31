@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
@@ -109,11 +110,16 @@ class CharacterListFragment : CollectionListFragment() {
         buttonTitle: String?,
         action: (() -> Unit)?
     ) {
-        TODO("Not yet implemented")
+        _binding.list.visibility = View.GONE
+        _binding.emptyStateView.root.visibility = View.VISIBLE
+        _binding.emptyStateView.model = EmptyListStateModel(title, message, buttonTitle) {
+            action?.let { it() }
+        }
     }
 
     override fun showList() {
-        TODO("Not yet implemented")
+        _binding.list.visibility = View.VISIBLE
+        _binding.emptyStateView.root.visibility = View.GONE
     }
 
     private fun showFilterDialog(races: CollectionListViewModel.FilterData<Race>, types: CollectionListViewModel.FilterData<CharacterListViewModel.CharacterType>, worlds: CollectionListViewModel.FilterData<World>) {

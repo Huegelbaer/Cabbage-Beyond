@@ -50,6 +50,9 @@ class CharacterListViewModel(
         viewModelScope.launch {
             _characters = characterDataSource.getCharacters().getOrDefault(listOf())
             _items.value = _characters
+            if (_characters.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
@@ -118,7 +121,7 @@ class CharacterListViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            _items.value = _characters.filter { character ->
+            val filteredItems = _characters.filter { character ->
                 val iRace = race?.let { race ->
                     character.race == race
                 } ?: true
@@ -131,7 +134,23 @@ class CharacterListViewModel(
 
                 iRace && iType && iWorld
             }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(race?.name, characterType?.title, world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
         }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedRace = null
+        _activeFilter.selectedType = null
+        _activeFilter.selectedWorld = null
+        _items.value = _characters
     }
 
     fun onInteractionCompleted() {
