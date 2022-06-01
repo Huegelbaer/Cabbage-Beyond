@@ -6,14 +6,15 @@ import android.os.Parcelable
 data class Ability(
     var name: String,
     var description: String,
-    var attribute: String,
+    var attribute: Attribute,
     var world: World?,
     var id: String,
 ): Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(Attribute::class.java.classLoader)!!,
         parcel.readParcelable(World::class.java.classLoader),
         parcel.readString()!!
     )
@@ -21,7 +22,7 @@ data class Ability(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(description)
-        parcel.writeString(attribute)
+        parcel.writeParcelable(attribute, flags)
         parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }

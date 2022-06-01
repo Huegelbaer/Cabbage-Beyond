@@ -1,25 +1,25 @@
 package com.cabbagebeyond.ui.collection.characters
 
-import android.app.SearchManager
-import android.content.Context
 import android.os.Bundle
 import android.view.*
-import android.widget.SearchView
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.EmptyListStateModel
+import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.databinding.FragmentCharacterListBinding
 import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.collection.CollectionListFragment
+import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class CharacterListFragment : Fragment() {
+class CharacterListFragment : CollectionListFragment() {
 
-    private val _viewModel: CharacterListViewModel by lazy {
-        val dataSource: CharacterDataSource by inject()
-        CharacterListViewModel(dataSource)
-    }
+    private val _viewModel: CharacterListViewModel
+        get() = viewModel as CharacterListViewModel
 
     private lateinit var _binding: FragmentCharacterListBinding
     private lateinit var _adapter: CharacterListAdapter
@@ -29,6 +29,9 @@ class CharacterListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentCharacterListBinding.inflate(inflater)
+
+        val dataSource: CharacterDataSource by inject()
+        viewModel = CharacterListViewModel(requireActivity().application, dataSource)
 
         val clickListener = CharacterClickListener {
             _viewModel.onCharacterClicked(it)
@@ -40,17 +43,7 @@ class CharacterListFragment : Fragment() {
             adapter = _adapter
         }
 
-        _viewModel.items.observe(viewLifecycleOwner) {
-            it?.let {
-                _adapter.submitList(it)
-            }
-        }
-
-        _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
-            it?.let {
-                showCharacterDetails(it)
-            }
-        }
+        setupViewModelObservers()
 
         setHasOptionsMenu(true)
 
@@ -59,39 +52,11 @@ class CharacterListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
-
-        inflater.inflate(R.menu.character_list, menu)
-
-        // Associate searchable configuration with the SearchView
-        val searchManager = requireActivity().getSystemService(Context.SEARCH_SERVICE) as SearchManager
-
-        val queryTextListener: SearchView.OnQueryTextListener =
-            object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(newText: String): Boolean {
-                  //  val textView = findViewById(R.id.aa) as TextView
-                    //textView.text = newText
-                    if (newText.isEmpty()) {
-                        _viewModel.onSearchCanceled()
-                    }
-                    return true
-                }
-
-                override fun onQueryTextSubmit(query: String): Boolean {
-                    _viewModel.onSearchCharacter(query)
-                    return true
-                }
-            }
-        (menu.findItem(R.id.app_bar_search).actionView as SearchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(requireActivity().componentName))
-            setOnQueryTextListener(queryTextListener)
-        }
+        inflater.inflate(R.menu.collection_characters_sort, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.app_bar_search -> {
-                true
-            }
             R.id.app_bar_sort_name -> {
                 _viewModel.onSelectSort(CharacterListViewModel.SortType.NAME)
                 true
@@ -110,6 +75,74 @@ class CharacterListFragment : Fragment() {
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun setupViewModelObservers() {
+        super.setupViewModelObservers()
+
+        _viewModel.items.observe(viewLifecycleOwner) {
+            it?.let {
+                _adapter.submitList(it)
+            }
+        }
+
+        _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
+            it?.let {
+                showCharacterDetails(it)
+            }
+        }
+
+        _viewModel.interaction.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it) {
+                    is CharacterListViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(it.races, it.types, it.worlds)
+                    }
+                }
+                _viewModel.onInteractionCompleted()
+            }
+        }
+    }
+
+    override fun showEmptyState(
+        title: String,
+        message: String,
+        buttonTitle: String?,
+        action: (() -> Unit)?
+    ) {
+        _binding.list.visibility = View.GONE
+        _binding.emptyStateView.root.visibility = View.VISIBLE
+        _binding.emptyStateView.model = EmptyListStateModel(title, message, buttonTitle) {
+            action?.let { it() }
+        }
+    }
+
+    override fun showList() {
+        _binding.list.visibility = View.VISIBLE
+        _binding.emptyStateView.root.visibility = View.GONE
+    }
+
+    private fun showFilterDialog(races: CollectionListViewModel.FilterData<Race>, types: CollectionListViewModel.FilterData<CharacterListViewModel.CharacterType>, worlds: CollectionListViewModel.FilterData<World>) {
+
+        var selectedRace = races.selected
+        var selectedType = types.selected
+        var selectedWorld = worlds.selected
+
+        val dialog = FilterDialogFragment(onFilter = {
+            _viewModel.filter(selectedRace, selectedType, selectedWorld)
+        })
+
+        dialog.addFilterChipGroup(races.title, races.values, races.selected, races.titleProperty) {
+            selectedRace = it
+        }
+        dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
+            selectedType = it
+        }
+        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+            selectedWorld = it
+        }
+
+        dialog.show(requireActivity().supportFragmentManager, "character_dialog_filter")
     }
 
     private fun showCharacterDetails(character: Character) {

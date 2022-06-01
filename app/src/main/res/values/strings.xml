@@ -52,46 +52,64 @@
     <string name="select_attribute">Select an attribute</string>
     <string name="select_world">Select a world</string>
 
-    <string-array name="attributes">
-        <item>Strength</item>
-        <item>Verstand</item>
-        <item>Constitution</item>
-        <item>Dexterity</item>
-        <item>Willpower</item>
-    </string-array>
+    <string name="character_type_player">Player</string>
+    <string name="character_type_npc">NPC</string>
+    <string name="character_type_monster">Monster</string>
 
-    <string-array name="types_of_weapons">
-        <item>Weapon</item>
-        <item>Armor</item>
-        <item>Others</item>
-    </string-array>
+    <!-- Ability attributes -->
+    <string name="attribute_strength">Strength</string>
+    <string name="attribute_intellect">Intellect</string>
+    <string name="attribute_constitution">Constitution</string>
+    <string name="attribute_dexterity">Dexterity</string>
+    <string name="attribute_willpower">Willpower</string>
 
-    <string-array name="ranks">
-        <item>Rookie</item>
-        <item>Advanced</item>
-        <item>Veteran</item>
-        <item>Hero</item>
-        <item>Legend</item>
-    </string-array>
+    <!-- Equipment types-->
+    <string name="equipment_type_weapon">Weapon</string>
+    <string name="equipment_type_armor">Armor</string>
+    <string name="equipment_type_others">Others</string>
 
-    <string-array name="types_of_handicap">
-        <item>slight</item>
-        <item>heavy</item>
-        <item>slight or heavy</item>
-    </string-array>
+    <!-- Ranks -->
+    <string name="rank_rookie">Rookie</string>
+    <string name="rank_advanced">Advanced</string>
+    <string name="rank_veteran">Veteran</string>
+    <string name="rank_hero">Hero</string>
+    <string name="rank_legend">Legend</string>
 
-    <string-array name="types_of_talents">
-        <item>background</item>
-        <item>leader</item>
-        <item>expert</item>
-        <item>fight</item>
-        <item>force</item>
-        <item>race</item>
-        <item>social</item>
-        <item>supernatural</item>
-        <item>wildcard</item>
-        <item>legendary</item>
-    </string-array>
+    <!-- Handicaps -->
+    <string name="handicap_type_slight">Slight</string>
+    <string name="handicap_type_slight_or_heavy">Slight or heavy</string>
+    <string name="handicap_type_heavy">Heavy</string>
+
+    <!-- Types of talents -->
+    <string name="talent_type_background">Background</string>
+    <string name="talent_type_leader">Leader</string>
+    <string name="talent_type_expert">Expert</string>
+    <string name="talent_type_fight">Fight</string>
+    <string name="talent_type_force">Force</string>
+    <string name="talent_type_race">Race</string>
+    <string name="talent_type_social">Social</string>
+    <string name="talent_type_supernatural">Supernatural</string>
+    <string name="talent_type_wildcard">Wildcard</string>
+    <string name="talent_type_legendary">Legendary</string>
+    <string name="talent_type_dragon">Dragon</string>
+    <string name="talent_type_athletic">Athletic</string>
+    <string name="talent_type_perception">Perception</string>
+    <string name="talent_type_illusion">Illusion</string>
+    <string name="talent_type_provoke">Provoke</string>
+    <string name="talent_type_thievery">Thievery</string>
+    <string name="talent_type_stealth">Stealth</string>
+    <string name="talent_type_territory">Territory</string>
+    <string name="talent_type_intellect">Intellect</string>
+    <string name="talent_type_strength">Strength</string>
+
+    <!-- Empty State -->
+    <string name="empty_state_list_title" />
+    <string name="empty_state_list_message">No entries yet…\n ry to synchronise manually or start adding entries on your own!</string>
+    <string name="empty_state_list_reset_button">Start synchronize</string>
+
+    <string name="empty_state_filtered_list_title">Oops!</string>
+    <string name="empty_state_filtered_list_message">Your filters %s did not match any entries.</string>
+    <string name="empty_state_filtered_list_reset_button">Reset filter</string>
 
     <!-- -->
     <string name="property_name">Name</string>

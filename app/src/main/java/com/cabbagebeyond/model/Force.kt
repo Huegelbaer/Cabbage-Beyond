@@ -8,7 +8,7 @@ data class Force(
     var description: String,
     var cost: String,
     var duration: String,
-    var rangRequirement: String,
+    var rangRequirement: Rank?,
     var range: String,
     var shaping: String,
     var world: World?,
@@ -19,7 +19,7 @@ data class Force(
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable<Rank>(Rank::class.java.classLoader)!!,
         parcel.readString()!!,
         parcel.readString()!!,
         parcel.readParcelable<World>(World::class.java.classLoader)!!,
@@ -31,7 +31,7 @@ data class Force(
         parcel.writeString(description)
         parcel.writeString(cost)
         parcel.writeString(duration)
-        parcel.writeString(rangRequirement)
+        parcel.writeParcelable(rangRequirement, flags)
         parcel.writeString(range)
         parcel.writeString(shaping)
         parcel.writeParcelable(world, flags)

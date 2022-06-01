@@ -72,7 +72,7 @@ fun List<EquipmentDTO>.asDomainModel(worlds: List<World>): List<Equipment> {
 }
 
 fun EquipmentDTO.asDomainModel(world: World?): Equipment {
-    return Equipment(name, description, cost, weight, requirements.split(", "), type, world, id)
+    return Equipment(name, description, cost, weight, requirements.split(", "), valueToEquipmentType(type), world, id)
 }
 
 fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
@@ -82,5 +82,22 @@ fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
 }
 
 fun Equipment.asDatabaseModel(): EquipmentDTO {
-    return EquipmentDTO(name, description, cost, weight, requirements.joinToString(), type, world?.id ?: "", id)
+    return EquipmentDTO(name, description, cost, weight, requirements.joinToString(), type?.asDatabaseModel() ?: "", world?.id ?: "", id)
+}
+
+fun valueToEquipmentType(dtoValue: String?): Equipment.Type? {
+    return when(dtoValue) {
+        "Waffe" -> Equipment.Type.WEAPON
+        "Rüstung" -> Equipment.Type.ARMOR
+        "Sonstiges" -> Equipment.Type.OTHERS
+        else -> null
+    }
+}
+
+fun Equipment.Type.asDatabaseModel(): String {
+    return when(this) {
+        Equipment.Type.WEAPON -> "Waffe"
+        Equipment.Type.ARMOR -> "Rüstung"
+        Equipment.Type.OTHERS -> "Sonstiges"
+    }
 }

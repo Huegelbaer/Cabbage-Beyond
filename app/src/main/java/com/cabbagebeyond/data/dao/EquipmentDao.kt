@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.EquipmentDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
@@ -20,7 +21,7 @@ class EquipmentDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val equipments = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(EquipmentDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(equipments)
             }
@@ -42,7 +43,7 @@ class EquipmentDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val equipments = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(EquipmentDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(equipments)
             }
@@ -59,11 +60,8 @@ class EquipmentDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(EquipmentDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val equipment = map(task)
+                result = Result.success(equipment)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -110,5 +108,18 @@ class EquipmentDao {
             .await()
 
         return result
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): EquipmentDTO {
+        return EquipmentDTO(
+            documentSnapshot.get(EquipmentDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(EquipmentDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(EquipmentDTO.FIELD_COST, String::class.java) ?: "",
+            documentSnapshot.get(EquipmentDTO.FIELD_WEIGHT, Double::class.java) ?: 0.0,
+            documentSnapshot.get(EquipmentDTO.FIELD_REQUIREMENTS, String::class.java) ?: "",
+            documentSnapshot.get(EquipmentDTO.FIELD_TYPE, String::class.java) ?: "",
+            documentSnapshot.get(EquipmentDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }

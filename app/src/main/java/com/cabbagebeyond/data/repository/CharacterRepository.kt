@@ -116,7 +116,7 @@ fun List<CharacterDTO>.asDomainModel(allRaces: List<Race>, allAbilities: List<Ab
 }
 
 fun CharacterDTO.asDomainModel(_race: Race?, _abilities: List<Ability>, _equipments: List<Equipment>, _forces: List<Force>, _handicaps: List<Handicap>, _talents: List<Talent>, _world: World?): Character {
-    return Character(name, _race, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, _abilities, _equipments, _forces, _handicaps, _talents, type, owner, _world, id)
+    return Character(name, _race, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, _abilities, _equipments, _forces, _handicaps, _talents, valueToCharacterType(type), owner, _world, id)
 }
 
 fun List<Character>.asDatabaseModel(): List<CharacterDTO> {
@@ -126,5 +126,22 @@ fun List<Character>.asDatabaseModel(): List<CharacterDTO> {
 }
 
 fun Character.asDatabaseModel(): CharacterDTO {
-    return CharacterDTO(name, race?.id, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities.map { it.id }, equipments.map { it.id }, forces.map { it.id }, handicaps.map { it.id }, talents.map { it.id }, type, owner, world?.id, id)
+    return CharacterDTO(name, race?.id, description, charisma, constitution, deception, dexterity, intelligence, investigation, perception, stealth, strength, willpower, movement, parry, toughness, abilities.map { it.id }, equipments.map { it.id }, forces.map { it.id }, handicaps.map { it.id }, talents.map { it.id }, type?.asDatabaseModel() ?: "", owner, world?.id, id)
+}
+
+fun valueToCharacterType(dtoValue: String?): Character.Type? {
+    return when(dtoValue) {
+        "Spieler" -> Character.Type.PLAYER
+        "NPC" -> Character.Type.NPC
+        "Monster" -> Character.Type.MONSTER
+        else -> null
+    }
+}
+
+fun Character.Type.asDatabaseModel(): String {
+    return when(this) {
+        Character.Type.PLAYER -> "Spieler"
+        Character.Type.NPC -> "NPC"
+        Character.Type.MONSTER -> "Monster"
+    }
 }

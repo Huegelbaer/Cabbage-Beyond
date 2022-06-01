@@ -11,6 +11,7 @@ import com.cabbagebeyond.databinding.FragmentAbilityDetailsBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
 import org.koin.android.ext.android.inject
 
 class AbilityDetailsFragment : DetailsFragment() {
@@ -64,12 +65,12 @@ class AbilityDetailsFragment : DetailsFragment() {
             }
         }
 
-        _viewModel.attributes.observe(viewLifecycleOwner) {
-            setupAttributeSpinner(ability.attribute, it ?: listOf())
+        _viewModel.attributes.observe(viewLifecycleOwner) { attributes ->
+            setupAttributeSpinner(attributes.selected, attributes.values)
         }
 
-        _viewModel.worlds.observe(viewLifecycleOwner) {
-            setupWorldSpinner(ability.world, it ?: listOf())
+        _viewModel.worlds.observe(viewLifecycleOwner) { worlds ->
+            setupWorldSpinner(worlds.selected, worlds.values)
         }
 
         _viewModel.message.observe(viewLifecycleOwner) {
@@ -83,15 +84,28 @@ class AbilityDetailsFragment : DetailsFragment() {
         return _binding.root
     }
 
-    private fun setupAttributeSpinner(attribute: String, attributes: List<String>) {
-        setupStringSpinner(attribute, attributes, _binding.attributeSpinner) {
-            _viewModel.onAttributeSelected(it)
+    private fun setupWorldSpinner(preSelection: World?, worlds: List<World?>) {
+        if (worlds.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.name,
+            worlds.mapNotNull { it?.name ?: "" },
+            _binding.worldSpinner
+        ) { index ->
+            val world = worlds.getOrNull(index)
+            _viewModel.onWorldSelected(world)
         }
     }
 
-    private fun setupWorldSpinner(world: World?, worlds: List<World?>) {
-        super.setupWorldSpinner(world, worlds, _binding.worldSpinner) {
-            _viewModel.onWorldSelected(it)
+    private fun setupAttributeSpinner(preSelection: AbilityAttribute?, attributes: List<AbilityAttribute>) {
+        if (attributes.isNullOrEmpty()) return
+
+        setupSpinner(
+            preSelection?.title,
+            attributes.map { it.title },
+            _binding.attributeSpinner
+        ) { index ->
+            _viewModel.onAttributeSelected(attributes[index])
         }
     }
 

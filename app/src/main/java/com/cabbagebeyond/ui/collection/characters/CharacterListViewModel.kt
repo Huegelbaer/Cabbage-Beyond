@@ -1,20 +1,41 @@
 package com.cabbagebeyond.ui.collection.characters
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import android.app.Application
+import androidx.lifecycle.*
+import com.cabbagebeyond.R
 import com.cabbagebeyond.data.*
 import com.cabbagebeyond.model.Character
+import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class CharacterListViewModel(
+    private val app: Application,
     private val characterDataSource: CharacterDataSource
-) : ViewModel() {
+) : CollectionListViewModel(app) {
 
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE
     }
+
+    class CharacterType(var type: Character.Type, var title: String)
+
+    object Filter {
+        var selectedRace: Race? = null
+        var selectedType: CharacterType? = null
+        var selectedWorld: World? = null
+    }
+
+    sealed class Interaction {
+        data class OpenFilter(val races: FilterData<Race>, val types: FilterData<CharacterType>, val worlds: FilterData<World>) : Interaction()
+    }
+
+    private var _activeFilter = Filter
+
+    private var _interaction = MutableLiveData<Interaction?>()
+    val interaction: LiveData<Interaction?>
+        get() = _interaction
 
     private var _characters: List<Character> = listOf()
     private var _items = MutableLiveData<List<Character>>()
@@ -29,16 +50,19 @@ class CharacterListViewModel(
         viewModelScope.launch {
             _characters = characterDataSource.getCharacters().getOrDefault(listOf())
             _items.value = _characters
+            if (_characters.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
-    fun onSearchCharacter(query: String) {
+    override fun onSearch(query: String) {
         _items.value = _characters.filter {
             it.name.contains(query) || it.description.contains(query)
         }
     }
 
-    fun onSearchCanceled() {
+    override fun onSearchCanceled() {
         _items.value = _characters
     }
 
@@ -64,6 +88,73 @@ class CharacterListViewModel(
             _characters = result.getOrDefault(listOf())
             _items.value = _characters
         }
+    }
+
+    override fun onSelectFilter() {
+        val application = getApplication<Application>()
+        val races = _characters.mapNotNull { it.race }.toSet().toList()
+        val types = Character.Type.values().map {
+            createCharacterType(it)
+        }
+        val worlds = _characters.mapNotNull { it.world }.toSet().toList()
+
+        _interaction.value = Interaction.OpenFilter(
+            FilterData(application.resources.getString(R.string.character_race), races, _activeFilter.selectedRace, Race::name),
+            FilterData(application.resources.getString(R.string.character_type), types, _activeFilter.selectedType, CharacterType::title),
+            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
+        )
+    }
+
+    private fun createCharacterType(type: Character.Type): CharacterType {
+        val titleId = when (type) {
+            Character.Type.PLAYER -> R.string.character_type_player
+            Character.Type.NPC -> R.string.character_type_npc
+            Character.Type.MONSTER -> R.string.character_type_monster
+        }
+        val title = app.resources.getString(titleId)
+        return CharacterType(type, title)
+    }
+
+    fun filter(race: Race?, characterType: CharacterType?, world: World?) {
+        _activeFilter.selectedRace = race
+        _activeFilter.selectedType = characterType
+        _activeFilter.selectedWorld = world
+
+        viewModelScope.launch {
+            val filteredItems = _characters.filter { character ->
+                val iRace = race?.let { race ->
+                    character.race == race
+                } ?: true
+                val iType = characterType?.let { type ->
+                    character.type == type.type
+                } ?: true
+                val iWorld = world?.let { world ->
+                    character.world == world
+                } ?: true
+
+                iRace && iType && iWorld
+            }
+            _items.value = filteredItems
+            if (filteredItems.isEmpty()) {
+                val searchTerm = listOfNotNull(race?.name, characterType?.title, world?.name)
+                showNoFilterResult(searchTerm) {
+                    resetFilter()
+                }
+            } else {
+                resetEmptyState()
+            }
+        }
+    }
+
+    private fun resetFilter() {
+        _activeFilter.selectedRace = null
+        _activeFilter.selectedType = null
+        _activeFilter.selectedWorld = null
+        _items.value = _characters
+    }
+
+    fun onInteractionCompleted() {
+        _interaction.value = null
     }
 
     fun onCharacterClicked(character: Character) {

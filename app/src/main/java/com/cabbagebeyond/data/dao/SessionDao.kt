@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.SessionDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.tasks.await
 
 class SessionDao {
@@ -18,7 +19,7 @@ class SessionDao {
             .get()
             .addOnSuccessListener { task ->
                 val sessions = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(SessionDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(sessions)
             }
@@ -35,11 +36,8 @@ class SessionDao {
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                task.toObject(SessionDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val session = map(task)
+                Result.success(session)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -64,5 +62,19 @@ class SessionDao {
             .delete()
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): SessionDTO {
+        return SessionDTO(
+            documentSnapshot.get(SessionDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(SessionDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(SessionDTO.FIELD_PLAYER, String::class.java) ?: "",
+            documentSnapshot.get(SessionDTO.FIELD_STATUS, String::class.java) ?: "",
+            documentSnapshot.get(SessionDTO.FIELD_INVITED_PLAYERS, String::class.java) as List<String>,
+            documentSnapshot.get(SessionDTO.FIELD_OWNER, String::class.java) ?: "",
+            documentSnapshot.get(SessionDTO.FIELD_STORY, String::class.java) ?: "",
+            documentSnapshot.get(SessionDTO.FIELD_RULEBOOK, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }

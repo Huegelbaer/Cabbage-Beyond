@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.ui.collection.equipments.EquipmentType
 import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
@@ -22,21 +23,20 @@ class EquipmentDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, app) {
 
+    data class TypeSelection(var selected: EquipmentType?, var values: List<EquipmentType>)
+    data class WorldSelection(var selected: World?, var values: List<World?>)
+
     var equipment = MutableLiveData(givenEquipment)
 
-    private var _worlds = MutableLiveData<List<World?>>()
-    val worlds: LiveData<List<World?>>
+    private var _worlds = MutableLiveData<WorldSelection>()
+    val worlds: LiveData<WorldSelection>
         get() = _worlds
 
-    private var _types = MutableLiveData<List<String>>()
-    val types: LiveData<List<String>>
+    private var _types = MutableLiveData<TypeSelection>()
+    val types: LiveData<TypeSelection>
         get() = _types
 
     init {
-        // for MVP the types are stored in resources.
-        val stringArray = app.applicationContext.resources.getStringArray(R.array.types_of_weapons)
-        _types.value = stringArray.toList()
-
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
             CollectionProperty("type", R.string.character_type, ""),
@@ -49,24 +49,34 @@ class EquipmentDetailsViewModel(
 
     override fun onEdit() {
         super.onEdit()
-        if (_worlds.value == null) {
-            loadWorlds()
-        }
-        if (_types.value == null) {
-            loadAttributes()
-        }
+
+        _types.value?.values?.let { updateTypeSelection(it) } ?: loadTypes()
+        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+
+    }
+
+    private fun loadTypes() {
+        val application = getApplication<Application>()
+        val attributes = Equipment.Type.values().map { EquipmentType.create(it, application) }
+        updateTypeSelection(attributes)
+    }
+
+    private fun updateTypeSelection(types: List<EquipmentType>) {
+        val application = getApplication<Application>()
+        val currentSelected = equipment.value?.type?.let { EquipmentType.create(it, application) }
+        _types.value = TypeSelection(currentSelected, types)
     }
 
     private fun loadWorlds() {
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            _worlds.value = worlds
+            updateWorldSelection(worlds)
         }
     }
 
-    private fun loadAttributes() {
-
+    private fun updateWorldSelection(worlds: List<World?>) {
+        _worlds.value = WorldSelection(equipment.value?.world, worlds)
     }
 
     override fun onSave() {
@@ -88,8 +98,8 @@ class EquipmentDetailsViewModel(
         }
     }
 
-    fun onTypeSelected(type: String) {
-        equipment.value?.type = type
+    fun onTypeSelected(type: EquipmentType) {
+        equipment.value?.type = type.type
     }
 
     fun onWorldSelected(world: World?) {
@@ -102,7 +112,7 @@ class EquipmentDetailsViewModel(
         for (property in properties) {
             when (property.key) {
                 "name" -> equipment.value?.name = property.value
-                "type" -> equipment.value?.type = property.value
+         //       "type" -> equipment.value?.type = property.value
                 "cost" -> equipment.value?.cost = property.value
                 "weight" -> equipment.value?.weight = property.value.toDouble()
                 "requirements" -> equipment.value?.requirements = property.value.split(", ")

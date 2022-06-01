@@ -1,14 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <item
-        android:id="@+id/app_bar_search"
-        android:icon="@drawable/ic_search"
-        android:title="@string/menu_search"
-        app:actionViewClass="android.widget.SearchView"
-        app:showAsAction="always" />
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/app_bar_sort_list"
         android:icon="@drawable/ic_sort"
@@ -29,11 +20,4 @@
                 android:title="@string/character_world" />
         </menu>
     </item>
-    
-    <!--
-    <item
-        android:id="@+id/app_bar_filter_list"
-        android:icon="@drawable/ic_filter_list"
-        android:title="@string/menu_filter" />
-        -->
 </menu>

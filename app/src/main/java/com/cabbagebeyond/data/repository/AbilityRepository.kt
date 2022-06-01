@@ -6,6 +6,7 @@ import com.cabbagebeyond.data.dao.AbilityDao
 import com.cabbagebeyond.data.dto.AbilityDTO
 import com.cabbagebeyond.data.remote.AbilityService
 import com.cabbagebeyond.model.Ability
+import com.cabbagebeyond.model.Attribute
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -72,7 +73,7 @@ fun List<AbilityDTO>.asDomainModel(allWorlds: List<World>): List<Ability> {
 }
 
 fun AbilityDTO.asDomainModel(world: World?): Ability {
-    return Ability(name, description, attribute, world, id)
+    return Ability(name, description, valueToAbilityAttribute(attribute)!!, world, id)
 }
 
 fun List<Ability>.asDatabaseModel(): List<AbilityDTO> {
@@ -82,5 +83,26 @@ fun List<Ability>.asDatabaseModel(): List<AbilityDTO> {
 }
 
 fun Ability.asDatabaseModel(): AbilityDTO {
-    return AbilityDTO(name, description, attribute, world?.id ?: "", id)
+    return AbilityDTO(name, description, attribute.asDatabaseModel(), world?.id ?: "", id)
+}
+
+fun valueToAbilityAttribute(dtoValue: String?): Attribute? {
+    return when(dtoValue) {
+        "Stärke" -> Attribute.STRENGTH
+        "Verstand" -> Attribute.INTELLECT
+        "Konstitution" -> Attribute.CONSTITUTION
+        "Geschicklichkeit" -> Attribute.DEXTERITY
+        "Willenskraft" -> Attribute.WILLPOWER
+        else -> null
+    }
+}
+
+fun Attribute.asDatabaseModel(): String {
+    return when(this) {
+        Attribute.STRENGTH -> "Stärke"
+        Attribute.INTELLECT -> "Verstand"
+        Attribute.CONSTITUTION -> "Konstitution"
+        Attribute.DEXTERITY -> "Geschicklichkeit"
+        Attribute.WILLPOWER -> "Willenskraft"
+    }
 }

@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.ForceDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
@@ -20,7 +21,7 @@ class ForceDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val forces = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(ForceDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(forces)
             }
@@ -42,7 +43,7 @@ class ForceDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val forces = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(ForceDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(forces)
             }
@@ -59,11 +60,8 @@ class ForceDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(ForceDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val force = map(task)
+                result = Result.success(force)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -104,5 +102,19 @@ class ForceDao {
             }
             .await()
         return result
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): ForceDTO {
+        return ForceDTO(
+            documentSnapshot.get(ForceDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_COST, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_DURATION, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_RANG_REQUIREMENT, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_RANGE, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_SHAPING, String::class.java) ?: "",
+            documentSnapshot.get(ForceDTO.FIELD_WORLD, String::class.java) ?: "",
+            documentSnapshot.id
+        )
     }
 }

@@ -2,18 +2,27 @@ package com.cabbagebeyond.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
 data class Handicap(
     var name: String,
     var description: String,
-    var type: String,
+    var type: Type?,
     var world: World?,
     val id: String
 ): Parcelable {
+
+    @Parcelize
+    enum class Type(val value: String) : Parcelable {
+        SLIGHT("Leicht"),
+        SLIGHT_OR_HEAVY("Leicht/Schwer"),
+        HEAVY("Schwer"),
+    }
+
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
-        parcel.readString()!!,
+        parcel.readParcelable(Type::class.java.classLoader)!!,
         parcel.readParcelable(World::class.java.classLoader)!!,
         parcel.readString()!!
     )
@@ -21,7 +30,7 @@ data class Handicap(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(description)
-        parcel.writeString(type)
+        parcel.writeParcelable(type, flags)
         parcel.writeParcelable(world, flags)
         parcel.writeString(id)
     }

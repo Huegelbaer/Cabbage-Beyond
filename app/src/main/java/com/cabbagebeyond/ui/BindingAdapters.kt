@@ -1,11 +1,17 @@
 package com.cabbagebeyond.ui
 
-import android.widget.ImageButton
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
-import com.cabbagebeyond.model.Role
 import android.view.View
 import android.widget.ImageView
+import com.cabbagebeyond.R
+import com.cabbagebeyond.model.*
+import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
+import com.cabbagebeyond.ui.collection.equipments.EquipmentType
+import com.cabbagebeyond.ui.collection.forces.ForceRank
+import com.cabbagebeyond.ui.collection.handicaps.HandicapType
+import com.cabbagebeyond.ui.collection.talents.TalentRank
+import com.cabbagebeyond.ui.collection.talents.TalentType
 
 
 @BindingAdapter("roleList")
@@ -35,4 +41,48 @@ fun bindVisibility(view: View, isVisible: Boolean?) {
         false -> View.INVISIBLE
         null -> View.GONE
     }
+}
+
+@BindingAdapter("characterType")
+fun bindTextViewToCharacterType(textView: TextView, type: Character.Type) {
+    val resourceId = getTitleIdForCharacterType(type)
+    textView.text = textView.context.getString(resourceId)
+}
+
+private fun getTitleIdForCharacterType(type: Character.Type): Int  {
+    return when (type) {
+        Character.Type.PLAYER -> R.string.character_type_player
+        Character.Type.NPC -> R.string.character_type_npc
+        Character.Type.MONSTER -> R.string.character_type_monster
+    }
+}
+
+@BindingAdapter("abilityAttribute")
+fun bindTextViewToAbilityAttribute(textView: TextView, attribute: Attribute) {
+    textView.text = AbilityAttribute.create(attribute, textView.context).title
+}
+
+@BindingAdapter("talentType")
+fun bindTextViewToTalentType(textView: TextView, type: Talent.Type?) {
+    textView.text = if (type != null) TalentType.create(type, textView.context).title else ""
+}
+
+@BindingAdapter("talentRank")
+fun bindTextViewToTalentRank(textView: TextView, rank: Rank?) {
+    textView.text = if (rank != null) TalentRank.create(rank, textView.context).title else ""
+}
+
+@BindingAdapter("handicapType")
+fun bindTextViewToHandicapType(textView: TextView, type: Handicap.Type?) {
+    textView.text = if (type != null) HandicapType.create(type, textView.context).title else ""
+}
+
+@BindingAdapter("forceRank")
+fun bindTextViewToForceRank(textView: TextView, type: Rank?) {
+    textView.text = if (type != null) ForceRank.create(type, textView.context).title else ""
+}
+
+@BindingAdapter("equipmentType")
+fun bindTextViewToEquipmentType(textView: TextView, type: Equipment.Type?) {
+    textView.text = if (type != null) EquipmentType.create(type, textView.context).title else ""
 }

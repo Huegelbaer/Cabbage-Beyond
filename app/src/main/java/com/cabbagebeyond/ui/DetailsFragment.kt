@@ -11,7 +11,6 @@ import android.widget.Spinner
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
 import com.cabbagebeyond.R
-import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.ocr.TextRecognizerFragment
 import com.cabbagebeyond.util.CollectionProperty
 import com.google.android.material.snackbar.Snackbar
@@ -45,7 +44,7 @@ open class DetailsFragment : Fragment() {
 
     protected open fun navigateToOcr() {}
 
-    protected fun setupStringSpinner(attribute: String, attributes: List<String>, spinner: Spinner, onSelected: ((item: String) -> Unit)) {
+    protected fun setupSpinner(attribute: String?, attributes: List<String>, spinner: Spinner, onSelected: ((index: Int) -> Unit)) {
         setupSpinner(attribute, attributes, spinner, object :
             AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -54,29 +53,7 @@ open class DetailsFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                val item = attributes[position]
-                onSelected(item)
-            }
-
-            override fun onNothingSelected(parentView: AdapterView<*>?) {
-                // your code here
-            }
-        })
-    }
-
-    protected fun setupWorldSpinner(world: World?, worlds: List<World?>, spinner: Spinner, onSelected: ((item: World?) -> Unit)) {
-        val titles = worlds.map { it?.name ?: "" }
-
-        setupSpinner(world?.name, titles, spinner, object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parentView: AdapterView<*>?,
-                selectedItemView: View?,
-                position: Int,
-                id: Long
-            ) {
-                val item = worlds[position]
-                onSelected(item)
+                onSelected(position)
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {

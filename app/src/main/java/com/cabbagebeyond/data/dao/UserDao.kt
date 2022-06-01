@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.dao
 import android.util.Log
 import com.cabbagebeyond.data.dto.UserDTO
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
@@ -36,11 +37,8 @@ class UserDao {
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.toObject(UserDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val user = map(task)
+                result = Result.success(user)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -55,11 +53,10 @@ class UserDao {
             .whereEqualTo(UserDTO.FIELD_EMAIL, email)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                task.documents.firstOrNull()?.toObject(UserDTO::class.java)?.let {
-                    result = Result.success(it)
-                    return@addOnSuccessListener
-                }
-                result = Result.failure(Throwable())
+                val user = task.documents.mapNotNull { documentSnapshot ->
+                    map(documentSnapshot)
+                }.first()
+                result = Result.success(user)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -86,5 +83,15 @@ class UserDao {
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
             .await()
+    }
+
+    private fun map(documentSnapshot: DocumentSnapshot): UserDTO {
+        return UserDTO(
+            documentSnapshot.get(UserDTO.FIELD_NAME, String::class.java) ?: "",
+            documentSnapshot.get(UserDTO.FIELD_EMAIL, String::class.java) ?: "",
+            documentSnapshot.get(UserDTO.FIELD_FEATURES) as List<String>,
+            documentSnapshot.get(UserDTO.FIELD_ROLES) as List<String>,
+            documentSnapshot.id
+        )
     }
 }

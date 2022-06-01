@@ -126,7 +126,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="center_vertical"
-                    android:text="@{viewModel.handicap.type}"
+                    app:handicapType="@{viewModel.handicap.type}"
                     app:layout_constraintBottom_toBottomOf="@+id/type_spinner"
                     app:layout_constraintEnd_toEndOf="@id/type_spinner"
                     app:layout_constraintStart_toStartOf="@id/type_spinner"

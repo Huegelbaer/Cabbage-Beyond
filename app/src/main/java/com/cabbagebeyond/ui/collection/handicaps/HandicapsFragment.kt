@@ -1,24 +1,25 @@
 package com.cabbagebeyond.ui.collection.handicaps
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.cabbagebeyond.EmptyListStateModel
+import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.databinding.FragmentHandicapsListBinding
 import com.cabbagebeyond.model.Handicap
+import com.cabbagebeyond.model.World
+import com.cabbagebeyond.ui.collection.CollectionListFragment
+import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class HandicapsFragment : Fragment() {
+class HandicapsFragment : CollectionListFragment() {
 
-    private val _viewModel: HandicapsViewModel by lazy {
-        val dataSource: HandicapDataSource by inject()
-        HandicapsViewModel(dataSource)
-    }
+    private val _viewModel: HandicapsViewModel
+        get() = viewModel as HandicapsViewModel
 
     private lateinit var _binding: FragmentHandicapsListBinding
     private lateinit var _adapter: HandicapsRecyclerViewAdapter
@@ -29,6 +30,9 @@ class HandicapsFragment : Fragment() {
     ): View {
         _binding = FragmentHandicapsListBinding.inflate(inflater)
 
+        val dataSource: HandicapDataSource by inject()
+        viewModel = HandicapsViewModel(requireActivity().application, dataSource)
+
         val clickListener = HandicapClickListener {
             _viewModel.onHandicapClicked(it)
         }
@@ -38,6 +42,16 @@ class HandicapsFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = _adapter
         }
+
+        setupViewModelObservers()
+
+        setHasOptionsMenu(true)
+
+        return _binding.root
+    }
+
+    override fun setupViewModelObservers() {
+        super.setupViewModelObservers()
 
         _viewModel.items.observe(viewLifecycleOwner) {
             it?.let {
@@ -51,7 +65,53 @@ class HandicapsFragment : Fragment() {
             }
         }
 
-        return _binding.root
+        _viewModel.interaction.observe(viewLifecycleOwner) {
+            it?.let {
+                when (it) {
+                    is HandicapsViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(it.types, it.worlds)
+                    }
+                }
+                _viewModel.onInteractionCompleted()
+            }
+        }
+    }
+
+    override fun showEmptyState(
+        title: String,
+        message: String,
+        buttonTitle: String?,
+        action: (() -> Unit)?
+    ) {
+        _binding.list.visibility = View.GONE
+        _binding.emptyStateView.root.visibility = View.VISIBLE
+        _binding.emptyStateView.model = EmptyListStateModel(title, message, buttonTitle) {
+            action?.let { it() }
+        }
+    }
+
+    override fun showList() {
+        _binding.list.visibility = View.VISIBLE
+        _binding.emptyStateView.root.visibility = View.GONE
+    }
+
+    private fun showFilterDialog(types: CollectionListViewModel.FilterData<HandicapType>, worlds: CollectionListViewModel.FilterData<World>) {
+
+        var selectedType = types.selected
+        var selectedWorld = worlds.selected
+
+        val dialog = FilterDialogFragment(onFilter = {
+            _viewModel.filter(selectedType, selectedWorld)
+        })
+
+        dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
+            selectedType = it
+        }
+        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+            selectedWorld = it
+        }
+
+        dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
     private fun showDetails(handicap: Handicap) {
