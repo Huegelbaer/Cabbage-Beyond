@@ -10,7 +10,9 @@ import androidx.fragment.app.DialogFragment
 import kotlin.reflect.KProperty1
 
 /**
- * TODO: document your custom view class.
+ * A dialogue fragment for displaying various filters. Any number of ChipGroups can be added.
+ *
+ * @property onFilter: action to be performed when the positive button of dialog is pressed
  */
 class FilterDialogFragment(private val onFilter: () -> Unit) : DialogFragment() {
 
@@ -54,6 +56,24 @@ class FilterDialogFragment(private val onFilter: () -> Unit) : DialogFragment() 
         } ?: throw IllegalStateException("Activity cannot be null")
     }
 
+    /**
+     * Generate a chip group with the given values.
+     *
+     * <code>
+     *     data class SampleData(var value: Any, var title: String)
+     *
+     *     val values = listOf<SampleData>()
+     *     addFilterChipGroup("", values, null, SampleData::title) {
+     *          // to something
+     *     }
+     * </code>
+     *
+     * @param title: title which describe the chip group
+     * @param values: filterable values
+     * @param selected: preselected value (optional)
+     * @param titleProperty: operation to get the represented titles of the values
+     * @param onSelect: action, which is called when an item is selected
+     */
     fun <T : Any> addFilterChipGroup(
         title: String,
         values: List<T>,

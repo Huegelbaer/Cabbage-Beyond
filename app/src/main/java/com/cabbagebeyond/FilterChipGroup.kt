@@ -11,7 +11,8 @@ import com.google.android.material.chip.ChipGroup
 import kotlin.reflect.KProperty1
 
 /**
- * TODO: document your custom view class.
+ * Chip group with dynamically added  chips.
+ * To define the chip group call the function prepareChipGroup.
  */
 class FilterChipGroup constructor(
     context: Context,
@@ -42,6 +43,14 @@ class FilterChipGroup constructor(
         }
     }
 
+    /**
+     * Generate a chip group with the given values.
+     *
+     * @param values: filterable values
+     * @param selected: preselected value (optional)
+     * @param titleProperty: operation to get the represented titles of the values
+     * @param onSelect: action, which is called when an item is selected
+     */
     fun <T : Any> prepareChipGroup(
         values: List<T>,
         selected: T?,
