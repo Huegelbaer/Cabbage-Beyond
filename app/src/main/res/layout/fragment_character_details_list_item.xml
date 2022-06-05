@@ -8,13 +8,13 @@
     </data>
 
     <FrameLayout
-        style="@style/ListAppearance.Body"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/title"
+            style="@style/ListAppearance.Property.Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@{item.title}" />

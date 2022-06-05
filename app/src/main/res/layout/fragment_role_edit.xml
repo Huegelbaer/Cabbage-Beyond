@@ -24,15 +24,12 @@
 
         <EditText
             android:id="@+id/edit_role_name"
-            style="@style/TextAppearance.Body"
+            style="@style/PropertyEdit"
             android:layout_width="0dp"
             android:layout_height="@dimen/image_button_size"
             android:layout_marginStart="8dp"
-            android:ems="10"
-            android:importantForAutofill="no"
             android:inputType="textPersonName"
             android:labelFor="@id/role_name"
-            android:minHeight="@dimen/image_button_size"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/role_name"
             app:layout_constraintTop_toTopOf="parent" />

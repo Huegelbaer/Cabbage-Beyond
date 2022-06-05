@@ -76,10 +76,10 @@ class RoleEditDialogFragment : DialogFragment(), AdapterView.OnItemSelectedListe
 
         ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.spinner_item,
             _unselectedFeatures
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
             _binding.spinnerFeatures.adapter = adapter
         }
     }

@@ -54,7 +54,6 @@
 
         <Spinner
             android:id="@+id/spinner_world"
-            style="@style/TextAppearance.Property.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="28dp"
@@ -65,12 +64,10 @@
 
         <EditText
             android:id="@+id/edit_nickname"
-            style="@style/TextAppearance.Body"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:ems="10"
-            android:importantForAutofill="no"
+            style="@style/PropertyEdit"
             android:inputType="textPersonName"
             android:labelFor="@id/nickname_title"
             android:text="@{account.name}"

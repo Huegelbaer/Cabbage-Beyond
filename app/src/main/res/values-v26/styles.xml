@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="PropertyEdit">
+        <item name="android:autofillHints">no</item>
+        <item name="android:ems">10</item>
+        <item name="android:importantForAutofill">no</item>
+        <item name="android:minHeight">@dimen/image_button_size</item>
+        <item name="android:textAppearance">@style/TextAppearance.Property.Value</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
+    </style>
+</resources>
