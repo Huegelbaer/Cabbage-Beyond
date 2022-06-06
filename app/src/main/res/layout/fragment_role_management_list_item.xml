@@ -47,7 +47,7 @@
 
         <TextView
             android:id="@+id/features"
-            style="@style/ListAppearance.Body"
+            style="@style/ListAppearance.Property.Value"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"

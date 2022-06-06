@@ -11,6 +11,10 @@
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
+    <style name="ListAppearance.Body.Light" parent="ListAppearance.Body">
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
     <style name="ListAppearance.Property.Title" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/primaryTextColor</item>
@@ -34,6 +38,10 @@
     <style name="TextAppearance.Body" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/primaryTextColor</item>
+    </style>
+
+    <style name="TextAppearance.Body.Light" parent="TextAppearance.Body">
+        <item name="android:textColor">@color/secondaryTextColor</item>
     </style>
 
     <style name="TextAppearance.Property.Title" parent="TextAppearance.MaterialComponents.Body2">
