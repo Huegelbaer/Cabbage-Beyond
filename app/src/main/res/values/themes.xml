@@ -24,7 +24,4 @@
         <item name="postSplashScreenTheme">@style/Theme.CabbageBeyond</item>
     </style>
 
-    <style name="Theme.CabbageBeyond.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar" />
-
-    <style name="Theme.CabbageBeyond.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 </resources>
