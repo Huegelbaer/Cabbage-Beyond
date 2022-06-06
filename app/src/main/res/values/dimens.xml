@@ -12,4 +12,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="list_horizontal_margin">16dp</dimen>
     <dimen name="image_button_size">48dp</dimen>
+    <dimen name="dropdown_height">48dp</dimen>
 </resources>

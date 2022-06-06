@@ -55,10 +55,10 @@ class AccountFragment : Fragment() {
     private fun setupSpinner(worlds: List<String>, activeWorld: String) {
         ArrayAdapter(
             requireContext(),
-            android.R.layout.simple_spinner_item,
+            R.layout.spinner_item,
             worlds
         ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            adapter.setDropDownViewResource(R.layout.spinner_dropdown_item)
             _binding.spinnerWorld.adapter = adapter
         }
         val position = worlds.indexOf(activeWorld)

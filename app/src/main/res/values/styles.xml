@@ -11,6 +11,10 @@
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
+    <style name="ListAppearance.Body.Light" parent="ListAppearance.Body">
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
     <style name="ListAppearance.Property.Title" parent="TextAppearance.MaterialComponents.Body1">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/primaryTextColor</item>
@@ -36,6 +40,10 @@
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 
+    <style name="TextAppearance.Body.Light" parent="TextAppearance.Body">
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
     <style name="TextAppearance.Property.Title" parent="TextAppearance.MaterialComponents.Body2">
         <item name="fontFamily">@font/roboto</item>
         <item name="android:textColor">@color/primaryTextColor</item>
@@ -46,10 +54,21 @@
         <item name="android:textColor">@color/secondaryTextColor</item>
     </style>
 
+    <style name="TextAppearance.Spinner" parent="TextAppearance.AppCompat.Widget.DropDownItem">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:padding">@dimen/small_margin</item>
+    </style>
+
+    <style name="TextAppearance.Spinner2" parent="TextAppearance.Property.Value">
+        <item name="fontFamily">@font/roboto</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+    </style>
+
     <style name="IconButton">
         <item name="android:layout_width">@dimen/image_button_size</item>
         <item name="android:layout_height">@dimen/image_button_size</item>
-        <item name="android:backgroundTint">@color/white</item>
+        <item name="android:backgroundTint">@color/transparent</item>
         <item name="tint">@color/secondaryColor</item>
     </style>
 
@@ -90,6 +109,14 @@
 
     <style name="Onboarding.Button.Text" parent="Onboarding.Button">
         <item name="android:textColor">@color/secondaryColor</item>
+    </style>
+
+    <style name="PropertyEdit">
+        <item name="android:ems">10</item>
+        <item name="android:minHeight">@dimen/image_button_size</item>
+        <item name="android:textAppearance">@style/TextAppearance.Property.Value</item>
+        <item name="android:textColor">@color/secondaryTextColor</item>
+        <item name="android:textColorHint">@color/secondaryTextColor</item>
     </style>
 
 </resources>

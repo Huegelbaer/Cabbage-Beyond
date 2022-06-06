@@ -28,14 +28,11 @@
 
                 <EditText
                     android:id="@+id/edit_name"
-                    style="@style/TextAppearance.Body"
+                    style="@style/PropertyEdit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:ems="10"
                     android:hint="@string/enter_name"
-                    android:importantForAutofill="no"
                     android:inputType="text"
-                    android:minHeight="@dimen/image_button_size"
                     android:text="@={viewModel.world.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -43,19 +40,15 @@
 
                 <EditText
                     android:id="@+id/edit_description"
-                    style="@style/TextAppearance.Body"
+                    style="@style/PropertyEdit"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/default_margin"
                     android:layout_marginBottom="@dimen/default_margin"
-                    android:ems="10"
                     android:gravity="start|top"
                     android:hint="@string/enter_description"
-                    android:importantForAutofill="no"
                     android:inputType="textMultiLine"
-                    android:minHeight="@dimen/image_button_size"
                     android:text="@={viewModel.world.description}"
-                    android:textColorHint="@color/secondaryTextColor"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -74,7 +67,7 @@
 
                 <TextView
                     android:id="@+id/description_value"
-                    style="@style/TextAppearance.Body"
+                    style="@style/TextAppearance.Body.Light"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginTop="@dimen/default_margin"
