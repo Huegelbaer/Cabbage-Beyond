@@ -97,7 +97,7 @@ class CharacterDetailsViewModel(
     }
 
     fun show(listItem: ListItem) {
-
+        // TODO: Show list item
     }
 
     override fun onPropertiesReceived(properties: Array<CollectionProperty>) {

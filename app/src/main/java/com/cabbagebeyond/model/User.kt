@@ -7,5 +7,4 @@ data class User(
     var features: List<String>,
     var roles: List<String>,
     val id: String
-) {
-}
+)

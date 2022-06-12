@@ -52,7 +52,7 @@ class RaceDetailsViewModel(
     }
 
     private fun loadRanks() {
-
+        //TODO: Load ranks
     }
 
     override fun onSave() {

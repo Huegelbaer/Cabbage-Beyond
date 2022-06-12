@@ -2,7 +2,6 @@ package com.cabbagebeyond.data.remote
 
 import com.cabbagebeyond.data.dto.EquipmentDTO
 import com.cabbagebeyond.util.FirebaseUtil
-import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
