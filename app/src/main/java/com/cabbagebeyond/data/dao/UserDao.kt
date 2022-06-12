@@ -1,5 +1,6 @@
 package com.cabbagebeyond.data.dao
 
+import android.content.res.Resources
 import android.util.Log
 import com.cabbagebeyond.data.dto.UserDTO
 import com.cabbagebeyond.util.FirebaseUtil
@@ -55,8 +56,10 @@ class UserDao {
             .addOnSuccessListener { task ->
                 val user = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
-                }.first()
-                result = Result.success(user)
+                }.firstOrNull()
+                result = user?.let {
+                    Result.success(it)
+                } ?: Result.failure(Resources.NotFoundException())
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
