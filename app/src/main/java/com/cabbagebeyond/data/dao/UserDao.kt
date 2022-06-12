@@ -87,10 +87,10 @@ class UserDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): UserDTO {
         return UserDTO(
-            documentSnapshot.get(UserDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(UserDTO.FIELD_EMAIL, String::class.java) ?: "",
-            documentSnapshot.get(UserDTO.FIELD_FEATURES) as List<String>,
-            documentSnapshot.get(UserDTO.FIELD_ROLES) as List<String>,
+            extractString(UserDTO.FIELD_NAME, documentSnapshot),
+            extractString(UserDTO.FIELD_EMAIL, documentSnapshot),
+            extractListOfString(UserDTO.FIELD_FEATURES, documentSnapshot),
+            extractListOfString(UserDTO.FIELD_ROLES, documentSnapshot),
             documentSnapshot.id
         )
     }

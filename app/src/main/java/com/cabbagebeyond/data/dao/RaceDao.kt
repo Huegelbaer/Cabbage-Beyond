@@ -83,10 +83,10 @@ class RaceDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): RaceDTO {
         return RaceDTO(
-            documentSnapshot.get(RaceDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(RaceDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(RaceDTO.FIELD_RACE_FEATURES) as List<String>,
-            documentSnapshot.get(RaceDTO.FIELD_WORLD, String::class.java) ?: "",
+            extractString(RaceDTO.FIELD_NAME, documentSnapshot),
+            extractString(RaceDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractListOfString(RaceDTO.FIELD_RACE_FEATURES, documentSnapshot),
+            extractString(RaceDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

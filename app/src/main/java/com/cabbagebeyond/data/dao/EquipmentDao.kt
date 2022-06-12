@@ -112,13 +112,13 @@ class EquipmentDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): EquipmentDTO {
         return EquipmentDTO(
-            documentSnapshot.get(EquipmentDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(EquipmentDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(EquipmentDTO.FIELD_COST, String::class.java) ?: "",
-            documentSnapshot.get(EquipmentDTO.FIELD_WEIGHT, Double::class.java) ?: 0.0,
-            documentSnapshot.get(EquipmentDTO.FIELD_REQUIREMENTS, String::class.java) ?: "",
-            documentSnapshot.get(EquipmentDTO.FIELD_TYPE, String::class.java) ?: "",
-            documentSnapshot.get(EquipmentDTO.FIELD_WORLD, String::class.java) ?: "",
+            extractString(EquipmentDTO.FIELD_NAME, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_COST, documentSnapshot),
+            extractDouble(EquipmentDTO.FIELD_WEIGHT, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_REQUIREMENTS, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_TYPE, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

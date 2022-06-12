@@ -67,8 +67,8 @@ class RoleDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): RoleDTO {
         return RoleDTO(
-            documentSnapshot.get(RoleDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(RoleDTO.FIELD_FEATURES) as List<String>,
+            extractString(RoleDTO.FIELD_NAME, documentSnapshot),
+            extractListOfString(RoleDTO.FIELD_FEATURES, documentSnapshot),
             documentSnapshot.id
         )
     }

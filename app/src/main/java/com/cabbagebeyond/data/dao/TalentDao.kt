@@ -107,12 +107,12 @@ class TalentDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): TalentDTO {
         return TalentDTO(
-            documentSnapshot.get(TalentDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(TalentDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(TalentDTO.FIELD_RANG_REQUIREMENT, String::class.java) ?: "",
-            documentSnapshot.get(TalentDTO.FIELD_REQUIREMENTS, String::class.java) ?: "",
-            documentSnapshot.get(TalentDTO.FIELD_TYPE, String::class.java) ?: "",
-            documentSnapshot.get(TalentDTO.FIELD_WORLD, String::class.java) ?: "",
+            extractString(TalentDTO.FIELD_NAME, documentSnapshot),
+            extractString(TalentDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(TalentDTO.FIELD_RANG_REQUIREMENT, documentSnapshot),
+            extractString(TalentDTO.FIELD_REQUIREMENTS, documentSnapshot),
+            extractString(TalentDTO.FIELD_TYPE, documentSnapshot),
+            extractString(TalentDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

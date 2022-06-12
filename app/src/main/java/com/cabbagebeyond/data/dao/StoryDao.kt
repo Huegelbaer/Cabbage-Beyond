@@ -66,12 +66,12 @@ class StoryDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): StoryDTO {
         return StoryDTO(
-            documentSnapshot.get(StoryDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(StoryDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(StoryDTO.FIELD_STORY, String::class.java) ?: "",
-            documentSnapshot.get(StoryDTO.FIELD_OWNER, String::class.java) ?: "",
-            documentSnapshot.get(StoryDTO.FIELD_WORLD, String::class.java) ?: "",
-            documentSnapshot.get(StoryDTO.FIELD_RULEBOOK, String::class.java) ?: "",
+            extractString(StoryDTO.FIELD_NAME, documentSnapshot),
+            extractString(StoryDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(StoryDTO.FIELD_STORY, documentSnapshot),
+            extractString(StoryDTO.FIELD_OWNER, documentSnapshot),
+            extractString(StoryDTO.FIELD_WORLD, documentSnapshot),
+            extractString(StoryDTO.FIELD_RULEBOOK, documentSnapshot),
             documentSnapshot.id
         )
     }

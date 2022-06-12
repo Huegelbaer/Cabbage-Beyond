@@ -66,14 +66,14 @@ class SessionDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): SessionDTO {
         return SessionDTO(
-            documentSnapshot.get(SessionDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(SessionDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(SessionDTO.FIELD_PLAYER, String::class.java) ?: "",
-            documentSnapshot.get(SessionDTO.FIELD_STATUS, String::class.java) ?: "",
-            documentSnapshot.get(SessionDTO.FIELD_INVITED_PLAYERS, String::class.java) as List<String>,
-            documentSnapshot.get(SessionDTO.FIELD_OWNER, String::class.java) ?: "",
-            documentSnapshot.get(SessionDTO.FIELD_STORY, String::class.java) ?: "",
-            documentSnapshot.get(SessionDTO.FIELD_RULEBOOK, String::class.java) ?: "",
+            extractString(SessionDTO.FIELD_NAME, documentSnapshot),
+            extractString(SessionDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(SessionDTO.FIELD_PLAYER, documentSnapshot),
+            extractString(SessionDTO.FIELD_STATUS, documentSnapshot),
+            extractListOfString(SessionDTO.FIELD_INVITED_PLAYERS, documentSnapshot),
+            extractString(SessionDTO.FIELD_OWNER, documentSnapshot),
+            extractString(SessionDTO.FIELD_STORY, documentSnapshot),
+            extractString(SessionDTO.FIELD_RULEBOOK, documentSnapshot),
             documentSnapshot.id
         )
     }

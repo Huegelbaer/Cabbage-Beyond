@@ -106,10 +106,10 @@ class HandicapDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): HandicapDTO {
         return HandicapDTO(
-            documentSnapshot.get(HandicapDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(HandicapDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(HandicapDTO.FIELD_TYPE, String::class.java) ?: "",
-            documentSnapshot.get(HandicapDTO.FIELD_WORLD, String::class.java) ?: "",
+            extractString(HandicapDTO.FIELD_NAME, documentSnapshot),
+            extractString(HandicapDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(HandicapDTO.FIELD_TYPE, documentSnapshot),
+            extractString(HandicapDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

@@ -111,10 +111,10 @@ class AbilityDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): AbilityDTO {
         return AbilityDTO(
-            documentSnapshot.get(AbilityDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(AbilityDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(AbilityDTO.FIELD_ATTRIBUTE, String::class.java) ?: "",
-            documentSnapshot.get(AbilityDTO.FIELD_WORLD, String::class.java) ?: "",
+            extractString(AbilityDTO.FIELD_NAME, documentSnapshot),
+            extractString(AbilityDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(AbilityDTO.FIELD_ATTRIBUTE, documentSnapshot),
+            extractString(AbilityDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

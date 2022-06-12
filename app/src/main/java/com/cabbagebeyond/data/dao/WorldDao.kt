@@ -83,9 +83,9 @@ class WorldDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): WorldDTO {
         return WorldDTO(
-            documentSnapshot.get(WorldDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(WorldDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(WorldDTO.FIELD_RULEBOOK, String::class.java) ?: "",
+            extractString(WorldDTO.FIELD_NAME, documentSnapshot),
+            extractString(WorldDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(WorldDTO.FIELD_RULEBOOK, documentSnapshot),
             documentSnapshot.id
         )
     }

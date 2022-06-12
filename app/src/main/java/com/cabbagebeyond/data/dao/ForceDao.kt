@@ -106,14 +106,14 @@ class ForceDao {
 
     private fun map(documentSnapshot: DocumentSnapshot): ForceDTO {
         return ForceDTO(
-            documentSnapshot.get(ForceDTO.FIELD_NAME, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_DESCRIPTION, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_COST, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_DURATION, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_RANG_REQUIREMENT, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_RANGE, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_SHAPING, String::class.java) ?: "",
-            documentSnapshot.get(ForceDTO.FIELD_WORLD, String::class.java) ?: "",
+            extractString(ForceDTO.FIELD_NAME, documentSnapshot),
+            extractString(ForceDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(ForceDTO.FIELD_COST, documentSnapshot),
+            extractString(ForceDTO.FIELD_DURATION, documentSnapshot),
+            extractString(ForceDTO.FIELD_RANG_REQUIREMENT, documentSnapshot),
+            extractString(ForceDTO.FIELD_RANGE, documentSnapshot),
+            extractString(ForceDTO.FIELD_SHAPING, documentSnapshot),
+            extractString(ForceDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }
