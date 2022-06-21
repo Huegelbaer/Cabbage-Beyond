@@ -102,7 +102,7 @@
 
     <!-- Empty State -->
     <string name="empty_state_list_title" />
-    <string name="empty_state_list_message">No entries yet …\n try to synchronise manually or start adding entries on your own!</string>
+    <string name="empty_state_list_message">No entries available …\n try to synchronise manually or start adding entries on your own!</string>
     <string name="empty_state_list_reset_button">Start synchronize</string>
 
     <string name="empty_state_filtered_list_title">Oops!</string>
