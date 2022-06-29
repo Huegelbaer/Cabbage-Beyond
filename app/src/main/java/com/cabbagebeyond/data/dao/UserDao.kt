@@ -21,7 +21,7 @@ class UserDao {
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
                 val users = task.documents.mapNotNull { documentSnapshot ->
-                    documentSnapshot.toObject(UserDTO::class.java)
+                    map(documentSnapshot)
                 }
                 result = Result.success(users)
             }
