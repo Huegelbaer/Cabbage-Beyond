@@ -41,8 +41,6 @@ class WorldsFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
-
-
         setupViewModelObservers()
 
         return _binding.root

@@ -26,7 +26,11 @@ class WorldsViewModel(private val app: Application, private val dataSource: Worl
     init {
         viewModelScope.launch {
             val result = dataSource.getWorlds()
-            _items.value = result.getOrNull() ?: listOf()
+            val worlds = result.getOrDefault(listOf())
+            _items.value = worlds
+            if (worlds.isEmpty()) {
+                showNoContentAvailable()
+            }
         }
     }
 
