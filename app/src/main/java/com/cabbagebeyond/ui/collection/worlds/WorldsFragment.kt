@@ -10,6 +10,7 @@ import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentWorldsListBinding
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import org.koin.android.ext.android.inject
 
@@ -29,7 +30,7 @@ class WorldsFragment : CollectionListFragment() {
         _binding = FragmentWorldsListBinding.inflate(inflater)
 
         val dataSource: WorldDataSource by inject()
-        viewModel = WorldsViewModel(requireActivity().application, dataSource)
+        viewModel = WorldsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = WorldClickListener {
             _viewModel.onSelectWorld(it)

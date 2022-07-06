@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.model.Talent
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class TalentsViewModel(
+    user: User,
     private val app: Application,
     private val talentDataSource: TalentDataSource
-) : CollectionListViewModel(app) {
+) : CollectionListViewModel(user, app) {
 
     object Filter {
         var selectedType: TalentType? = null

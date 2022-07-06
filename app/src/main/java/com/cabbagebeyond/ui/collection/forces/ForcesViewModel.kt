@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.model.Force
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class ForcesViewModel(
+    user: User,
     application: Application,
     private val forceDataSource: ForceDataSource
-) : CollectionListViewModel(application) {
+) : CollectionListViewModel(user, application) {
 
     object Filter {
         var selectedRank: ForceRank? = null

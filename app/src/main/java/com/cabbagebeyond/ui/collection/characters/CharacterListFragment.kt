@@ -12,6 +12,7 @@ import com.cabbagebeyond.databinding.FragmentCharacterListBinding
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -31,7 +32,7 @@ class CharacterListFragment : CollectionListFragment() {
         _binding = FragmentCharacterListBinding.inflate(inflater)
 
         val dataSource: CharacterDataSource by inject()
-        viewModel = CharacterListViewModel(requireActivity().application, dataSource)
+        viewModel = CharacterListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = CharacterClickListener {
             _viewModel.onCharacterClicked(it)

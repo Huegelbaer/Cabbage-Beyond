@@ -12,6 +12,7 @@ import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.databinding.FragmentForcesListBinding
 import com.cabbagebeyond.model.Force
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -31,7 +32,7 @@ class ForcesFragment : CollectionListFragment() {
         _binding = FragmentForcesListBinding.inflate(inflater)
 
         val dataSource: ForceDataSource by inject()
-        viewModel = ForcesViewModel(requireActivity().application, dataSource)
+        viewModel = ForcesViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = ForceClickListener {
             _viewModel.onForceClicked(it)

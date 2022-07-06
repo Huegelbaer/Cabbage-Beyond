@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.model.Handicap
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class HandicapsViewModel(
+    user: User,
     app: Application,
     private val handicapsDataSource: HandicapDataSource
-) : CollectionListViewModel(app) {
+) : CollectionListViewModel(user, app) {
 
     object Filter {
         var selectedType: HandicapType? = null

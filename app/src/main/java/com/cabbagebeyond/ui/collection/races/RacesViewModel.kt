@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class RacesViewModel(
+    user: User,
     application: Application,
     private val raceDataSource: RaceDataSource
-) : CollectionListViewModel(application) {
+) : CollectionListViewModel(user, application) {
 
     object Filter {
         var selectedWorld: World? = null

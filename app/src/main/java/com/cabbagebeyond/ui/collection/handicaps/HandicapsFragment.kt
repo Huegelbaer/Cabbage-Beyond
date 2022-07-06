@@ -12,6 +12,7 @@ import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.databinding.FragmentHandicapsListBinding
 import com.cabbagebeyond.model.Handicap
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -31,7 +32,7 @@ class HandicapsFragment : CollectionListFragment() {
         _binding = FragmentHandicapsListBinding.inflate(inflater)
 
         val dataSource: HandicapDataSource by inject()
-        viewModel = HandicapsViewModel(requireActivity().application, dataSource)
+        viewModel = HandicapsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = HandicapClickListener {
             _viewModel.onHandicapClicked(it)

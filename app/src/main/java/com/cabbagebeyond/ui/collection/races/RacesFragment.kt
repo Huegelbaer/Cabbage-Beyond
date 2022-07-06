@@ -12,6 +12,7 @@ import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.databinding.FragmentRacesListBinding
 import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -31,7 +32,7 @@ class RacesFragment : CollectionListFragment() {
         _binding = FragmentRacesListBinding.inflate(inflater)
 
         val dataSource: RaceDataSource by inject()
-        viewModel = RacesViewModel(requireActivity().application, dataSource)
+        viewModel = RacesViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = RaceClickListener {
             _viewModel.onRaceClicked(it)
