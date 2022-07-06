@@ -18,11 +18,12 @@ import kotlinx.coroutines.launch
 
 class AbilityDetailsViewModel(
     givenAbility: Ability,
+    isEditingActive: Boolean,
     private val _abilityDataSource: AbilityDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     data class WorldSelection(var selected: World?, var values: List<World?>)
     data class AttributeSelection(var selected: AbilityAttribute?, var values: List<AbilityAttribute>)

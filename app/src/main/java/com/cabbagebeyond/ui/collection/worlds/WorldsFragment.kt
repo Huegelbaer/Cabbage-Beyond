@@ -42,6 +42,8 @@ class WorldsFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener { _viewModel.addWorld() }
+
         setupViewModelObservers()
 
         return _binding.root
@@ -58,7 +60,13 @@ class WorldsFragment : CollectionListFragment() {
 
         _viewModel.selectedWorld.observe(viewLifecycleOwner) { world ->
             world?.let {
-                navigateToDetails(it)
+                navigateToDetails(it.first, it.second)
+            }
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
             }
         }
     }
@@ -81,8 +89,8 @@ class WorldsFragment : CollectionListFragment() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun navigateToDetails(world: World) {
-        findNavController().navigate(WorldsFragmentDirections.actionHomeToWorldDetails(world))
+    private fun navigateToDetails(world: World, startEditing: Boolean) {
+        findNavController().navigate(WorldsFragmentDirections.actionHomeToWorldDetails(world, startEditing))
         _viewModel.onNavigationCompleted()
     }
 }

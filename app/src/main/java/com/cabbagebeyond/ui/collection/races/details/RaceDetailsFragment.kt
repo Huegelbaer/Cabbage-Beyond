@@ -36,7 +36,7 @@ class RaceDetailsFragment : DetailsFragment() {
         val dataSource: RaceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = RaceDetailsViewModel(
-            race, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            race, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

@@ -16,11 +16,12 @@ import kotlinx.coroutines.launch
 
 class RaceDetailsViewModel(
     givenRace: Race,
+    isEditingActive: Boolean,
     private val _raceDataSource: RaceDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     var race = MutableLiveData(givenRace)
 

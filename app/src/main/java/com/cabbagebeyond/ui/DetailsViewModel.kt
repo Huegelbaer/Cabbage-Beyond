@@ -4,22 +4,27 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.util.Feature
 import com.cabbagebeyond.util.CollectionProperty
 
-open class DetailsViewModel(user: User, app: Application) : AndroidViewModel(app) {
+open class DetailsViewModel(user: User, isEditingActive: Boolean, app: Application) : AndroidViewModel(app) {
 
     val userCanEdit = user.features.contains(Feature.CONFIGURE_APP.name)
 
-    private var _isEditing = MutableLiveData(false)
+    private var _isEditing = MutableLiveData(isEditingActive)
     val isEditing: LiveData<Boolean>
         get() = _isEditing
 
-    private var _fabImage = MutableLiveData(R.drawable.ic_edit)
-    val fabImage: LiveData<Int>
-        get() = _fabImage
+    val fabImage: LiveData<Int> = Transformations.map(_isEditing) {
+        if (it) {
+            R.drawable.ic_save
+        } else {
+            R.drawable.ic_edit
+        }
+    }
 
     var message = MutableLiveData<Int?>()
         protected set
@@ -37,14 +42,26 @@ open class DetailsViewModel(user: User, app: Application) : AndroidViewModel(app
         } else {
             onEdit()
         }
-        _isEditing.value = !inEditMode
     }
 
     open fun onSave() {
-        _fabImage.value = R.drawable.ic_edit
+    }
+
+    fun onSaveSucceeded() {
+        message.value = R.string.save_completed
+        toggleEditMode()
+    }
+
+    fun onSaveFailed() {
+        message.value = R.string.save_failed
     }
 
     open fun onEdit() {
-        _fabImage.value = R.drawable.ic_save
+        toggleEditMode()
+    }
+
+    private fun toggleEditMode() {
+        val inEditMode = _isEditing.value ?: false
+        _isEditing.value = !inEditMode
     }
 }

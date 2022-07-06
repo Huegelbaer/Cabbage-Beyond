@@ -4,8 +4,10 @@ import android.util.Log
 import com.cabbagebeyond.data.dto.WorldDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.SetOptions
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 
 class WorldDao {
 
@@ -15,19 +17,15 @@ class WorldDao {
     }
 
     suspend fun getWorlds(): Result<List<WorldDTO>> {
-        var result: Result<List<WorldDTO>> = Result.success(mutableListOf())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+        val result: Result<List<WorldDTO>>
+        val querySnapshot = FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val worlds = task.documents.mapNotNull { documentSnapshot ->
-                    map(documentSnapshot)
-                }
-                result = Result.success(worlds)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
             .await()
+
+        val worlds = querySnapshot.documents.mapNotNull { documentSnapshot ->
+            map(documentSnapshot)
+        }
+        result = if (worlds.isNullOrEmpty()) Result.failure(Exception()) else Result.success(worlds)
         return result
     }
 
@@ -53,7 +51,7 @@ class WorldDao {
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(world.id)
-            .set(entity)
+            .set(entity, SetOptions.merge())
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
             }

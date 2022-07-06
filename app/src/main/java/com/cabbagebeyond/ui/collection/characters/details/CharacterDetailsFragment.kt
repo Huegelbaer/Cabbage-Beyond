@@ -45,7 +45,7 @@ class CharacterDetailsFragment : DetailsFragment() {
 
         val dataSource: CharacterDataSource by inject()
         viewModel = CharacterDetailsViewModel(
-            character, dataSource, UserService.currentUser, requireActivity().application
+            character, false, dataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

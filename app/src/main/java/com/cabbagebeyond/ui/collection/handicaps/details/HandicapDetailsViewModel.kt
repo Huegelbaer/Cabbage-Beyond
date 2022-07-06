@@ -17,11 +17,12 @@ import kotlinx.coroutines.launch
 
 class HandicapDetailsViewModel(
     givenHandicap: Handicap,
+    isEditingActive: Boolean,
     private val _handicapDataSource: HandicapDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     data class TypeSelection(var selected: HandicapType?, var values: List<HandicapType>)
     data class WorldSelection(var selected: World?, var values: List<World?>)

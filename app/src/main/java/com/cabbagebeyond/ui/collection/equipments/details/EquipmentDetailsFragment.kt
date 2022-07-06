@@ -38,6 +38,7 @@ class EquipmentDetailsFragment : DetailsFragment() {
         val worldDataSource: WorldDataSource by inject()
         viewModel = EquipmentDetailsViewModel(
             equipment,
+            false,
             dataSource,
             worldDataSource,
             UserService.currentUser,
