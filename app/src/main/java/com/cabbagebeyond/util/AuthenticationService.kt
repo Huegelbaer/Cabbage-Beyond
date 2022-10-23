@@ -15,6 +15,8 @@ object AuthenticationService {
 
     fun loginIntent(): Intent {
         val emailProvider = AuthUI.IdpConfig.EmailBuilder()
+            .setAllowNewAccounts(false)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             // Workaround for PendingIntent missing MUTABLE FLAG crash
             emailProvider.setDefaultEmail("@")
