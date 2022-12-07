@@ -18,6 +18,8 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         Log.d(TAG, "doWork")
 
         return try {
+            refreshWorlds()
+
             refreshAbilities()
             refreshCharacters()
             refreshEquipments()
@@ -27,7 +29,6 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
             refreshRoles()
             refreshTalents()
             refreshUsers()
-            refreshWorlds()
 
             Log.d(TAG, "success")
             Result.success()

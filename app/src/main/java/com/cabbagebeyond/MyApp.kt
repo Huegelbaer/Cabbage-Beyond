@@ -2,6 +2,7 @@ package com.cabbagebeyond
 
 import android.app.Application
 import com.cabbagebeyond.data.*
+import com.cabbagebeyond.data.local.CabbageDatabase
 import com.cabbagebeyond.data.remote.*
 import com.cabbagebeyond.data.repository.*
 import org.koin.android.ext.koin.androidContext
@@ -10,6 +11,8 @@ import org.koin.dsl.module
 
 class MyApp : Application() {
 
+    val database: CabbageDatabase by lazy { CabbageDatabase.getDatabase(this) }
+
     override fun onCreate() {
         super.onCreate()
 
@@ -17,6 +20,7 @@ class MyApp : Application() {
          * use Koin Library as a service locator
          */
         val myModule = module {
+
             single {
                 AbilityRepository(
                     Database.abilityDao,
@@ -64,7 +68,7 @@ class MyApp : Application() {
                 ) as TalentDataSource
             }
             single { UserRepository(Database.userDao, UserService()) as UserDataSource }
-            single { WorldRepository(Database.worldDao, WorldService()) as WorldDataSource }
+            single { WorldRepository(database.worldDao(), WorldService()) as WorldDataSource }
         }
 
         startKoin {

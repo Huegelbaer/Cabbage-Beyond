@@ -14,7 +14,7 @@ interface WorldDataSource {
 
     suspend fun saveWorld(world: World): Result<Boolean>
 
-    suspend fun deleteWorld(id: String): Result<Boolean>
+    suspend fun deleteWorld(world: World): Result<Boolean>
 
     /*
         REMOTE

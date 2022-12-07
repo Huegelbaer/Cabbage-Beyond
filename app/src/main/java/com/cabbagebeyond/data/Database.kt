@@ -15,6 +15,5 @@ object Database {
     val storyDao = StoryDao()
     val talentDao = TalentDao()
     val userDao = UserDao()
-    val worldDao = WorldDao()
 
 }

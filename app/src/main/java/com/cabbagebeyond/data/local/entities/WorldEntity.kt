@@ -1,19 +1,22 @@
-package com.cabbagebeyond.data.dto
+package com.cabbagebeyond.data.local.entities
 
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.cabbagebeyond.model.World
-import com.google.firebase.firestore.DocumentId
-import com.google.firebase.firestore.PropertyName
 import java.util.*
 import kotlin.collections.HashMap
 
-data class WorldDTO(
-    @PropertyName(FIELD_NAME)
+@Entity(tableName = "world")
+data class WorldEntity(
+    @ColumnInfo(name = "name")
     var name: String = "",
-    @PropertyName(FIELD_DESCRIPTION)
+    @ColumnInfo(name = "description")
     var description: String? = null,
-    @PropertyName(FIELD_RULEBOOK)
+    @ColumnInfo(name = "rulebook")
     var rulebook: String = "",
-    @DocumentId
+    @PrimaryKey(autoGenerate = false)
     val id: String = UUID.randomUUID().toString()
 ) {
 
@@ -34,13 +37,22 @@ data class WorldDTO(
 
 }
 
-fun List<WorldDTO>.asDomainModel(): List<World> {
+fun List<WorldEntity>.asDomainModel(): List<World> {
     return map {
         it.asDomainModel()
     }
 }
 
-fun WorldDTO.asDomainModel(): World {
+fun WorldEntity.asDomainModel(): World {
     return World(name, description, rulebook, id)
 }
 
+fun List<World>.asDatabaseModel(): List<WorldEntity> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun World.asDatabaseModel(): WorldEntity {
+    return WorldEntity(name, description, rulebook, id)
+}

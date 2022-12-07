@@ -1,9 +1,10 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.WorldDao
-import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.local.dao.WorldDao
+import com.cabbagebeyond.data.local.entities.asDatabaseModel
+import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.remote.WorldService
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -18,27 +19,40 @@ class WorldRepository(
 
     override suspend fun getWorlds(): Result<List<World>> = withContext(ioDispatcher) {
         val result = worldDao.getWorlds()
-        return@withContext result.mapCatching { it.asDomainModel() }
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
     override suspend fun getWorld(id: String): Result<World> = withContext(ioDispatcher) {
         val result = worldDao.getWorld(id)
-        return@withContext result.mapCatching { it.asDomainModel() }
+        return@withContext Result.success(result.asDomainModel())
     }
 
     override suspend fun saveWorld(world: World): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext worldDao.saveWorld(world.asDatabaseModel())
+        worldDao.saveWorld(world.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun deleteWorld(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext worldDao.deleteWorld(id)
+    override suspend fun deleteWorld(world: World): Result<Boolean> = withContext(ioDispatcher) {
+        worldDao.deleteWorld(world.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
     override suspend fun refreshWorlds() = withContext(ioDispatcher) {
-        worldService.refreshWorlds()
+        val result = worldService.refreshWorlds()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                worldDao.saveWorld(it.asDomainModel().asDatabaseModel())
+            }
+        }
     }
 
     override suspend fun refreshWorld(id: String) {
-        worldService.refreshWorld(id)
+        val result = worldService.refreshWorld(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                worldDao.saveWorld(it.asDomainModel().asDatabaseModel())
+            }
+        }
     }
 }
