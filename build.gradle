@@ -34,4 +34,5 @@ ext {
     navigationVersion = '2.5.2'
     mlkitVersion = '18.0.2'
     work_version = '2.7.1'
+    room_version = "2.4.3"
 }
