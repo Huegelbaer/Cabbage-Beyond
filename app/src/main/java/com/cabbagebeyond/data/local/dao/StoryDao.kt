@@ -1,27 +1,27 @@
-package com.cabbagebeyond.data.dao
+package com.cabbagebeyond.data.local.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.SessionDTO
+import com.cabbagebeyond.data.dto.StoryDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import kotlinx.coroutines.tasks.await
 
-class SessionDao {
+class StoryDao {
 
     companion object {
-        private const val COLLECTION_TITLE = SessionDTO.COLLECTION_TITLE
-        private const val TAG = "SessionDao"
+        private const val COLLECTION_TITLE = StoryDTO.COLLECTION_TITLE
+        private const val TAG = "StoryDao"
     }
 
-    suspend fun getSessions(): Result<List<SessionDTO>> {
-        var result: Result<List<SessionDTO>> = Result.success(mutableListOf())
+    suspend fun getStories(): Result<List<StoryDTO>> {
+        var result: Result<List<StoryDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get()
             .addOnSuccessListener { task ->
-                val sessions = task.documents.mapNotNull { documentSnapshot ->
+                val stories = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(sessions)
+                result = Result.success(stories)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -30,14 +30,14 @@ class SessionDao {
         return result
     }
 
-    suspend fun getSession(id: String): Result<SessionDTO> {
-        var result: Result<SessionDTO> = Result.failure(Throwable())
+    suspend fun getStory(id: String): Result<StoryDTO> {
+        var result: Result<StoryDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get()
             .addOnSuccessListener { task ->
-                val session = map(task)
-                Result.success(session)
+                val story = map(task)
+                result = Result.success(story)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -46,17 +46,17 @@ class SessionDao {
         return result
     }
 
-    fun saveSession(session: SessionDTO) {
-        val entity = session.toHashMap()
+    fun saveStory(story: StoryDTO) {
+        val entity = story.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(session.id)
+            .document(story.id)
             .set(entity)
             .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
             .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
     }
 
-    fun deleteSession(id: String) {
+    fun deleteStory(id: String) {
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
@@ -64,16 +64,14 @@ class SessionDao {
             .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
     }
 
-    private fun map(documentSnapshot: DocumentSnapshot): SessionDTO {
-        return SessionDTO(
-            extractString(SessionDTO.FIELD_NAME, documentSnapshot),
-            extractString(SessionDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(SessionDTO.FIELD_PLAYER, documentSnapshot),
-            extractString(SessionDTO.FIELD_STATUS, documentSnapshot),
-            extractListOfString(SessionDTO.FIELD_INVITED_PLAYERS, documentSnapshot),
-            extractString(SessionDTO.FIELD_OWNER, documentSnapshot),
-            extractString(SessionDTO.FIELD_STORY, documentSnapshot),
-            extractString(SessionDTO.FIELD_RULEBOOK, documentSnapshot),
+    private fun map(documentSnapshot: DocumentSnapshot): StoryDTO {
+        return StoryDTO(
+            extractString(StoryDTO.FIELD_NAME, documentSnapshot),
+            extractString(StoryDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(StoryDTO.FIELD_STORY, documentSnapshot),
+            extractString(StoryDTO.FIELD_OWNER, documentSnapshot),
+            extractString(StoryDTO.FIELD_WORLD, documentSnapshot),
+            extractString(StoryDTO.FIELD_RULEBOOK, documentSnapshot),
             documentSnapshot.id
         )
     }

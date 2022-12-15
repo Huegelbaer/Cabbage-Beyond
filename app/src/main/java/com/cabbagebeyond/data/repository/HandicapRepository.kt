@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.HandicapDao
+import com.cabbagebeyond.data.local.dao.HandicapDao
 import com.cabbagebeyond.data.dto.HandicapDTO
 import com.cabbagebeyond.data.remote.HandicapService
 import com.cabbagebeyond.model.Handicap

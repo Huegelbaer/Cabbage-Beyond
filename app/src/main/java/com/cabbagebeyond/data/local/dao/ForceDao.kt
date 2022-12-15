@@ -1,29 +1,29 @@
-package com.cabbagebeyond.data.dao
+package com.cabbagebeyond.data.local.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.HandicapDTO
+import com.cabbagebeyond.data.dto.ForceDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
-class HandicapDao {
+class ForceDao {
 
     companion object {
-        private const val COLLECTION_TITLE = HandicapDTO.COLLECTION_TITLE
-        private const val TAG = "HandicapDao"
+        private const val COLLECTION_TITLE = ForceDTO.COLLECTION_TITLE
+        private const val TAG = "ForceDao"
     }
 
-    suspend fun getHandicaps(): Result<List<HandicapDTO>> {
-        var result: Result<List<HandicapDTO>> = Result.success(mutableListOf())
+    suspend fun getForces(): Result<List<ForceDTO>> {
+        var result: Result<List<ForceDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val handicaps = task.documents.mapNotNull { documentSnapshot ->
+                val forces = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(handicaps)
+                result = Result.success(forces)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -32,8 +32,8 @@ class HandicapDao {
         return result
     }
 
-    suspend fun getHandicaps(ids: List<String>): Result<List<HandicapDTO>> {
-        var result: Result<List<HandicapDTO>> = Result.success(mutableListOf())
+    suspend fun getForces(ids: List<String>): Result<List<ForceDTO>> {
+        var result: Result<List<ForceDTO>> = Result.success(mutableListOf())
         if (ids.isEmpty()) {
             return result
         }
@@ -42,10 +42,10 @@ class HandicapDao {
             .whereIn(FieldPath.documentId(), ids)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val handicaps = task.documents.mapNotNull { documentSnapshot ->
+                val forces = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(handicaps)
+                result = Result.success(forces)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -54,14 +54,14 @@ class HandicapDao {
         return result
     }
 
-    suspend fun getHandicap(id: String): Result<HandicapDTO> {
-        var result: Result<HandicapDTO> = Result.failure(Throwable())
+    suspend fun getForce(id: String): Result<ForceDTO> {
+        var result: Result<ForceDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val handicap = map(task)
-                result = Result.success(handicap)
+                val force = map(task)
+                result = Result.success(force)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -70,26 +70,26 @@ class HandicapDao {
         return result
     }
 
-    suspend fun saveHandicap(handicap: HandicapDTO): Result<Boolean> {
-        var result = Result.success(true)
-        val entity = handicap.toHashMap()
+    suspend fun saveForce(force: ForceDTO): Result<Boolean> {
+        var result: Result<Boolean> = Result.success(true)
+        val entity = force.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(handicap.id)
+            .document(force.id)
             .set(entity)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Error writing document", error)
-                result = Result.failure(error)
-            }
+                result = Result.failure(error) }
             .await()
         return result
     }
 
-    suspend fun deleteHandicap(id: String): Result<Boolean> {
-        var result = Result.success(true)
+    suspend fun deleteForce(id: String): Result<Boolean> {
+        var result: Result<Boolean> = Result.success(true)
+
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
@@ -104,12 +104,16 @@ class HandicapDao {
         return result
     }
 
-    private fun map(documentSnapshot: DocumentSnapshot): HandicapDTO {
-        return HandicapDTO(
-            extractString(HandicapDTO.FIELD_NAME, documentSnapshot),
-            extractString(HandicapDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(HandicapDTO.FIELD_TYPE, documentSnapshot),
-            extractString(HandicapDTO.FIELD_WORLD, documentSnapshot),
+    private fun map(documentSnapshot: DocumentSnapshot): ForceDTO {
+        return ForceDTO(
+            extractString(ForceDTO.FIELD_NAME, documentSnapshot),
+            extractString(ForceDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(ForceDTO.FIELD_COST, documentSnapshot),
+            extractString(ForceDTO.FIELD_DURATION, documentSnapshot),
+            extractString(ForceDTO.FIELD_RANG_REQUIREMENT, documentSnapshot),
+            extractString(ForceDTO.FIELD_RANGE, documentSnapshot),
+            extractString(ForceDTO.FIELD_SHAPING, documentSnapshot),
+            extractString(ForceDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

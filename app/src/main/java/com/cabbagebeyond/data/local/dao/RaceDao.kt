@@ -1,4 +1,4 @@
-package com.cabbagebeyond.data.dao
+package com.cabbagebeyond.data.local.dao
 
 import android.util.Log
 import com.cabbagebeyond.data.dto.RaceDTO

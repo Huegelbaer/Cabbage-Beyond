@@ -1,29 +1,29 @@
-package com.cabbagebeyond.data.dao
+package com.cabbagebeyond.data.local.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.AbilityDTO
+import com.cabbagebeyond.data.dto.TalentDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
-class AbilityDao {
+class TalentDao {
 
     companion object {
-        private const val COLLECTION_TITLE = AbilityDTO.COLLECTION_TITLE
-        private const val TAG = "AbilityDao"
+        private const val COLLECTION_TITLE = TalentDTO.COLLECTION_TITLE
+        private const val TAG = "TalentDao"
     }
 
-    suspend fun getAbilities(): Result<List<AbilityDTO>> {
-        var result: Result<List<AbilityDTO>> = Result.success(mutableListOf())
+    suspend fun getTalents(): Result<List<TalentDTO>> {
+        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val abilities = task.documents.mapNotNull { documentSnapshot ->
+                val talents = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(abilities)
+                result = Result.success(talents)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -32,8 +32,8 @@ class AbilityDao {
         return result
     }
 
-    suspend fun getAbilities(ids: List<String>): Result<List<AbilityDTO>> {
-        var result: Result<List<AbilityDTO>> = Result.success(mutableListOf())
+    suspend fun getTalents(ids: List<String>): Result<List<TalentDTO>> {
+        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
         if (ids.isEmpty()) {
             return result
         }
@@ -42,10 +42,10 @@ class AbilityDao {
             .whereIn(FieldPath.documentId(), ids)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val abilities = task.documents.mapNotNull { documentSnapshot ->
+                val talents = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(abilities)
+                result = Result.success(talents)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -54,14 +54,14 @@ class AbilityDao {
         return result
     }
 
-    suspend fun getAbility(id: String): Result<AbilityDTO> {
-        var result: Result<AbilityDTO> = Result.failure(Throwable())
+    suspend fun getTalent(id: String): Result<TalentDTO> {
+        var result: Result<TalentDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val ability = map(task)
-                result = Result.success(ability)
+                val talent = map(task)
+                result = Result.success(talent)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -70,51 +70,49 @@ class AbilityDao {
         return result
     }
 
-    suspend fun saveAbility(ability: AbilityDTO): Result<Boolean> {
-        var result: Result<Boolean> = Result.failure(Throwable())
-        val entity = ability.toHashMap()
+    suspend fun saveTalent(talent: TalentDTO): Result<Boolean> {
+        var result = Result.success(true)
+        val entity = talent.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(ability.id)
+            .document(talent.id)
             .set(entity)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
-                result = Result.success(true)
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Error writing document", error)
                 result = Result.failure(error)
             }
             .await()
-
         return result
     }
 
-    suspend fun deleteAbility(id: String): Result<Boolean> {
-        var result: Result<Boolean> = Result.failure(Throwable())
+    suspend fun deleteTalent(id: String): Result<Boolean> {
+        var result = Result.success(true)
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully deleted!")
-                result = Result.success(true)
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Error deleting document", error)
                 result = Result.failure(error)
             }
             .await()
-
         return result
     }
 
-    private fun map(documentSnapshot: DocumentSnapshot): AbilityDTO {
-        return AbilityDTO(
-            extractString(AbilityDTO.FIELD_NAME, documentSnapshot),
-            extractString(AbilityDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(AbilityDTO.FIELD_ATTRIBUTE, documentSnapshot),
-            extractString(AbilityDTO.FIELD_WORLD, documentSnapshot),
+    private fun map(documentSnapshot: DocumentSnapshot): TalentDTO {
+        return TalentDTO(
+            extractString(TalentDTO.FIELD_NAME, documentSnapshot),
+            extractString(TalentDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(TalentDTO.FIELD_RANG_REQUIREMENT, documentSnapshot),
+            extractString(TalentDTO.FIELD_REQUIREMENTS, documentSnapshot),
+            extractString(TalentDTO.FIELD_TYPE, documentSnapshot),
+            extractString(TalentDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

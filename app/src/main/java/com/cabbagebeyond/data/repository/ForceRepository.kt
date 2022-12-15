@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.ForceDao
+import com.cabbagebeyond.data.local.dao.ForceDao
 import com.cabbagebeyond.data.dto.ForceDTO
 import com.cabbagebeyond.data.remote.ForceService
 import com.cabbagebeyond.model.Force

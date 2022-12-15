@@ -1,7 +1,7 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.UserDataSource
-import com.cabbagebeyond.data.dao.UserDao
+import com.cabbagebeyond.data.local.dao.UserDao
 import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
 import com.cabbagebeyond.data.remote.UserService

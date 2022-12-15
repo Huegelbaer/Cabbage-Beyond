@@ -1,7 +1,7 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.SessionDataSource
-import com.cabbagebeyond.data.dao.SessionDao
+import com.cabbagebeyond.data.local.dao.SessionDao
 import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
 import com.cabbagebeyond.model.Session

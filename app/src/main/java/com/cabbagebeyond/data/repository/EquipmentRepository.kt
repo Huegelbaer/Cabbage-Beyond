@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.EquipmentDao
+import com.cabbagebeyond.data.local.dao.EquipmentDao
 import com.cabbagebeyond.data.dto.EquipmentDTO
 import com.cabbagebeyond.data.remote.EquipmentService
 import com.cabbagebeyond.model.Equipment

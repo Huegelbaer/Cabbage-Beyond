@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.RaceDao
+import com.cabbagebeyond.data.local.dao.RaceDao
 import com.cabbagebeyond.data.dto.RaceDTO
 import com.cabbagebeyond.data.remote.RaceService
 import com.cabbagebeyond.model.Race

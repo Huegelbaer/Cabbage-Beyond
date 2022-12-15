@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.TalentDao
+import com.cabbagebeyond.data.local.dao.TalentDao
 import com.cabbagebeyond.data.dto.TalentDTO
 import com.cabbagebeyond.data.remote.TalentService
 import com.cabbagebeyond.model.Rank

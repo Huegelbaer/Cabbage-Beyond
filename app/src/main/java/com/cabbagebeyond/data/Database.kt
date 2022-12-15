@@ -1,6 +1,6 @@
 package com.cabbagebeyond.data
 
-import com.cabbagebeyond.data.dao.*
+import com.cabbagebeyond.data.local.dao.*
 
 object Database {
 

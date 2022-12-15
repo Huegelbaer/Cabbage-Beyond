@@ -1,7 +1,7 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.StoryDataSource
-import com.cabbagebeyond.data.dao.StoryDao
+import com.cabbagebeyond.data.local.dao.StoryDao
 import com.cabbagebeyond.data.dto.asDatabaseModel
 import com.cabbagebeyond.data.dto.asDomainModel
 import com.cabbagebeyond.model.Story

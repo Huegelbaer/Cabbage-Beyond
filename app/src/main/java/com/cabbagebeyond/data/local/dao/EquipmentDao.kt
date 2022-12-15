@@ -1,29 +1,29 @@
-package com.cabbagebeyond.data.dao
+package com.cabbagebeyond.data.local.dao
 
 import android.util.Log
-import com.cabbagebeyond.data.dto.TalentDTO
+import com.cabbagebeyond.data.dto.EquipmentDTO
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
-class TalentDao {
+class EquipmentDao {
 
     companion object {
-        private const val COLLECTION_TITLE = TalentDTO.COLLECTION_TITLE
-        private const val TAG = "TalentDao"
+        private const val COLLECTION_TITLE = EquipmentDTO.COLLECTION_TITLE
+        private const val TAG = "EquipmentDao"
     }
 
-    suspend fun getTalents(): Result<List<TalentDTO>> {
-        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
+    suspend fun getEquipments(): Result<List<EquipmentDTO>> {
+        var result: Result<List<EquipmentDTO>> = Result.success(mutableListOf())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val talents = task.documents.mapNotNull { documentSnapshot ->
+                val equipments = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(talents)
+                result = Result.success(equipments)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -32,8 +32,8 @@ class TalentDao {
         return result
     }
 
-    suspend fun getTalents(ids: List<String>): Result<List<TalentDTO>> {
-        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
+    suspend fun getEquipments(ids: List<String>): Result<List<EquipmentDTO>> {
+        var result: Result<List<EquipmentDTO>> = Result.success(mutableListOf())
         if (ids.isEmpty()) {
             return result
         }
@@ -42,10 +42,10 @@ class TalentDao {
             .whereIn(FieldPath.documentId(), ids)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val talents = task.documents.mapNotNull { documentSnapshot ->
+                val equipments = task.documents.mapNotNull { documentSnapshot ->
                     map(documentSnapshot)
                 }
-                result = Result.success(talents)
+                result = Result.success(equipments)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -54,14 +54,14 @@ class TalentDao {
         return result
     }
 
-    suspend fun getTalent(id: String): Result<TalentDTO> {
-        var result: Result<TalentDTO> = Result.failure(Throwable())
+    suspend fun getEquipment(id: String): Result<EquipmentDTO> {
+        var result: Result<EquipmentDTO> = Result.failure(Throwable())
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get(Source.CACHE)
             .addOnSuccessListener { task ->
-                val talent = map(task)
-                result = Result.success(talent)
+                val equipment = map(task)
+                result = Result.success(equipment)
             }
             .addOnFailureListener { exception ->
                 result = Result.failure(exception.fillInStackTrace())
@@ -70,49 +70,55 @@ class TalentDao {
         return result
     }
 
-    suspend fun saveTalent(talent: TalentDTO): Result<Boolean> {
-        var result = Result.success(true)
-        val entity = talent.toHashMap()
+    suspend fun saveEquipment(equipment: EquipmentDTO): Result<Boolean> {
+        var result: Result<Boolean> = Result.failure(Throwable())
+
+        val entity = equipment.toHashMap()
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(talent.id)
+            .document(equipment.id)
             .set(entity)
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully written!")
+                result = Result.success(true)
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Error writing document", error)
                 result = Result.failure(error)
             }
             .await()
+
         return result
     }
 
-    suspend fun deleteTalent(id: String): Result<Boolean> {
-        var result = Result.success(true)
+    suspend fun deleteEquipment(id: String): Result<Boolean> {
+        var result: Result<Boolean> = Result.failure(Throwable())
 
         FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .delete()
             .addOnSuccessListener {
                 Log.d(TAG, "DocumentSnapshot successfully deleted!")
+                result = Result.success(true)
             }
             .addOnFailureListener { error ->
                 Log.w(TAG, "Error deleting document", error)
                 result = Result.failure(error)
             }
             .await()
+
         return result
     }
 
-    private fun map(documentSnapshot: DocumentSnapshot): TalentDTO {
-        return TalentDTO(
-            extractString(TalentDTO.FIELD_NAME, documentSnapshot),
-            extractString(TalentDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(TalentDTO.FIELD_RANG_REQUIREMENT, documentSnapshot),
-            extractString(TalentDTO.FIELD_REQUIREMENTS, documentSnapshot),
-            extractString(TalentDTO.FIELD_TYPE, documentSnapshot),
-            extractString(TalentDTO.FIELD_WORLD, documentSnapshot),
+    private fun map(documentSnapshot: DocumentSnapshot): EquipmentDTO {
+        return EquipmentDTO(
+            extractString(EquipmentDTO.FIELD_NAME, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_COST, documentSnapshot),
+            extractDouble(EquipmentDTO.FIELD_WEIGHT, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_REQUIREMENTS, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_TYPE, documentSnapshot),
+            extractString(EquipmentDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )
     }

@@ -1,4 +1,4 @@
-package com.cabbagebeyond.data.dao
+package com.cabbagebeyond.data.local.dao
 
 import com.google.firebase.firestore.DocumentSnapshot
 
