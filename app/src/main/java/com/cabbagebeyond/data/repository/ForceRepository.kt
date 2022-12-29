@@ -3,10 +3,13 @@ package com.cabbagebeyond.data.repository
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dto.ForceDTO
+import com.cabbagebeyond.data.local.asDatabaseModel
+import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.ForceDao
 import com.cabbagebeyond.data.local.entities.ForceEntity
 import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.ForceWithWorld
+import com.cabbagebeyond.data.local.valueToRank
 import com.cabbagebeyond.data.remote.ForceService
 import com.cabbagebeyond.model.Force
 import kotlinx.coroutines.CoroutineDispatcher
@@ -81,7 +84,7 @@ fun ForceWithWorld.asDomainModel(): Force {
         force.description,
         force.cost,
         force.duration,
-        valueToTalentRank(force.rangRequirement),
+        force.requiredRank.asDomainModel(),
         force.range,
         force.shaping,
         world?.asDomainModel(),
@@ -101,7 +104,7 @@ fun Force.asDatabaseModel(): ForceEntity {
         description,
         cost,
         duration,
-        rangRequirement?.asDatabaseModel() ?: "",
+        rangRequirement.asDatabaseModel(),
         range,
         shaping,
         world?.id ?: "",
@@ -115,7 +118,7 @@ fun ForceDTO.asDatabaseModel(): ForceEntity {
         description,
         cost,
         duration,
-        rangRequirement,
+        valueToRank(rangRequirement),
         range,
         shaping,
         world,

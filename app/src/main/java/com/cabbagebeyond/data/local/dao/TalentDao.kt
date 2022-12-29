@@ -1,119 +1,27 @@
 package com.cabbagebeyond.data.local.dao
 
-import android.util.Log
-import com.cabbagebeyond.data.dto.TalentDTO
-import com.cabbagebeyond.util.FirebaseUtil
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.Source
-import kotlinx.coroutines.tasks.await
+import androidx.room.*
+import com.cabbagebeyond.data.local.entities.TalentEntity
+import com.cabbagebeyond.data.local.relations.TalentWithWorld
 
-class TalentDao {
+@Dao
+interface TalentDao {
 
-    companion object {
-        private const val COLLECTION_TITLE = TalentDTO.COLLECTION_TITLE
-        private const val TAG = "TalentDao"
-    }
+    @Transaction
+    @Query("SELECT * FROM talent")
+    suspend fun getTalents(): List<TalentWithWorld>
 
-    suspend fun getTalents(): Result<List<TalentDTO>> {
-        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val talents = task.documents.mapNotNull { documentSnapshot ->
-                    map(documentSnapshot)
-                }
-                result = Result.success(talents)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
+    @Transaction
+    @Query("SELECT * FROM talent WHERE id in (:ids)")
+    suspend fun getTalents(ids: List<String>): List<TalentWithWorld>
 
-    suspend fun getTalents(ids: List<String>): Result<List<TalentDTO>> {
-        var result: Result<List<TalentDTO>> = Result.success(mutableListOf())
-        if (ids.isEmpty()) {
-            return result
-        }
+    @Transaction
+    @Query("SELECT * FROM talent WHERE id = :id")
+    suspend fun getTalent(id: String): TalentWithWorld
 
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .whereIn(FieldPath.documentId(), ids)
-            .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val talents = task.documents.mapNotNull { documentSnapshot ->
-                    map(documentSnapshot)
-                }
-                result = Result.success(talents)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveTalent(talent: TalentEntity)
 
-    suspend fun getTalent(id: String): Result<TalentDTO> {
-        var result: Result<TalentDTO> = Result.failure(Throwable())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val talent = map(task)
-                result = Result.success(talent)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
-
-    suspend fun saveTalent(talent: TalentDTO): Result<Boolean> {
-        var result = Result.success(true)
-        val entity = talent.toHashMap()
-
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(talent.id)
-            .set(entity)
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully written!")
-            }
-            .addOnFailureListener { error ->
-                Log.w(TAG, "Error writing document", error)
-                result = Result.failure(error)
-            }
-            .await()
-        return result
-    }
-
-    suspend fun deleteTalent(id: String): Result<Boolean> {
-        var result = Result.success(true)
-
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .delete()
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully deleted!")
-            }
-            .addOnFailureListener { error ->
-                Log.w(TAG, "Error deleting document", error)
-                result = Result.failure(error)
-            }
-            .await()
-        return result
-    }
-
-    private fun map(documentSnapshot: DocumentSnapshot): TalentDTO {
-        return TalentDTO(
-            extractString(TalentDTO.FIELD_NAME, documentSnapshot),
-            extractString(TalentDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(TalentDTO.FIELD_RANG_REQUIREMENT, documentSnapshot),
-            extractString(TalentDTO.FIELD_REQUIREMENTS, documentSnapshot),
-            extractString(TalentDTO.FIELD_TYPE, documentSnapshot),
-            extractString(TalentDTO.FIELD_WORLD, documentSnapshot),
-            documentSnapshot.id
-        )
-    }
+    @Delete
+    suspend fun deleteTalent(talent: TalentEntity)
 }

@@ -2,12 +2,16 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.local.dao.TalentDao
 import com.cabbagebeyond.data.dto.TalentDTO
+import com.cabbagebeyond.data.local.asDatabaseModel
+import com.cabbagebeyond.data.local.asDomainModel
+import com.cabbagebeyond.data.local.dao.TalentDao
+import com.cabbagebeyond.data.local.entities.TalentEntity
+import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.local.relations.TalentWithWorld
+import com.cabbagebeyond.data.local.valueToRank
 import com.cabbagebeyond.data.remote.TalentService
-import com.cabbagebeyond.model.Rank
 import com.cabbagebeyond.model.Talent
-import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,139 +25,172 @@ class TalentRepository(
 
     override suspend fun getTalents(): Result<List<Talent>> = withContext(ioDispatcher) {
         val result = talentDao.getTalents()
-        return@withContext mapList(result)
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
-    override suspend fun getTalents(ids: List<String>): Result<List<Talent>> = withContext(ioDispatcher) {
-        val result = talentDao.getTalents(ids)
-        return@withContext mapList(result)
-    }
+    override suspend fun getTalents(ids: List<String>): Result<List<Talent>> =
+        withContext(ioDispatcher) {
+            val result = talentDao.getTalents(ids)
+            val list = result.map { it.asDomainModel() }
+            return@withContext Result.success(list)
+        }
 
     override suspend fun getTalent(id: String): Result<Talent> = withContext(ioDispatcher) {
         val result = talentDao.getTalent(id)
-        return@withContext map(result)
+        return@withContext Result.success(result.asDomainModel())
     }
 
     override suspend fun saveTalent(talent: Talent): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext talentDao.saveTalent(talent.asDatabaseModel())
+        talentDao.saveTalent(talent.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun deleteTalent(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext talentDao.deleteTalent(id)
+    override suspend fun deleteTalent(talent: Talent): Result<Boolean> = withContext(ioDispatcher) {
+        talentDao.deleteTalent(talent.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun refreshTalents(): Result<Boolean> = withContext(ioDispatcher) {
-        talentService.refreshTalents()
-    }
-
-    override suspend fun refreshTalent(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        talentService.refreshTalent(id)
-    }
-
-    private suspend fun mapList(result: Result<List<TalentDTO>>): Result<List<Talent>> {
-        val worlds = worldDataSource.getWorlds().getOrDefault(listOf())
-        return result.mapCatching {
-            it.asDomainModel(worlds)
+    override suspend fun refreshTalents() = withContext(ioDispatcher) {
+        val result = talentService.refreshTalents()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                talentDao.saveTalent(it.asDatabaseModel())
+            }
         }
     }
 
-    private suspend fun map(result: Result<TalentDTO>): Result<Talent> {
-        return result.mapCatching {
-            val world = worldDataSource.getWorld(it.world).getOrNull()
-            it.asDomainModel(world)
+    override suspend fun refreshTalent(id: String) = withContext(ioDispatcher) {
+        val result = talentService.refreshTalent(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                talentDao.saveTalent(it.asDatabaseModel())
+            }
         }
     }
 }
 
-
-fun List<TalentDTO>.asDomainModel(worlds: List<World>): List<Talent> {
-    return map { talent ->
-        talent.asDomainModel(worlds.firstOrNull { it.id == talent.world })
-    }
+fun TalentDTO.asDatabaseModel(): TalentEntity {
+    return TalentEntity(
+        name,
+        description,
+        valueToRank(rangRequirement),
+        requirements.split(", "),
+        valueToTalentType(type),
+        world,
+        id
+    )
 }
 
-fun TalentDTO.asDomainModel(world: World?): Talent {
-    return Talent(name, description, valueToTalentRank(rangRequirement), requirements.split(", "), valueToTalentType(type), world, id)
-}
-
-fun List<Talent>.asDatabaseModel(): List<TalentDTO> {
+fun List<Talent>.asDatabaseModel(): List<TalentEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Talent.asDatabaseModel(): TalentDTO {
-    return TalentDTO(name, description, rangRequirement?.asDatabaseModel() ?: "", requirements.joinToString(), type?.asDatabaseModel() ?: "", world?.id ?: "", id)
+fun Talent.asDatabaseModel(): TalentEntity {
+    return TalentEntity(
+        name,
+        description,
+        rangRequirement.asDatabaseModel(),
+        requirements,
+        type.asDatabaseModel(),
+        world?.id ?: "",
+        id
+    )
 }
 
-fun valueToTalentRank(dtoValue: String?): Rank? {
-    return when(dtoValue) {
-        "Anfänger" -> Rank.ROOKIE
-        "Fortgeschritten" -> Rank.ADVANCED
-        "Veteran" -> Rank.VETERAN
-        "Held" -> Rank.HERO
-        "Legende" -> Rank.LEGEND
-        else -> null
+fun List<TalentWithWorld>.asDomainModel(): List<Talent> {
+    return map {
+        it.asDomainModel()
     }
 }
 
-fun Rank.asDatabaseModel(): String {
-    return when(this) {
-        Rank.ROOKIE -> "Anfänger"
-        Rank.ADVANCED -> "Fortgeschritten"
-        Rank.VETERAN -> "Veteran"
-        Rank.HERO -> "Held"
-        Rank.LEGEND -> "Legende"
+fun TalentWithWorld.asDomainModel(): Talent {
+    return Talent(
+        talent.name,
+        talent.description,
+        talent.requiredRank.asDomainModel(),
+        talent.requirements,
+        talent.type.asDomainModel(),
+        world?.asDomainModel(),
+        talent.id
+    )
+}
+
+fun valueToTalentType(dtoValue: String?): TalentEntity.Type {
+    return when (dtoValue) {
+        "Hintergrundtalent" -> TalentEntity.Type.BACKGROUND
+        "Anführertalent" -> TalentEntity.Type.LEADER
+        "Expertentalent" -> TalentEntity.Type.EXPERT
+        "Kampftalent" -> TalentEntity.Type.FIGHT
+        "Machttalent" -> TalentEntity.Type.FORCE
+        "Rassentalent" -> TalentEntity.Type.RACE
+        "Soziales Talent" -> TalentEntity.Type.SOCIAL
+        "Übernatürliches Talent" -> TalentEntity.Type.SUPERNATURAL
+        "Wildcard Talent" -> TalentEntity.Type.WILDCARD
+        "Legendäres Talent" -> TalentEntity.Type.LEGENDARY
+        "Drachentalent" -> TalentEntity.Type.DRAGON
+        "Athletiktalent" -> TalentEntity.Type.ATHLETIC
+        "Wahrnehmungstalent" -> TalentEntity.Type.PERCEPTION
+        "Täuschungstalent" -> TalentEntity.Type.ILLUSION
+        "Provozierentalent" -> TalentEntity.Type.PROVOKE
+        "Diebeskunsttalent" -> TalentEntity.Type.THIEVERY
+        "Heimlichkeitstalent" -> TalentEntity.Type.STEALTH
+        "Reviertalent" -> TalentEntity.Type.TERRITORY
+        "Verstandstalent" -> TalentEntity.Type.INTELLECT
+        "Krafttalent" -> TalentEntity.Type.STRENGTH
+        else -> TalentEntity.Type.UNKNOWN
     }
 }
 
-fun valueToTalentType(dtoValue: String?): Talent.Type? {
-    return when(dtoValue) {
-        "Hintergrundtalent" -> Talent.Type.BACKGROUND
-        "Anführertalent" -> Talent.Type.LEADER
-        "Expertentalent" -> Talent.Type.EXPERT
-        "Kampftalent" -> Talent.Type.FIGHT
-        "Machttalent" -> Talent.Type.FORCE
-        "Rassentalent" -> Talent.Type.RACE
-        "Soziales Talent" -> Talent.Type.SOCIAL
-        "Übernatürliches Talent" -> Talent.Type.SUPERNATURAL
-        "Wildcard Talent" -> Talent.Type.WILDCARD
-        "Legendäres Talent" -> Talent.Type.LEGENDARY
-        "Drachentalent" -> Talent.Type.DRAGON
-        "Athletiktalent" -> Talent.Type.ATHLETIC
-        "Wahrnehmungstalent" -> Talent.Type.PERCEPTION
-        "Täuschungstalent" -> Talent.Type.ILLUSION
-        "Provozierentalent" -> Talent.Type.PROVOKE
-        "Diebeskunsttalent" -> Talent.Type.THIEVERY
-        "Heimlichkeitstalent" -> Talent.Type.STEALTH
-        "Reviertalent" -> Talent.Type.TERRITORY
-        "Verstandstalent" -> Talent.Type.INTELLECT
-        "Krafttalent" -> Talent.Type.STRENGTH
-        else -> null
+fun Talent.Type.asDatabaseModel(): TalentEntity.Type {
+    return when (this) {
+        Talent.Type.BACKGROUND -> TalentEntity.Type.BACKGROUND
+        Talent.Type.LEADER -> TalentEntity.Type.LEADER
+        Talent.Type.EXPERT -> TalentEntity.Type.EXPERT
+        Talent.Type.FIGHT -> TalentEntity.Type.FIGHT
+        Talent.Type.FORCE -> TalentEntity.Type.FORCE
+        Talent.Type.RACE -> TalentEntity.Type.RACE
+        Talent.Type.SOCIAL -> TalentEntity.Type.SOCIAL
+        Talent.Type.SUPERNATURAL -> TalentEntity.Type.SUPERNATURAL
+        Talent.Type.WILDCARD -> TalentEntity.Type.WILDCARD
+        Talent.Type.LEGENDARY -> TalentEntity.Type.LEGENDARY
+        Talent.Type.DRAGON -> TalentEntity.Type.DRAGON
+        Talent.Type.ATHLETIC -> TalentEntity.Type.ATHLETIC
+        Talent.Type.PERCEPTION -> TalentEntity.Type.PERCEPTION
+        Talent.Type.ILLUSION -> TalentEntity.Type.ILLUSION
+        Talent.Type.PROVOKE -> TalentEntity.Type.PROVOKE
+        Talent.Type.THIEVERY -> TalentEntity.Type.THIEVERY
+        Talent.Type.STEALTH -> TalentEntity.Type.STEALTH
+        Talent.Type.TERRITORY -> TalentEntity.Type.TERRITORY
+        Talent.Type.INTELLECT -> TalentEntity.Type.INTELLECT
+        Talent.Type.STRENGTH -> TalentEntity.Type.STRENGTH
     }
 }
 
-fun Talent.Type.asDatabaseModel(): String {
-    return when(this) {
-        Talent.Type.BACKGROUND -> "Hintergrundtalent"
-        Talent.Type.LEADER -> "Anführertalent"
-        Talent.Type.EXPERT -> "Expertentalent"
-        Talent.Type.FIGHT -> "Kampftalent"
-        Talent.Type.FORCE -> "Machttalent"
-        Talent.Type.RACE -> "Rassentalent"
-        Talent.Type.SOCIAL -> "Soziales Talent"
-        Talent.Type.SUPERNATURAL -> "Übernatürliches Talent"
-        Talent.Type.WILDCARD -> "Wildcard Talent"
-        Talent.Type.LEGENDARY -> "Legendäres Talent"
-        Talent.Type.DRAGON -> "Drachentalent"
-        Talent.Type.ATHLETIC -> "Athletiktalent"
-        Talent.Type.PERCEPTION -> "Wahrnehmungstalent"
-        Talent.Type.ILLUSION -> "Täuschungstalent"
-        Talent.Type.PROVOKE -> "Provozierentalent"
-        Talent.Type.THIEVERY -> "Diebeskunsttalent"
-        Talent.Type.STEALTH -> "Heimlichkeitstalent"
-        Talent.Type.TERRITORY -> "Reviertalent"
-        Talent.Type.INTELLECT -> "Verstandstalent"
-        Talent.Type.STRENGTH -> "Krafttalent"
+fun TalentEntity.Type.asDomainModel(): Talent.Type {
+    return when (this) {
+        TalentEntity.Type.BACKGROUND -> Talent.Type.BACKGROUND
+        TalentEntity.Type.LEADER -> Talent.Type.LEADER
+        TalentEntity.Type.EXPERT -> Talent.Type.EXPERT
+        TalentEntity.Type.FIGHT -> Talent.Type.FIGHT
+        TalentEntity.Type.FORCE -> Talent.Type.FORCE
+        TalentEntity.Type.RACE -> Talent.Type.RACE
+        TalentEntity.Type.SOCIAL -> Talent.Type.SOCIAL
+        TalentEntity.Type.SUPERNATURAL -> Talent.Type.SUPERNATURAL
+        TalentEntity.Type.WILDCARD -> Talent.Type.WILDCARD
+        TalentEntity.Type.LEGENDARY -> Talent.Type.LEGENDARY
+        TalentEntity.Type.DRAGON -> Talent.Type.DRAGON
+        TalentEntity.Type.ATHLETIC -> Talent.Type.ATHLETIC
+        TalentEntity.Type.PERCEPTION -> Talent.Type.PERCEPTION
+        TalentEntity.Type.ILLUSION -> Talent.Type.ILLUSION
+        TalentEntity.Type.PROVOKE -> Talent.Type.PROVOKE
+        TalentEntity.Type.THIEVERY -> Talent.Type.THIEVERY
+        TalentEntity.Type.STEALTH -> Talent.Type.STEALTH
+        TalentEntity.Type.TERRITORY -> Talent.Type.TERRITORY
+        TalentEntity.Type.INTELLECT -> Talent.Type.INTELLECT
+        TalentEntity.Type.STRENGTH -> Talent.Type.STRENGTH
+        TalentEntity.Type.UNKNOWN -> Talent.Type.BACKGROUND
     }
 }

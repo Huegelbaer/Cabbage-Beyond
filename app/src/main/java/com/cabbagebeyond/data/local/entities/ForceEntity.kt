@@ -3,6 +3,7 @@ package com.cabbagebeyond.data.local.entities
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.cabbagebeyond.data.local.CharacterRank
 import java.util.*
 
 @Entity(tableName = "force")
@@ -15,8 +16,8 @@ data class ForceEntity(
     var cost: String,
     @ColumnInfo(name = "duration")
     var duration: String,
-    @ColumnInfo(name = "requirement")
-    var rangRequirement: String,
+    @ColumnInfo(name = "rank")
+    var requiredRank: CharacterRank,
     @ColumnInfo(name = "range")
     var range: String,
     @ColumnInfo(name = "shaping")

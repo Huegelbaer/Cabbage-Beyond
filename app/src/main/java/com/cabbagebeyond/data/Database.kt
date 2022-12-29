@@ -8,7 +8,6 @@ object Database {
     val roleDao = RoleDao()
     val sessionDao = SessionDao()
     val storyDao = StoryDao()
-    val talentDao = TalentDao()
     val userDao = UserDao()
 
 }

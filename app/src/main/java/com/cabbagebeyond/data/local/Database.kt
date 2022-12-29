@@ -10,11 +10,26 @@ import com.cabbagebeyond.data.local.entities.*
 import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
 
 @Database(
-    entities = [AbilityEntity::class, EquipmentEntity::class, ForceEntity::class, HandicapEntity::class, RaceEntity::class, RaceFeatureEntity::class, RaceFeatureCrossRef::class, WorldEntity::class],
-    version = 7,
+    entities = [
+        AbilityEntity::class,
+        EquipmentEntity::class,
+        ForceEntity::class,
+        HandicapEntity::class,
+        RaceEntity::class,
+        RaceFeatureEntity::class,
+        RaceFeatureCrossRef::class,
+        TalentEntity::class,
+        WorldEntity::class],
+    version = 8,
     exportSchema = false
 )
-@TypeConverters(AttributeConverter::class, EquipmentTypeConverter::class, ListConverter::class)
+@TypeConverters(
+    AttributeConverter::class,
+    EquipmentTypeConverter::class,
+    ListConverter::class,
+    TalentRankConverter::class,
+    TalentTypeConverter::class
+)
 abstract class CabbageDatabase : RoomDatabase() {
 
     abstract fun abilityDao(): AbilityDao
@@ -22,6 +37,7 @@ abstract class CabbageDatabase : RoomDatabase() {
     abstract fun forceDao(): ForceDao
     abstract fun handicapDao(): HandicapDao
     abstract fun raceDao(): RaceDao
+    abstract fun talentDao(): TalentDao
     abstract fun worldDao(): WorldDao
 
     companion object {

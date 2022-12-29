@@ -62,7 +62,7 @@ class MyApp : Application() {
             single { StoryRepository(Database.storyDao) as StoryDataSource }
             single {
                 TalentRepository(
-                    Database.talentDao,
+                    database.talentDao(),
                     TalentService(),
                     get()
                 ) as TalentDataSource
