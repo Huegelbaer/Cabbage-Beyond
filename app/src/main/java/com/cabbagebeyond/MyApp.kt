@@ -23,7 +23,7 @@ class MyApp : Application() {
 
             single {
                 AbilityRepository(
-                    Database.abilityDao,
+                    database.abilityDao(),
                     AbilityService(),
                     get()
                 ) as AbilityDataSource

@@ -41,7 +41,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshAbilities() {
         val abilityDataSource: AbilityDataSource by inject(AbilityDataSource::class.java)
-        abilityDataSource.refreshAbilities().onFailure { throw it }
+        abilityDataSource.refreshAbilities()
     }
 
     private suspend fun refreshCharacters() {

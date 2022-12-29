@@ -19,13 +19,13 @@ interface AbilityDataSource {
 
     //suspend fun deleteAllAbilities()
 
-    suspend fun deleteAbility(id: String): Result<Boolean>
+    suspend fun deleteAbility(ability: Ability): Result<Boolean>
 
     /*
         REMOTE
      */
 
-    suspend fun refreshAbilities(): Result<Boolean>
+    suspend fun refreshAbilities()
 
-    suspend fun refreshAbility(id: String): Result<Boolean>
+    suspend fun refreshAbility(id: String)
 }

@@ -4,7 +4,6 @@ import com.cabbagebeyond.data.local.dao.*
 
 object Database {
 
-    val abilityDao = AbilityDao()
     val characterDao = CharacterDao()
     val equipmentDao = EquipmentDao()
     val forceDao = ForceDao()

@@ -2,12 +2,13 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.local.dao.AbilityDao
 import com.cabbagebeyond.data.dto.AbilityDTO
+import com.cabbagebeyond.data.local.dao.AbilityDao
+import com.cabbagebeyond.data.local.entities.AbilityEntity
+import com.cabbagebeyond.data.local.relations.asDomainModel
 import com.cabbagebeyond.data.remote.AbilityService
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.Attribute
-import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -21,88 +22,83 @@ class AbilityRepository(
 
     override suspend fun getAbilities(): Result<List<Ability>> = withContext(ioDispatcher) {
         val result = abilityDao.getAbilities()
-        return@withContext mapList(result)
+        val abilities = result.map { it.asDomainModel() }
+        return@withContext Result.success(abilities)
     }
 
     override suspend fun getAbilities(ids: List<String>): Result<List<Ability>> = withContext(ioDispatcher) {
         val result = abilityDao.getAbilities(ids)
-        return@withContext mapList(result)
+        val abilities = result.map { it.asDomainModel() }
+        return@withContext Result.success(abilities)
     }
 
     override suspend fun getAbility(id: String): Result<Ability> = withContext(ioDispatcher) {
         val result = abilityDao.getAbility(id)
-        return@withContext map(result)
+        return@withContext Result.success(result.asDomainModel())
     }
 
     override suspend fun saveAbility(ability: Ability): Result<Boolean> = withContext(ioDispatcher) {
         abilityDao.saveAbility(ability.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun deleteAbility(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        abilityDao.deleteAbility(id)
+    override suspend fun deleteAbility(ability: Ability): Result<Boolean> = withContext(ioDispatcher) {
+        abilityDao.deleteAbility(ability.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun refreshAbilities(): Result<Boolean> = withContext(ioDispatcher) {
-        abilityService.refreshAbilities()
+    override suspend fun refreshAbilities() = withContext(ioDispatcher) {
+        val result = abilityService.refreshAbilities()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                abilityDao.saveAbility(it.asDatabaseModel())
+            }
+        }
     }
 
-    override suspend fun refreshAbility(id: String): Result<Boolean> = withContext(ioDispatcher) {
+    override suspend fun refreshAbility(id: String) = withContext(ioDispatcher) {
         abilityService.refreshAbility(id)
-    }
-
-    private suspend fun mapList(result: Result<List<AbilityDTO>>): Result<List<Ability>> {
-        val worlds = worldDataSource.getWorlds().getOrDefault(listOf())
-        return result.mapCatching {
-            it.asDomainModel(worlds)
-        }
-    }
-
-    private suspend fun map(result: Result<AbilityDTO>): Result<Ability> {
-        return result.mapCatching {
-            val world = worldDataSource.getWorld(it.world).getOrNull()
-            it.asDomainModel(world)
+        val result = abilityService.refreshAbility(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                abilityDao.saveAbility(it.asDatabaseModel())
+            }
         }
     }
 }
 
-fun List<AbilityDTO>.asDomainModel(allWorlds: List<World>): List<Ability> {
-    return map { ability ->
-        val world = allWorlds.firstOrNull { it.id == ability.world }
-        ability.asDomainModel(world)
-    }
+fun AbilityDTO.asDatabaseModel(): AbilityEntity {
+    val attribute = valueToAbilityAttribute(attribute)
+    return AbilityEntity(name, description, attribute, world, id)
 }
 
-fun AbilityDTO.asDomainModel(world: World?): Ability {
-    return Ability(name, description, valueToAbilityAttribute(attribute)!!, world, id)
-}
-
-fun List<Ability>.asDatabaseModel(): List<AbilityDTO> {
+fun List<Ability>.asDatabaseModel(): List<AbilityEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Ability.asDatabaseModel(): AbilityDTO {
-    return AbilityDTO(name, description, attribute.asDatabaseModel(), world?.id ?: "", id)
+fun Ability.asDatabaseModel(): AbilityEntity {
+    return AbilityEntity(name, description, attribute.asDatabaseModel(), world?.id ?: "", id)
 }
 
-fun valueToAbilityAttribute(dtoValue: String?): Attribute? {
+fun valueToAbilityAttribute(dtoValue: String?): AbilityEntity.Attribute {
     return when(dtoValue) {
-        "Stärke" -> Attribute.STRENGTH
-        "Verstand" -> Attribute.INTELLECT
-        "Konstitution" -> Attribute.CONSTITUTION
-        "Geschicklichkeit" -> Attribute.DEXTERITY
-        "Willenskraft" -> Attribute.WILLPOWER
-        else -> null
+        "Stärke" -> AbilityEntity.Attribute.STRENGTH
+        "Verstand" -> AbilityEntity.Attribute.INTELLECT
+        "Konstitution" -> AbilityEntity.Attribute.CONSTITUTION
+        "Geschicklichkeit" -> AbilityEntity.Attribute.DEXTERITY
+        "Willenskraft" -> AbilityEntity.Attribute.WILLPOWER
+        else -> AbilityEntity.Attribute.UNKNOWN
     }
 }
 
-fun Attribute.asDatabaseModel(): String {
+fun Attribute.asDatabaseModel(): AbilityEntity.Attribute {
     return when(this) {
-        Attribute.STRENGTH -> "Stärke"
-        Attribute.INTELLECT -> "Verstand"
-        Attribute.CONSTITUTION -> "Konstitution"
-        Attribute.DEXTERITY -> "Geschicklichkeit"
-        Attribute.WILLPOWER -> "Willenskraft"
+        Attribute.STRENGTH -> AbilityEntity.Attribute.STRENGTH
+        Attribute.INTELLECT -> AbilityEntity.Attribute.INTELLECT
+        Attribute.CONSTITUTION -> AbilityEntity.Attribute.CONSTITUTION
+        Attribute.DEXTERITY -> AbilityEntity.Attribute.DEXTERITY
+        Attribute.WILLPOWER -> AbilityEntity.Attribute.WILLPOWER
     }
 }
