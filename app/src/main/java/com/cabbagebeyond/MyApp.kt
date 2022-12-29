@@ -43,7 +43,7 @@ class MyApp : Application() {
             }
             single {
                 EquipmentRepository(
-                    Database.equipmentDao,
+                    database.equipmentDao(),
                     EquipmentService(),
                     get()
                 ) as EquipmentDataSource

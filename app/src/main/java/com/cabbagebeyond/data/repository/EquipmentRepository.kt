@@ -4,9 +4,10 @@ import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.local.dao.EquipmentDao
 import com.cabbagebeyond.data.dto.EquipmentDTO
+import com.cabbagebeyond.data.local.entities.EquipmentEntity
+import com.cabbagebeyond.data.local.relations.asDomainModel
 import com.cabbagebeyond.data.remote.EquipmentService
 import com.cabbagebeyond.model.Equipment
-import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -19,85 +20,79 @@ class EquipmentRepository(
 ) : EquipmentDataSource {
 
     override suspend fun getEquipments(): Result<List<Equipment>> = withContext(ioDispatcher) {
-        val equipments = equipmentDao.getEquipments()
-        return@withContext mapList(equipments)
+        val result = equipmentDao.getEquipments()
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
     override suspend fun getEquipments(ids: List<String>): Result<List<Equipment>> = withContext(ioDispatcher) {
-        val equipments = equipmentDao.getEquipments(ids)
-        return@withContext mapList(equipments)
+        val result = equipmentDao.getEquipments(ids)
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
     override suspend fun getEquipment(id: String): Result<Equipment> = withContext(ioDispatcher) {
-        val equipments = equipmentDao.getEquipment(id)
-        return@withContext map(equipments)
+        val result = equipmentDao.getEquipment(id)
+        val list = result.asDomainModel()
+        return@withContext Result.success(list)
     }
 
-    override suspend fun saveEquipment(equipment: Equipment): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext equipmentDao.saveEquipment(equipment.asDatabaseModel())
+    override suspend fun saveEquipment(equipment: Equipment) = withContext(ioDispatcher) {
+        equipmentDao.saveEquipment(equipment.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun deleteEquipment(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext equipmentDao.deleteEquipment(id)
+    override suspend fun deleteEquipment(equipment: Equipment) = withContext(ioDispatcher) {
+        equipmentDao.deleteEquipment(equipment.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun refreshEquipments(): Result<Boolean> = withContext(ioDispatcher) {
-        equipmentService.refreshEquipments()
-    }
-
-    override suspend fun refreshEquipment(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        equipmentService.refreshEquipment(id)
-    }
-
-    private suspend fun mapList(result: Result<List<EquipmentDTO>>): Result<List<Equipment>> {
-        val worlds = worldDataSource.getWorlds().getOrDefault(listOf())
-        return result.mapCatching {
-            it.asDomainModel(worlds)
+    override suspend fun refreshEquipments() = withContext(ioDispatcher) {
+        val result = equipmentService.refreshEquipments()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                equipmentDao.saveEquipment(it.asDatabaseModel())
+            }
         }
     }
 
-    private suspend fun map(result: Result<EquipmentDTO>): Result<Equipment> {
-        return result.mapCatching {
-            val world = worldDataSource.getWorld(it.world).getOrNull()
-            it.asDomainModel(world)
+    override suspend fun refreshEquipment(id: String) = withContext(ioDispatcher) {
+        val result = equipmentService.refreshEquipment(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                equipmentDao.saveEquipment(it.asDatabaseModel())
+            }
         }
     }
 }
 
-fun List<EquipmentDTO>.asDomainModel(worlds: List<World>): List<Equipment> {
-    return map { equipment ->
-        val world = worlds.firstOrNull { it.id == equipment.world }
-        equipment.asDomainModel(world)
-    }
+fun EquipmentDTO.asDatabaseModel(): EquipmentEntity {
+    return EquipmentEntity(name, description, cost, weight, requirements.split(", "), valueToEquipmentType(type), world, id)
 }
 
-fun EquipmentDTO.asDomainModel(world: World?): Equipment {
-    return Equipment(name, description, cost, weight, requirements.split(", "), valueToEquipmentType(type), world, id)
-}
-
-fun List<Equipment>.asDatabaseModel(): List<EquipmentDTO> {
+fun List<Equipment>.asDatabaseModel(): List<EquipmentEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Equipment.asDatabaseModel(): EquipmentDTO {
-    return EquipmentDTO(name, description, cost, weight, requirements.joinToString(), type?.asDatabaseModel() ?: "", world?.id ?: "", id)
+fun Equipment.asDatabaseModel(): EquipmentEntity {
+    return EquipmentEntity(name, description, cost, weight, requirements, type?.asDatabaseModel() ?: EquipmentEntity.Type.OTHERS, world?.id ?: "", id)
 }
 
-fun valueToEquipmentType(dtoValue: String?): Equipment.Type? {
+fun valueToEquipmentType(dtoValue: String?): EquipmentEntity.Type {
     return when(dtoValue) {
-        "Waffe" -> Equipment.Type.WEAPON
-        "Rüstung" -> Equipment.Type.ARMOR
-        "Sonstiges" -> Equipment.Type.OTHERS
-        else -> null
+        "Waffe" -> EquipmentEntity.Type.WEAPON
+        "Rüstung" -> EquipmentEntity.Type.ARMOR
+        "Sonstiges" -> EquipmentEntity.Type.OTHERS
+        else -> EquipmentEntity.Type.OTHERS
     }
 }
 
-fun Equipment.Type.asDatabaseModel(): String {
+fun Equipment.Type.asDatabaseModel(): EquipmentEntity.Type {
     return when(this) {
-        Equipment.Type.WEAPON -> "Waffe"
-        Equipment.Type.ARMOR -> "Rüstung"
-        Equipment.Type.OTHERS -> "Sonstiges"
+        Equipment.Type.WEAPON -> EquipmentEntity.Type.WEAPON
+        Equipment.Type.ARMOR -> EquipmentEntity.Type.ARMOR
+        Equipment.Type.OTHERS -> EquipmentEntity.Type.OTHERS
     }
 }

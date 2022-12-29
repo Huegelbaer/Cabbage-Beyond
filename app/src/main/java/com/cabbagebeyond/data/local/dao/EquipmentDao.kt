@@ -1,125 +1,24 @@
 package com.cabbagebeyond.data.local.dao
 
-import android.util.Log
-import com.cabbagebeyond.data.dto.EquipmentDTO
-import com.cabbagebeyond.util.FirebaseUtil
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.Source
-import kotlinx.coroutines.tasks.await
+import androidx.room.*
+import com.cabbagebeyond.data.local.entities.EquipmentEntity
+import com.cabbagebeyond.data.local.relations.EquipmentWithWorld
 
-class EquipmentDao {
+@Dao
+interface EquipmentDao {
 
-    companion object {
-        private const val COLLECTION_TITLE = EquipmentDTO.COLLECTION_TITLE
-        private const val TAG = "EquipmentDao"
-    }
+    @Query("SELECT * FROM equipment")
+    suspend fun getEquipments(): List<EquipmentWithWorld>
 
-    suspend fun getEquipments(): Result<List<EquipmentDTO>> {
-        var result: Result<List<EquipmentDTO>> = Result.success(mutableListOf())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val equipments = task.documents.mapNotNull { documentSnapshot ->
-                    map(documentSnapshot)
-                }
-                result = Result.success(equipments)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
+    @Query("SELECT * FROM equipment WHERE id in (:ids)")
+    suspend fun getEquipments(ids: List<String>): List<EquipmentWithWorld>
 
-    suspend fun getEquipments(ids: List<String>): Result<List<EquipmentDTO>> {
-        var result: Result<List<EquipmentDTO>> = Result.success(mutableListOf())
-        if (ids.isEmpty()) {
-            return result
-        }
+    @Query("SELECT * FROM equipment WHERE id = :id")
+    suspend fun getEquipment(id: String): EquipmentWithWorld
 
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .whereIn(FieldPath.documentId(), ids)
-            .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val equipments = task.documents.mapNotNull { documentSnapshot ->
-                    map(documentSnapshot)
-                }
-                result = Result.success(equipments)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveEquipment(equipment: EquipmentEntity)
 
-    suspend fun getEquipment(id: String): Result<EquipmentDTO> {
-        var result: Result<EquipmentDTO> = Result.failure(Throwable())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .get(Source.CACHE)
-            .addOnSuccessListener { task ->
-                val equipment = map(task)
-                result = Result.success(equipment)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
-
-    suspend fun saveEquipment(equipment: EquipmentDTO): Result<Boolean> {
-        var result: Result<Boolean> = Result.failure(Throwable())
-
-        val entity = equipment.toHashMap()
-
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(equipment.id)
-            .set(entity)
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully written!")
-                result = Result.success(true)
-            }
-            .addOnFailureListener { error ->
-                Log.w(TAG, "Error writing document", error)
-                result = Result.failure(error)
-            }
-            .await()
-
-        return result
-    }
-
-    suspend fun deleteEquipment(id: String): Result<Boolean> {
-        var result: Result<Boolean> = Result.failure(Throwable())
-
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .delete()
-            .addOnSuccessListener {
-                Log.d(TAG, "DocumentSnapshot successfully deleted!")
-                result = Result.success(true)
-            }
-            .addOnFailureListener { error ->
-                Log.w(TAG, "Error deleting document", error)
-                result = Result.failure(error)
-            }
-            .await()
-
-        return result
-    }
-
-    private fun map(documentSnapshot: DocumentSnapshot): EquipmentDTO {
-        return EquipmentDTO(
-            extractString(EquipmentDTO.FIELD_NAME, documentSnapshot),
-            extractString(EquipmentDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(EquipmentDTO.FIELD_COST, documentSnapshot),
-            extractDouble(EquipmentDTO.FIELD_WEIGHT, documentSnapshot),
-            extractString(EquipmentDTO.FIELD_REQUIREMENTS, documentSnapshot),
-            extractString(EquipmentDTO.FIELD_TYPE, documentSnapshot),
-            extractString(EquipmentDTO.FIELD_WORLD, documentSnapshot),
-            documentSnapshot.id
-        )
-    }
+    @Delete
+    suspend fun deleteEquipment(equipment: EquipmentEntity)
 }

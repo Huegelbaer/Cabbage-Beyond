@@ -51,7 +51,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshEquipments() {
         val equipmentDataSource: EquipmentDataSource by inject(EquipmentDataSource::class.java)
-        equipmentDataSource.refreshEquipments().onFailure { throw it }
+        equipmentDataSource.refreshEquipments()
     }
 
     private suspend fun refreshForces() {

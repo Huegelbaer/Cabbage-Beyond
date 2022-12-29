@@ -16,14 +16,14 @@ interface EquipmentDataSource {
 
     suspend fun saveEquipment(equipment: Equipment): Result<Boolean>
 
-    suspend fun deleteEquipment(id: String): Result<Boolean>
+    suspend fun deleteEquipment(equipment: Equipment): Result<Boolean>
 
     /*
         REMOTE
      */
 
-    suspend fun refreshEquipments(): Result<Boolean>
+    suspend fun refreshEquipments()
 
-    suspend fun refreshEquipment(id: String): Result<Boolean>
+    suspend fun refreshEquipment(id: String)
 
 }
