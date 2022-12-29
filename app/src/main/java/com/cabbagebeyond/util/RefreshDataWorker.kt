@@ -61,7 +61,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshHandicaps() {
         val handicapDataSource: HandicapDataSource by inject(HandicapDataSource::class.java)
-        handicapDataSource.refreshHandicaps().onFailure { throw it }
+        handicapDataSource.refreshHandicaps()
     }
 
     private suspend fun refreshRaces() {

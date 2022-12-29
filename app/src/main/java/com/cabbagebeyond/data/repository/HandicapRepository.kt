@@ -2,11 +2,13 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.local.dao.HandicapDao
 import com.cabbagebeyond.data.dto.HandicapDTO
+import com.cabbagebeyond.data.local.dao.HandicapDao
+import com.cabbagebeyond.data.local.entities.HandicapEntity
+import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.local.relations.HandicapWithWorld
 import com.cabbagebeyond.data.remote.HandicapService
 import com.cabbagebeyond.model.Handicap
-import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -20,84 +22,105 @@ class HandicapRepository(
 
     override suspend fun getHandicaps(): Result<List<Handicap>> = withContext(ioDispatcher) {
         val result = handicapDao.getHandicaps()
-        return@withContext mapList(result)
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
-    override suspend fun getHandicaps(ids: List<String>): Result<List<Handicap>> = withContext(ioDispatcher) {
-        val result = handicapDao.getHandicaps(ids)
-        return@withContext mapList(result)
-    }
+    override suspend fun getHandicaps(ids: List<String>): Result<List<Handicap>> =
+        withContext(ioDispatcher) {
+            val result = handicapDao.getHandicaps(ids)
+            val list = result.map { it.asDomainModel() }
+            return@withContext Result.success(list)
+        }
 
     override suspend fun getHandicap(id: String): Result<Handicap> = withContext(ioDispatcher) {
         val result = handicapDao.getHandicap(id)
-        return@withContext map(result)
+        return@withContext Result.success(result.asDomainModel())
     }
 
-    override suspend fun saveHandicap(handicap: Handicap): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext handicapDao.saveHandicap(handicap.asDatabaseModel())
-    }
+    override suspend fun saveHandicap(handicap: Handicap): Result<Boolean> =
+        withContext(ioDispatcher) {
+            handicapDao.saveHandicap(handicap.asDatabaseModel())
+            return@withContext Result.success(true)
+        }
 
-    override suspend fun deleteHandicap(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext handicapDao.deleteHandicap(id)
-    }
+    override suspend fun deleteHandicap(handicap: Handicap): Result<Boolean> =
+        withContext(ioDispatcher) {
+            handicapDao.deleteHandicap(handicap.asDatabaseModel())
+            return@withContext Result.success(true)
+        }
 
-    override suspend fun refreshHandicaps(): Result<Boolean> = withContext(ioDispatcher) {
-        handicapService.refreshHandicaps()
-    }
-
-    override suspend fun refreshHandicap(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        handicapService.refreshHandicap(id)
-    }
-
-    private suspend fun mapList(result: Result<List<HandicapDTO>>): Result<List<Handicap>> {
-        val worlds = worldDataSource.getWorlds().getOrDefault(listOf())
-        return result.mapCatching {
-            it.asDomainModel(worlds)
+    override suspend fun refreshHandicaps() = withContext(ioDispatcher) {
+        val result = handicapService.refreshHandicaps()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                handicapDao.saveHandicap(it.asDatabaseModel())
+            }
         }
     }
 
-    private suspend fun map(result: Result<HandicapDTO>): Result<Handicap> {
-        return result.mapCatching {
-            val world = worldDataSource.getWorld(it.world).getOrNull()
-            it.asDomainModel(world)
+    override suspend fun refreshHandicap(id: String) = withContext(ioDispatcher) {
+        val result = handicapService.refreshHandicap(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                handicapDao.saveHandicap(it.asDatabaseModel())
+            }
         }
     }
 }
 
-fun List<HandicapDTO>.asDomainModel(worlds: List<World>): List<Handicap> {
+fun List<HandicapWithWorld>.asDomainModel(): List<Handicap> {
     return map { handicap ->
-        handicap.asDomainModel(worlds.firstOrNull { it.id == handicap.world })
+        handicap.asDomainModel()
     }
 }
 
-fun HandicapDTO.asDomainModel(world: World?): Handicap {
-    return Handicap(name, description, valueToHandicapType(type), world, id)
+fun HandicapWithWorld.asDomainModel(): Handicap {
+    return Handicap(
+        handicap.name,
+        handicap.description,
+        handicap.type.asDomainModel(),
+        world?.asDomainModel(),
+        handicap.id
+    )
 }
 
-fun List<Handicap>.asDatabaseModel(): List<HandicapDTO> {
+fun List<Handicap>.asDatabaseModel(): List<HandicapEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Handicap.asDatabaseModel(): HandicapDTO {
-    return HandicapDTO(name, description, type?.asDatabaseModel() ?: "", world?.id ?: "", id)
+fun Handicap.asDatabaseModel(): HandicapEntity {
+    return HandicapEntity(name, description, type.asDatabaseModel(), world?.id ?: "", id)
+}
+
+fun HandicapDTO.asDatabaseModel(): HandicapEntity {
+    return HandicapEntity(name, description, valueToHandicapType(type), world, id)
 }
 
 
-fun valueToHandicapType(dtoValue: String?): Handicap.Type? {
-    return when(dtoValue) {
-        "Leicht" -> Handicap.Type.SLIGHT
-        "Leicht/Schwer" -> Handicap.Type.SLIGHT_OR_HEAVY
-        "Schwer" -> Handicap.Type.HEAVY
-        else -> null
+fun valueToHandicapType(dtoValue: String): HandicapEntity.Type {
+    return when (dtoValue) {
+        "Leicht" -> HandicapEntity.Type.SLIGHT
+        "Leicht/Schwer" -> HandicapEntity.Type.SLIGHT_OR_HEAVY
+        "Schwer" -> HandicapEntity.Type.HEAVY
+        else -> HandicapEntity.Type.SLIGHT_OR_HEAVY
     }
 }
 
-fun Handicap.Type.asDatabaseModel(): String {
-    return when(this) {
-        Handicap.Type.SLIGHT -> "Leicht"
-        Handicap.Type.SLIGHT_OR_HEAVY -> "Leicht/Schwer"
-        Handicap.Type.HEAVY -> "Schwer"
+fun Handicap.Type.asDatabaseModel(): HandicapEntity.Type {
+    return when (this) {
+        Handicap.Type.SLIGHT -> HandicapEntity.Type.SLIGHT
+        Handicap.Type.SLIGHT_OR_HEAVY -> HandicapEntity.Type.SLIGHT_OR_HEAVY
+        Handicap.Type.HEAVY -> HandicapEntity.Type.HEAVY
+    }
+}
+
+fun HandicapEntity.Type.asDomainModel(): Handicap.Type {
+    return when (this) {
+        HandicapEntity.Type.SLIGHT -> Handicap.Type.SLIGHT
+        HandicapEntity.Type.SLIGHT_OR_HEAVY -> Handicap.Type.SLIGHT_OR_HEAVY
+        HandicapEntity.Type.HEAVY -> Handicap.Type.HEAVY
     }
 }

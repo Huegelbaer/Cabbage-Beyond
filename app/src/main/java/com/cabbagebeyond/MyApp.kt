@@ -51,7 +51,7 @@ class MyApp : Application() {
             single { ForceRepository(database.forceDao(), ForceService(), get()) as ForceDataSource }
             single {
                 HandicapRepository(
-                    Database.handicapDao,
+                    database.handicapDao(),
                     HandicapService(),
                     get()
                 ) as HandicapDataSource

@@ -5,7 +5,6 @@ import com.cabbagebeyond.data.local.dao.*
 object Database {
 
     val characterDao = CharacterDao()
-    val handicapDao = HandicapDao()
     val raceDao = RaceDao()
     val roleDao = RoleDao()
     val sessionDao = SessionDao()

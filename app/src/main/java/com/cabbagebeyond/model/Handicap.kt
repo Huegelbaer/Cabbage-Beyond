@@ -7,7 +7,7 @@ import kotlinx.parcelize.Parcelize
 data class Handicap(
     var name: String,
     var description: String,
-    var type: Type?,
+    var type: Type,
     var world: World?,
     val id: String
 ): Parcelable {
