@@ -11,7 +11,7 @@ data class RaceDTO(
     @PropertyName(FIELD_DESCRIPTION)
     var description: String = "",
     @PropertyName(FIELD_RACE_FEATURES)
-    var raceFeatures: List<String> = listOf(),
+    var raceFeatures: List<Feature> = listOf(),
     @PropertyName(FIELD_WORLD)
     var world: String = "",
     @DocumentId
@@ -25,6 +25,14 @@ data class RaceDTO(
         const val FIELD_RACE_FEATURES = "racefeats"
         const val FIELD_WORLD = "world_id"
     }
+
+    data class Feature(
+        @PropertyName(FIELD_NAME)
+        var name: String,
+        @PropertyName(FIELD_DESCRIPTION)
+        var description: String,
+        @DocumentId
+        val id: String = UUID.randomUUID().toString())
 
     fun toHashMap(): HashMap<String, Any> {
         return hashMapOf(

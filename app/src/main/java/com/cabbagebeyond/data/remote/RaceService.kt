@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.remote
 
 import com.cabbagebeyond.data.dto.RaceDTO
-import com.cabbagebeyond.data.local.dao.extractListOfString
 import com.cabbagebeyond.data.local.dao.extractString
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
@@ -42,10 +41,18 @@ class RaceService {
     }
 
     private fun map(documentSnapshot: DocumentSnapshot): RaceDTO {
+
+        val feats = documentSnapshot.get(RaceDTO.FIELD_RACE_FEATURES) as List<Map<String, String>>
+        val features = feats.mapNotNull {
+            it["id"]?.let { id ->
+                RaceDTO.Feature(it["name"] ?: "", it["description"] ?: "", id)
+            }
+        }
+
         return RaceDTO(
             extractString(RaceDTO.FIELD_NAME, documentSnapshot),
             extractString(RaceDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractListOfString(RaceDTO.FIELD_RACE_FEATURES, documentSnapshot),
+            features,
             extractString(RaceDTO.FIELD_WORLD, documentSnapshot),
             documentSnapshot.id
         )

@@ -5,7 +5,9 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dto.RaceDTO
 import com.cabbagebeyond.data.local.dao.RaceDao
 import com.cabbagebeyond.data.local.entities.RaceEntity
+import com.cabbagebeyond.data.local.entities.RaceFeatureEntity
 import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
 import com.cabbagebeyond.data.local.relations.RaceWithWorld
 import com.cabbagebeyond.data.remote.RaceService
 import com.cabbagebeyond.model.Race
@@ -45,7 +47,7 @@ class RaceRepository(
         val result = raceService.refreshRaces()
         if (result.isSuccess) {
             result.getOrNull()?.forEach {
-                raceDao.saveRace(it.asDatabaseModel())
+                save(it)
             }
         }
     }
@@ -54,24 +56,30 @@ class RaceRepository(
         val result = raceService.refreshRace(id)
         if (result.isSuccess) {
             result.getOrNull()?.let {
-                raceDao.saveRace(it.asDatabaseModel())
+                save(it)
             }
         }
+    }
+
+    private suspend fun save(raceDTO: RaceDTO) {
+        val race = raceDTO.asDatabaseModel()
+        val features = raceDTO.raceFeatures.map { it.asDatabaseModel() }
+        raceDao.saveRace(race)
+        raceDao.saveFeatures(features)
+        raceDao.saveRaceFeatures(features.map { RaceFeatureCrossRef(race.id, it.id) })
     }
 }
 
 fun RaceDTO.asDatabaseModel(): RaceEntity {
-    return RaceEntity(name, description, raceFeatures, world, id)
+    return RaceEntity(name, description, world, id)
 }
 
-fun List<Race>.asDatabaseModel(): List<RaceEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
+fun RaceDTO.Feature.asDatabaseModel(): RaceFeatureEntity {
+    return RaceFeatureEntity(description, name, id)
 }
 
 fun Race.asDatabaseModel(): RaceEntity {
-    return RaceEntity(name, description, raceFeatures, world?.id ?: "", id)
+    return RaceEntity(name, description, world?.id ?: "", id)
 }
 
 fun List<RaceWithWorld>.asDomainModel(): List<Race> {
@@ -81,5 +89,15 @@ fun List<RaceWithWorld>.asDomainModel(): List<Race> {
 }
 
 fun RaceWithWorld.asDomainModel(): Race {
-    return Race(race.name, race.description, race.features, world?.asDomainModel(), race.id)
+    return Race(
+        race.name,
+        race.description,
+        features.map { it.asDomainModel() },
+        world?.asDomainModel(),
+        race.id
+    )
+}
+
+fun RaceFeatureEntity.asDomainModel(): Race.Feature {
+    return Race.Feature(description, name, id)
 }

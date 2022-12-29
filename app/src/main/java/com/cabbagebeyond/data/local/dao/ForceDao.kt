@@ -1,22 +1,21 @@
 package com.cabbagebeyond.data.local.dao
 
-import androidx.room.Dao
-import androidx.room.Delete
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
-import androidx.room.Query
+import androidx.room.*
 import com.cabbagebeyond.data.local.entities.ForceEntity
 import com.cabbagebeyond.data.local.relations.ForceWithWorld
 
 @Dao
 interface ForceDao {
 
+    @Transaction
     @Query("SELECT * FROM force")
     suspend fun getForces(): List<ForceWithWorld>
 
+    @Transaction
     @Query("SELECT * FROM force WHERE id in (:ids)")
     suspend fun getForces(ids: List<String>): List<ForceWithWorld>
 
+    @Transaction
     @Query("SELECT * FROM force WHERE id = :id")
     suspend fun getForce(id: String): ForceWithWorld
 

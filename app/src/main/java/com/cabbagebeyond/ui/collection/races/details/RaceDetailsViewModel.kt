@@ -29,12 +29,18 @@ class RaceDetailsViewModel(
     val worlds: LiveData<List<World?>>
         get() = _worlds
 
+    private var _features = MutableLiveData<List<Race.Feature>>()
+    val features: LiveData<List<Race.Feature>>
+        get() = _features
+
 
     init {
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        _features.value = givenRace.raceFeatures
     }
 
     override fun onEdit() {

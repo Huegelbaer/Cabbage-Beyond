@@ -5,15 +5,12 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import java.util.*
 
-@Entity(tableName = "race")
-data class RaceEntity(
+@Entity(tableName = "race_feature")
+data class RaceFeatureEntity(
     @ColumnInfo(name = "name")
     var name: String,
     @ColumnInfo(name = "description")
     var description: String,
-    @ColumnInfo(name = "world")
-    var world: String,
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    val id: String = UUID.randomUUID().toString()
-)
+    val id: String = UUID.randomUUID().toString())

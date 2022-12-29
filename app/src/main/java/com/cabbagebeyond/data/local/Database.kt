@@ -7,11 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cabbagebeyond.data.local.dao.*
 import com.cabbagebeyond.data.local.entities.*
-import com.cabbagebeyond.data.local.entities.RaceEntity
+import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
 
 @Database(
-    entities = [AbilityEntity::class, EquipmentEntity::class, ForceEntity::class, HandicapEntity::class, RaceEntity::class, WorldEntity::class],
-    version = 6,
+    entities = [AbilityEntity::class, EquipmentEntity::class, ForceEntity::class, HandicapEntity::class, RaceEntity::class, RaceFeatureEntity::class, RaceFeatureCrossRef::class, WorldEntity::class],
+    version = 7,
     exportSchema = false
 )
 @TypeConverters(AttributeConverter::class, EquipmentTypeConverter::class, ListConverter::class)
