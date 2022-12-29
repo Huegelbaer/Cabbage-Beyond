@@ -66,7 +66,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshRaces() {
         val raceDataSource: RaceDataSource by inject(RaceDataSource::class.java)
-        raceDataSource.refreshRaces().onFailure { throw it }
+        raceDataSource.refreshRaces()
     }
 
     private suspend fun refreshRoles() {

@@ -1,7 +1,10 @@
 package com.cabbagebeyond.data.remote
 
 import com.cabbagebeyond.data.dto.RaceDTO
+import com.cabbagebeyond.data.local.dao.extractListOfString
+import com.cabbagebeyond.data.local.dao.extractString
 import com.cabbagebeyond.util.FirebaseUtil
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Source
 import kotlinx.coroutines.tasks.await
 
@@ -11,29 +14,40 @@ class RaceService {
         private const val COLLECTION_TITLE = RaceDTO.COLLECTION_TITLE
     }
 
-    suspend fun refreshRaces(): Result<Boolean> {
-        var result = Result.success(true)
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+    suspend fun refreshRaces(): Result<List<RaceDTO>> {
+        val querySnapshot = FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .get(Source.SERVER)
-            .addOnSuccessListener { }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
             .await()
-        return result
+
+        return if (!querySnapshot.isEmpty) {
+            val races = querySnapshot.documents.map { map(it) }
+            Result.success(races)
+        } else {
+            Result.failure(Throwable())
+        }
     }
 
-    suspend fun refreshRace(id: String): Result<Boolean> {
-        var result = Result.success(true)
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
+    suspend fun refreshRace(id: String): Result<RaceDTO> {
+        val querySnapshot = FirebaseUtil.firestore.collection(COLLECTION_TITLE)
             .document(id)
             .get(Source.SERVER)
-            .addOnSuccessListener { }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
             .await()
-        return result
+
+        return if (!querySnapshot.exists()) {
+            val race = map(querySnapshot)
+            Result.success(race)
+        } else {
+            Result.failure(Throwable())
+        }
     }
 
+    private fun map(documentSnapshot: DocumentSnapshot): RaceDTO {
+        return RaceDTO(
+            extractString(RaceDTO.FIELD_NAME, documentSnapshot),
+            extractString(RaceDTO.FIELD_DESCRIPTION, documentSnapshot),
+            extractListOfString(RaceDTO.FIELD_RACE_FEATURES, documentSnapshot),
+            extractString(RaceDTO.FIELD_WORLD, documentSnapshot),
+            documentSnapshot.id
+        )
+    }
 }

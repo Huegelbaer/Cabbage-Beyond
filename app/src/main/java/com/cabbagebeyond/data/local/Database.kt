@@ -7,10 +7,11 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cabbagebeyond.data.local.dao.*
 import com.cabbagebeyond.data.local.entities.*
+import com.cabbagebeyond.data.local.entities.RaceEntity
 
 @Database(
-    entities = [AbilityEntity::class, EquipmentEntity::class, ForceEntity::class, HandicapEntity::class, WorldEntity::class],
-    version = 5,
+    entities = [AbilityEntity::class, EquipmentEntity::class, ForceEntity::class, HandicapEntity::class, RaceEntity::class, WorldEntity::class],
+    version = 6,
     exportSchema = false
 )
 @TypeConverters(AttributeConverter::class, EquipmentTypeConverter::class, ListConverter::class)
@@ -20,6 +21,7 @@ abstract class CabbageDatabase : RoomDatabase() {
     abstract fun equipmentDao(): EquipmentDao
     abstract fun forceDao(): ForceDao
     abstract fun handicapDao(): HandicapDao
+    abstract fun raceDao(): RaceDao
     abstract fun worldDao(): WorldDao
 
     companion object {

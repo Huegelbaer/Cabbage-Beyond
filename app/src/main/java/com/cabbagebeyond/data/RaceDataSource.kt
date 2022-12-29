@@ -14,14 +14,14 @@ interface RaceDataSource {
 
     suspend fun saveRace(race: Race): Result<Boolean>
 
-    suspend fun deleteRace(id: String): Result<Boolean>
+    suspend fun deleteRace(race: Race): Result<Boolean>
 
     /*
         REMOTE
     */
 
-    suspend fun refreshRaces(): Result<Boolean>
+    suspend fun refreshRaces()
 
-    suspend fun refreshRace(id: String): Result<Boolean>
+    suspend fun refreshRace(id: String)
 
 }
