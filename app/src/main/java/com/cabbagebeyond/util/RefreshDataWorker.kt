@@ -56,7 +56,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshForces() {
         val forceDataSource: ForceDataSource by inject(ForceDataSource::class.java)
-        forceDataSource.refreshForces().onFailure { throw it }
+        forceDataSource.refreshForces()
     }
 
     private suspend fun refreshHandicaps() {

@@ -16,13 +16,13 @@ interface ForceDataSource {
 
     suspend fun saveForce(force: Force): Result<Boolean>
 
-    suspend fun deleteForce(id: String): Result<Boolean>
+    suspend fun deleteForce(force: Force): Result<Boolean>
 
     /*
         REMOTE
     */
 
-    suspend fun refreshForces(): Result<Boolean>
+    suspend fun refreshForces()
 
-    suspend fun refreshForce(id: String): Result<Boolean>
+    suspend fun refreshForce(id: String)
 }
