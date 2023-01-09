@@ -24,13 +24,13 @@ interface CharacterDataSource {
 
     suspend fun saveCharacter(character: Character): Result<Boolean>
 
-    suspend fun deleteCharacter(id: String): Result<Boolean>
+    suspend fun deleteCharacter(character: Character): Result<Boolean>
 
     /*
         REMOTE
     */
 
-    suspend fun refreshCharacters(): Result<Boolean>
+    suspend fun refreshCharacters()
 
-    suspend fun refreshCharacter(id: String): Result<Boolean>
+    suspend fun refreshCharacter(id: String)
 }

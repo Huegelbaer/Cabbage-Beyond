@@ -7,6 +7,7 @@ import com.cabbagebeyond.data.local.asDatabaseModel
 import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.TalentDao
 import com.cabbagebeyond.data.local.entities.TalentEntity
+import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.TalentWithWorld
 import com.cabbagebeyond.data.local.valueToRank
@@ -107,14 +108,18 @@ fun List<TalentWithWorld>.asDomainModel(): List<Talent> {
 }
 
 fun TalentWithWorld.asDomainModel(): Talent {
+    return talent.asDomainModel(world)
+}
+
+fun TalentEntity.asDomainModel(worldEntity: WorldEntity?): Talent {
     return Talent(
-        talent.name,
-        talent.description,
-        talent.requiredRank.asDomainModel(),
-        talent.requirements,
-        talent.type.asDomainModel(),
-        world?.asDomainModel(),
-        talent.id
+        name,
+        description,
+        requiredRank.asDomainModel(),
+        requirements,
+        type.asDomainModel(),
+        worldEntity?.asDomainModel(),
+        id
     )
 }
 

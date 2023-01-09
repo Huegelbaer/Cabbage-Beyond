@@ -25,7 +25,11 @@ fun List<AbilityWithWorld>.asDomainModel(): List<Ability> {
 }
 
 fun AbilityWithWorld.asDomainModel(): Ability {
-    val attribute = when(ability.attribute) {
+    return ability.asDomainModel(world)
+}
+
+fun AbilityEntity.asDomainModel(world: WorldEntity?): Ability {
+    val attribute = when(attribute) {
         AbilityEntity.Attribute.STRENGTH -> Attribute.STRENGTH
         AbilityEntity.Attribute.INTELLECT -> Attribute.INTELLECT
         AbilityEntity.Attribute.CONSTITUTION -> Attribute.CONSTITUTION
@@ -33,5 +37,5 @@ fun AbilityWithWorld.asDomainModel(): Ability {
         AbilityEntity.Attribute.WILLPOWER -> Attribute.WILLPOWER
         AbilityEntity.Attribute.UNKNOWN -> Attribute.STRENGTH
     }
-    return Ability(ability.name, ability.description, attribute, world?.asDomainModel(), ability.id)
+    return Ability(name, description, attribute, world?.asDomainModel(), id)
 }

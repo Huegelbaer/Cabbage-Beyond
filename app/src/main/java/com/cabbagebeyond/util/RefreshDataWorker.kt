@@ -19,16 +19,15 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
         return try {
             refreshWorlds()
-
             refreshAbilities()
-            refreshCharacters()
             refreshEquipments()
             refreshForces()
             refreshHandicaps()
             refreshRaces()
-            refreshRoles()
+            //refreshRoles()
             refreshTalents()
-            refreshUsers()
+            //refreshUsers()
+            refreshCharacters()
 
             Log.d(TAG, "success")
             Result.success()
@@ -46,7 +45,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshCharacters() {
         val characterDataSource: CharacterDataSource by inject(CharacterDataSource::class.java)
-        characterDataSource.refreshCharacters().onFailure { throw it }
+        characterDataSource.refreshCharacters()
     }
 
     private suspend fun refreshEquipments() {

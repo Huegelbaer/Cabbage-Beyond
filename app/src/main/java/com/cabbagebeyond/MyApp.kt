@@ -30,7 +30,7 @@ class MyApp : Application() {
             }
             single {
                 CharacterRepository(
-                    Database.characterDao,
+                    database.characterDao(),
                     CharacterService(),
                     get(),
                     get(),

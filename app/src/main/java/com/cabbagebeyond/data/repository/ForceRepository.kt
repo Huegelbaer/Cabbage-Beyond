@@ -7,6 +7,7 @@ import com.cabbagebeyond.data.local.asDatabaseModel
 import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.ForceDao
 import com.cabbagebeyond.data.local.entities.ForceEntity
+import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.ForceWithWorld
 import com.cabbagebeyond.data.local.valueToRank
@@ -79,16 +80,20 @@ fun List<ForceWithWorld>.asDomainModel(): List<Force> {
 }
 
 fun ForceWithWorld.asDomainModel(): Force {
+    return force.asDomainModel(world)
+}
+
+fun ForceEntity.asDomainModel(worldEntity: WorldEntity?): Force {
     return Force(
-        force.name,
-        force.description,
-        force.cost,
-        force.duration,
-        force.requiredRank.asDomainModel(),
-        force.range,
-        force.shaping,
-        world?.asDomainModel(),
-        force.id
+        name,
+        description,
+        cost,
+        duration,
+        requiredRank.asDomainModel(),
+        range,
+        shaping,
+        worldEntity?.asDomainModel(),
+        id
     )
 }
 

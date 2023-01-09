@@ -5,6 +5,7 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dto.HandicapDTO
 import com.cabbagebeyond.data.local.dao.HandicapDao
 import com.cabbagebeyond.data.local.entities.HandicapEntity
+import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.HandicapWithWorld
 import com.cabbagebeyond.data.remote.HandicapService
@@ -76,12 +77,16 @@ fun List<HandicapWithWorld>.asDomainModel(): List<Handicap> {
 }
 
 fun HandicapWithWorld.asDomainModel(): Handicap {
+    return handicap.asDomainModel(world)
+}
+
+fun HandicapEntity.asDomainModel(worldEntity: WorldEntity?): Handicap {
     return Handicap(
-        handicap.name,
-        handicap.description,
-        handicap.type.asDomainModel(),
-        world?.asDomainModel(),
-        handicap.id
+        name,
+        description,
+        type.asDomainModel(),
+        worldEntity?.asDomainModel(),
+        id
     )
 }
 

@@ -7,11 +7,17 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.cabbagebeyond.data.local.dao.*
 import com.cabbagebeyond.data.local.entities.*
-import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
+import com.cabbagebeyond.data.local.relations.*
 
 @Database(
     entities = [
         AbilityEntity::class,
+        CharacterEntity::class,
+        CharacterAbilityCrossRef::class,
+        CharacterEquipmentCrossRef::class,
+        CharacterForceCrossRef::class,
+        CharacterHandicapCrossRef::class,
+        CharacterTalentCrossRef::class,
         EquipmentEntity::class,
         ForceEntity::class,
         HandicapEntity::class,
@@ -20,7 +26,7 @@ import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
         RaceFeatureCrossRef::class,
         TalentEntity::class,
         WorldEntity::class],
-    version = 8,
+    version = 9,
     exportSchema = false
 )
 @TypeConverters(
@@ -38,6 +44,7 @@ abstract class CabbageDatabase : RoomDatabase() {
     abstract fun handicapDao(): HandicapDao
     abstract fun raceDao(): RaceDao
     abstract fun talentDao(): TalentDao
+    abstract fun characterDao(): CharacterDao
     abstract fun worldDao(): WorldDao
 
     companion object {

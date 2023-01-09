@@ -6,6 +6,7 @@ import com.cabbagebeyond.data.dto.RaceDTO
 import com.cabbagebeyond.data.local.dao.RaceDao
 import com.cabbagebeyond.data.local.entities.RaceEntity
 import com.cabbagebeyond.data.local.entities.RaceFeatureEntity
+import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
 import com.cabbagebeyond.data.local.relations.RaceWithWorld
@@ -89,12 +90,16 @@ fun List<RaceWithWorld>.asDomainModel(): List<Race> {
 }
 
 fun RaceWithWorld.asDomainModel(): Race {
+    return race.asDomainModel(world)
+}
+
+fun RaceEntity.asDomainModel(worldEntity: WorldEntity?): Race {
     return Race(
-        race.name,
-        race.description,
-        features.map { it.asDomainModel() },
-        world?.asDomainModel(),
-        race.id
+        name,
+        description,
+        listOf(),
+        worldEntity?.asDomainModel(),
+        id
     )
 }
 

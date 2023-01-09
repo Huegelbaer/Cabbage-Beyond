@@ -24,19 +24,23 @@ fun List<EquipmentWithWorld>.asDomainModel(): List<Equipment> {
 }
 
 fun EquipmentWithWorld.asDomainModel(): Equipment {
-    val type = when (equipment.type) {
+    return equipment.asDomainModel(world)
+}
+
+fun EquipmentEntity.asDomainModel(world: WorldEntity?): Equipment {
+    val type = when (type) {
         EquipmentEntity.Type.WEAPON -> Equipment.Type.WEAPON
         EquipmentEntity.Type.ARMOR -> Equipment.Type.ARMOR
         EquipmentEntity.Type.OTHERS -> Equipment.Type.OTHERS
     }
     return Equipment(
-        equipment.name,
-        equipment.description,
-        equipment.cost,
-        equipment.weight,
-        equipment.requirements,
+        name,
+        description,
+        cost,
+        weight,
+        requirements,
         type,
         world?.asDomainModel(),
-        equipment.id
+        id
     )
 }
