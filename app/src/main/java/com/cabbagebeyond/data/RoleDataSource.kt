@@ -14,13 +14,13 @@ interface RoleDataSource {
 
     suspend fun saveRole(role: Role)
 
-    suspend fun deleteRole(id: String)
+    suspend fun deleteRole(role: Role)
 
     /*
         REMOTE
      */
 
-    suspend fun refreshRoles(): Result<Boolean>
+    suspend fun refreshRoles()
 
-    suspend fun refreshRole(id: String): Result<Boolean>
+    suspend fun refreshRole(id: String)
 }

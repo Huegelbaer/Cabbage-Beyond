@@ -28,22 +28,3 @@ data class RoleDTO(
         )
     }
 }
-fun List<RoleDTO>.asDomainModel(): List<Role> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun RoleDTO.asDomainModel(): Role {
-    return Role(name, features, id)
-}
-
-fun List<Role>.asDatabaseModel(): List<RoleDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Role.asDatabaseModel(): RoleDTO {
-    return RoleDTO(name, features, id)
-}

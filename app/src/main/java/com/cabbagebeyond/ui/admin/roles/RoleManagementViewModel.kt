@@ -39,7 +39,7 @@ class RoleManagementViewModel(private val roleDataSource: RoleDataSource): ViewM
 
     fun delete(role: Role) {
         viewModelScope.launch {
-            roleDataSource.deleteRole(role.id)
+            roleDataSource.deleteRole(role)
             reloadRoles()
         }
     }

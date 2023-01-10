@@ -57,7 +57,7 @@ class MyApp : Application() {
                 ) as HandicapDataSource
             }
             single { RaceRepository(database.raceDao(), RaceService(), get()) as RaceDataSource }
-            single { RoleRepository(Database.roleDao, RoleService()) as RoleDataSource }
+            single { RoleRepository(database.roleDao(), RoleService()) as RoleDataSource }
             single { SessionRepository(Database.sessionDao) as SessionDataSource }
             single { StoryRepository(Database.storyDao) as StoryDataSource }
             single {

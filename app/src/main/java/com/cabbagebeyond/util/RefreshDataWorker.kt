@@ -18,13 +18,14 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         Log.d(TAG, "doWork")
 
         return try {
+            refreshRoles()
+
             refreshWorlds()
             refreshAbilities()
             refreshEquipments()
             refreshForces()
             refreshHandicaps()
             refreshRaces()
-            //refreshRoles()
             refreshTalents()
             //refreshUsers()
             refreshCharacters()
