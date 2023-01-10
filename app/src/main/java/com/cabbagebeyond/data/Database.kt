@@ -6,6 +6,5 @@ object Database {
 
     val sessionDao = SessionDao()
     val storyDao = StoryDao()
-    val userDao = UserDao()
 
 }

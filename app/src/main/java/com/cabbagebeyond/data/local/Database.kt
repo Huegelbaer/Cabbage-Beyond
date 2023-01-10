@@ -26,8 +26,10 @@ import com.cabbagebeyond.data.local.relations.*
         RaceFeatureCrossRef::class,
         RoleEntity::class,
         TalentEntity::class,
+        UserEntity::class,
+        UserRoleCrossRef::class,
         WorldEntity::class],
-    version = 10,
+    version = 14,
     exportSchema = false
 )
 @TypeConverters(
@@ -48,6 +50,7 @@ abstract class CabbageDatabase : RoomDatabase() {
     abstract fun characterDao(): CharacterDao
     abstract fun worldDao(): WorldDao
     abstract fun roleDao(): RoleDao
+    abstract fun userDao(): UserDao
 
     companion object {
         @Volatile

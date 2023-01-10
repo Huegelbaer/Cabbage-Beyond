@@ -58,7 +58,7 @@ class UserManagementViewModel(
     private fun createData(users: List<User>, roles: List<Role>) {
         _md.value = users.map {
             val role = roles.filter { role ->
-                it.roles.contains(role.id)
+                it.roles.contains(role)
             }
             Data(it, role)
         }
@@ -66,7 +66,7 @@ class UserManagementViewModel(
 
     fun change(roles: List<Role>, data: Data) {
         val user = data.user
-        user.roles = roles.map { it.id }
+        user.roles = roles
         save(user)
     }
 
@@ -79,7 +79,7 @@ class UserManagementViewModel(
 
     fun delete(user: Data) {
         viewModelScope.launch {
-            userDataSource.deleteUser(user.user.id)
+            userDataSource.deleteUser(user.user)
             reloadUsers()
         }
         _users.value = _users.value?.filterNot { it.id == user.user.id }

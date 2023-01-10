@@ -37,23 +37,3 @@ data class UserDTO(
         )
     }
 }
-
-fun List<UserDTO>.asDomainModel(): List<User> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun UserDTO.asDomainModel(): User {
-    return User(username, email, features, roles_ids, id)
-}
-
-fun List<User>.asDatabaseModel(): List<UserDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun User.asDatabaseModel(): UserDTO {
-    return UserDTO(name, email, features, roles, id)
-}

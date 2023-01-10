@@ -67,7 +67,7 @@ class MyApp : Application() {
                     get()
                 ) as TalentDataSource
             }
-            single { UserRepository(Database.userDao, UserService()) as UserDataSource }
+            single { UserRepository(database.userDao(), UserService()) as UserDataSource }
             single { WorldRepository(database.worldDao(), WorldService()) as WorldDataSource }
         }
 

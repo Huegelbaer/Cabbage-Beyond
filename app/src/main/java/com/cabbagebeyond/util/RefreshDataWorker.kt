@@ -19,6 +19,7 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
         return try {
             refreshRoles()
+            refreshUsers()
 
             refreshWorlds()
             refreshAbilities()
@@ -27,7 +28,6 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
             refreshHandicaps()
             refreshRaces()
             refreshTalents()
-            //refreshUsers()
             refreshCharacters()
 
             Log.d(TAG, "success")
