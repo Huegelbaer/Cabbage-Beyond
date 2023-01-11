@@ -44,22 +44,3 @@ data class StoryDTO(
         )
     }
 }
-fun List<StoryDTO>.asDomainModel(): List<Story> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun StoryDTO.asDomainModel(): Story {
-    return Story(name, description, story, owner, world, id)
-}
-
-fun List<Story>.asDatabaseModel(): List<StoryDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Story.asDatabaseModel(): StoryDTO {
-    return StoryDTO(name, description, story, owner, world, id)
-}

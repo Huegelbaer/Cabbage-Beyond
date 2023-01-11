@@ -7,6 +7,7 @@ import com.cabbagebeyond.data.local.entities.UserEntity
 import com.cabbagebeyond.data.local.relations.UserRoleCrossRef
 import com.cabbagebeyond.data.local.relations.UserWithRoles
 import com.cabbagebeyond.data.remote.UserService
+import com.cabbagebeyond.model.Role
 import com.cabbagebeyond.model.User
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -76,7 +77,12 @@ fun UserDTO.asDatabaseModel(): UserEntity {
 }
 
 fun UserWithRoles.asDomainModel(): User {
-    return User(user.username, user.email, user.features, roles.map { it.asDomainModel() }, user.id)
+    val roles = roles.map { it.asDomainModel() }
+    return user.asDomainModel(roles)
+}
+
+fun UserEntity.asDomainModel(roles: List<Role>): User {
+    return User(username, email, features, roles, id)
 }
 
 fun List<User>.asDatabaseModel(): List<UserEntity> {

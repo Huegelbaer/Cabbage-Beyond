@@ -1,78 +1,33 @@
 package com.cabbagebeyond.data.local.dao
 
-import android.util.Log
-import com.cabbagebeyond.data.dto.StoryDTO
-import com.cabbagebeyond.util.FirebaseUtil
-import com.google.firebase.firestore.DocumentSnapshot
-import kotlinx.coroutines.tasks.await
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import com.cabbagebeyond.data.local.entities.StoryEntity
+import com.cabbagebeyond.data.local.relations.StoryOwnerCrossRef
+import com.cabbagebeyond.data.local.relations.StoryWithEverything
+import com.cabbagebeyond.data.local.relations.StoryWorldCrossRef
 
-class StoryDao {
+@Dao
+interface StoryDao {
 
-    companion object {
-        private const val COLLECTION_TITLE = StoryDTO.COLLECTION_TITLE
-        private const val TAG = "StoryDao"
-    }
+    @Query("SELECT * FROM story")
+    suspend fun getStories(): List<StoryWithEverything>
 
-    suspend fun getStories(): Result<List<StoryDTO>> {
-        var result: Result<List<StoryDTO>> = Result.success(mutableListOf())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .get()
-            .addOnSuccessListener { task ->
-                val stories = task.documents.mapNotNull { documentSnapshot ->
-                    map(documentSnapshot)
-                }
-                result = Result.success(stories)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
+    @Query("SELECT * FROM story WHERE id = :id")
+    suspend fun getStory(id: String): StoryWithEverything
 
-    suspend fun getStory(id: String): Result<StoryDTO> {
-        var result: Result<StoryDTO> = Result.failure(Throwable())
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .get()
-            .addOnSuccessListener { task ->
-                val story = map(task)
-                result = Result.success(story)
-            }
-            .addOnFailureListener { exception ->
-                result = Result.failure(exception.fillInStackTrace())
-            }
-            .await()
-        return result
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveStory(story: StoryEntity)
 
-    fun saveStory(story: StoryDTO) {
-        val entity = story.toHashMap()
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveOwner(story: StoryOwnerCrossRef)
 
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(story.id)
-            .set(entity)
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
-    }
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun saveWorld(story: StoryWorldCrossRef)
 
-    fun deleteStory(id: String) {
-        FirebaseUtil.firestore.collection(COLLECTION_TITLE)
-            .document(id)
-            .delete()
-            .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully deleted!") }
-            .addOnFailureListener { e -> Log.w(TAG, "Error deleting document", e) }
-    }
-
-    private fun map(documentSnapshot: DocumentSnapshot): StoryDTO {
-        return StoryDTO(
-            extractString(StoryDTO.FIELD_NAME, documentSnapshot),
-            extractString(StoryDTO.FIELD_DESCRIPTION, documentSnapshot),
-            extractString(StoryDTO.FIELD_STORY, documentSnapshot),
-            extractString(StoryDTO.FIELD_OWNER, documentSnapshot),
-            extractString(StoryDTO.FIELD_WORLD, documentSnapshot),
-            extractString(StoryDTO.FIELD_RULEBOOK, documentSnapshot),
-            documentSnapshot.id
-        )
-    }
+    @Delete
+    suspend fun deleteStory(story: StoryEntity)
 }

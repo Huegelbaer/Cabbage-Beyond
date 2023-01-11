@@ -1,9 +1,14 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.StoryDataSource
+import com.cabbagebeyond.data.dto.StoryDTO
 import com.cabbagebeyond.data.local.dao.StoryDao
-import com.cabbagebeyond.data.dto.asDatabaseModel
-import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.local.entities.StoryEntity
+import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.local.relations.StoryOwnerCrossRef
+import com.cabbagebeyond.data.local.relations.StoryWithEverything
+import com.cabbagebeyond.data.local.relations.StoryWorldCrossRef
+import com.cabbagebeyond.data.remote.StoryService
 import com.cabbagebeyond.model.Story
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -11,22 +16,72 @@ import kotlinx.coroutines.withContext
 
 class StoryRepository(
     private val storyDao: StoryDao,
+    private val storyService: StoryService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : StoryDataSource {
 
     override suspend fun getStories(): Result<List<Story>> = withContext(ioDispatcher) {
-        return@withContext storyDao.getStories().mapCatching { it.asDomainModel() }
+        val result = storyDao.getStories()
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
     override suspend fun getStory(id: String): Result<Story> = withContext(ioDispatcher) {
-        return@withContext storyDao.getStory(id).mapCatching { it.asDomainModel() }
+        val result = storyDao.getStory(id)
+        val list = result.asDomainModel()
+        return@withContext Result.success(list)
     }
 
     override suspend fun saveStory(story: Story) = withContext(ioDispatcher) {
         storyDao.saveStory(story.asDatabaseModel())
     }
 
-    override suspend fun deleteStory(id: String) = withContext(ioDispatcher) {
-        storyDao.deleteStory(id)
+    override suspend fun deleteStory(story: Story) = withContext(ioDispatcher) {
+        storyDao.deleteStory(story.asDatabaseModel())
     }
+
+
+    override suspend fun refreshStories() = withContext(ioDispatcher) {
+        val result = storyService.refreshStories()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                save(it)
+            }
+        }
+    }
+
+    override suspend fun refreshStory(id: String) = withContext(ioDispatcher) {
+        val result = storyService.refreshStory(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                save(it)
+            }
+        }
+    }
+
+    private suspend fun save(story: StoryDTO) {
+        val owner = StoryOwnerCrossRef(story.id, story.owner)
+        storyDao.saveOwner(owner)
+        val world = StoryWorldCrossRef(story.id, story.world)
+        storyDao.saveWorld(world)
+        storyDao.saveStory(story.asDatabaseModel())
+    }
+}
+
+fun List<StoryDTO>.asDatabaseModel(): List<StoryEntity> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun StoryDTO.asDatabaseModel(): StoryEntity {
+    return StoryEntity(name, description, story, owner, world, id)
+}
+
+fun Story.asDatabaseModel(): StoryEntity {
+    return StoryEntity(name, description, story, owner.id, world.id, id)
+}
+
+fun StoryWithEverything.asDomainModel(): Story {
+    return Story(story.name, story.description, story.story, owner.asDomainModel(listOf()), world.asDomainModel(), story.id)
 }

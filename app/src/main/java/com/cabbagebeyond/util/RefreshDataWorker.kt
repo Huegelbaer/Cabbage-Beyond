@@ -30,6 +30,8 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
             refreshTalents()
             refreshCharacters()
 
+            refreshStories()
+
             Log.d(TAG, "success")
             Result.success()
 
@@ -89,6 +91,10 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         worldDataSource.refreshWorlds()
     }
 
+    private suspend fun refreshStories() {
+        val storyDataSource: StoryDataSource by inject(StoryDataSource::class.java)
+        storyDataSource.refreshStories()
+    }
 }
 
 fun startRefreshWorker(context: Context) {

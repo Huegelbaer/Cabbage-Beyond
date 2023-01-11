@@ -20,5 +20,13 @@ interface StoryDataSource {
 
     //suspend fun deleteAllStories()
 
-    suspend fun deleteStory(id: String)
+    suspend fun deleteStory(story: Story)
+
+    /*
+        REMOTE
+    */
+
+    suspend fun refreshStories()
+
+    suspend fun refreshStory(id: String)
 }
