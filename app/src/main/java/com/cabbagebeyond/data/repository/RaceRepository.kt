@@ -2,14 +2,14 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dto.RaceDTO
+import com.cabbagebeyond.data.remote.dto.RaceDTO
 import com.cabbagebeyond.data.local.dao.RaceDao
 import com.cabbagebeyond.data.local.entities.RaceEntity
 import com.cabbagebeyond.data.local.entities.RaceFeatureEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
 import com.cabbagebeyond.data.local.relations.RaceWithWorld
-import com.cabbagebeyond.data.remote.RaceService
+import com.cabbagebeyond.data.remote.service.RaceService
 import com.cabbagebeyond.model.Race
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

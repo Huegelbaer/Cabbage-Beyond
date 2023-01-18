@@ -1,11 +1,11 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.SessionDataSource
-import com.cabbagebeyond.data.dto.SessionDTO
+import com.cabbagebeyond.data.remote.dto.SessionDTO
 import com.cabbagebeyond.data.local.dao.SessionDao
 import com.cabbagebeyond.data.local.entities.SessionEntity
 import com.cabbagebeyond.data.local.relations.SessionWithEverything
-import com.cabbagebeyond.data.remote.SessionService
+import com.cabbagebeyond.data.remote.service.SessionService
 import com.cabbagebeyond.model.Session
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

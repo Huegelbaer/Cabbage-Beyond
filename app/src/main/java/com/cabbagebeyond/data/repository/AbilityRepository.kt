@@ -2,11 +2,11 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dto.AbilityDTO
+import com.cabbagebeyond.data.remote.dto.AbilityDTO
 import com.cabbagebeyond.data.local.dao.AbilityDao
 import com.cabbagebeyond.data.local.entities.AbilityEntity
 import com.cabbagebeyond.data.local.relations.asDomainModel
-import com.cabbagebeyond.data.remote.AbilityService
+import com.cabbagebeyond.data.remote.service.AbilityService
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.Attribute
 import kotlinx.coroutines.CoroutineDispatcher

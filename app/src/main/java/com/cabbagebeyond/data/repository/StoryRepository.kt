@@ -1,13 +1,13 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.StoryDataSource
-import com.cabbagebeyond.data.dto.StoryDTO
+import com.cabbagebeyond.data.remote.dto.StoryDTO
 import com.cabbagebeyond.data.local.dao.StoryDao
 import com.cabbagebeyond.data.local.entities.StoryEntity
 import com.cabbagebeyond.data.local.relations.StoryOwnerCrossRef
 import com.cabbagebeyond.data.local.relations.StoryWithEverything
 import com.cabbagebeyond.data.local.relations.StoryWorldCrossRef
-import com.cabbagebeyond.data.remote.StoryService
+import com.cabbagebeyond.data.remote.service.StoryService
 import com.cabbagebeyond.model.Story
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World

@@ -1,10 +1,10 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dto.asDomainModel
+import com.cabbagebeyond.data.remote.dto.asDomainModel
 import com.cabbagebeyond.data.local.dao.WorldDao
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.remote.WorldService
+import com.cabbagebeyond.data.remote.service.WorldService
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

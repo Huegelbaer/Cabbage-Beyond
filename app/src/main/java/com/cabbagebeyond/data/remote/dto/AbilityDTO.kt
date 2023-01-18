@@ -1,28 +1,28 @@
-package com.cabbagebeyond.data.dto
+package com.cabbagebeyond.data.remote.dto
 
 import com.google.firebase.firestore.DocumentId
 import com.google.firebase.firestore.PropertyName
 import java.util.*
 import kotlin.collections.HashMap
 
-data class HandicapDTO(
+data class AbilityDTO(
     @PropertyName(FIELD_NAME)
     var name: String = "",
     @PropertyName(FIELD_DESCRIPTION)
     var description: String = "",
-    @PropertyName(FIELD_TYPE)
-    var type: String = "",
+    @PropertyName(FIELD_ATTRIBUTE)
+    var attribute: String = "",
     @PropertyName(FIELD_WORLD)
     var world: String = "",
     @DocumentId
-    val id: String = UUID.randomUUID().toString()
+    var id: String = UUID.randomUUID().toString(),
 ) {
 
     companion object {
-        const val COLLECTION_TITLE = "sw_handicaps"
+        const val COLLECTION_TITLE = "sw_abilities"
         const val FIELD_NAME = "name"
         const val FIELD_DESCRIPTION = "description"
-        const val FIELD_TYPE = "type"
+        const val FIELD_ATTRIBUTE = "attribute"
         const val FIELD_WORLD = "world_id"
     }
 
@@ -30,7 +30,7 @@ data class HandicapDTO(
         return hashMapOf(
             FIELD_NAME to name,
             FIELD_DESCRIPTION to description,
-            FIELD_TYPE to type,
+            FIELD_ATTRIBUTE to attribute,
             FIELD_WORLD to world
         )
     }

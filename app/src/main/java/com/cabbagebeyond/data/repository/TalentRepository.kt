@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dto.TalentDTO
+import com.cabbagebeyond.data.remote.dto.TalentDTO
 import com.cabbagebeyond.data.local.asDatabaseModel
 import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.TalentDao
@@ -10,7 +10,7 @@ import com.cabbagebeyond.data.local.entities.TalentEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.relations.TalentWithWorld
 import com.cabbagebeyond.data.local.valueToRank
-import com.cabbagebeyond.data.remote.TalentService
+import com.cabbagebeyond.data.remote.service.TalentService
 import com.cabbagebeyond.model.Talent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

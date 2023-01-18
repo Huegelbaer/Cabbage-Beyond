@@ -1,12 +1,12 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.UserDataSource
-import com.cabbagebeyond.data.dto.UserDTO
+import com.cabbagebeyond.data.remote.dto.UserDTO
 import com.cabbagebeyond.data.local.dao.UserDao
 import com.cabbagebeyond.data.local.entities.UserEntity
 import com.cabbagebeyond.data.local.relations.UserRoleCrossRef
 import com.cabbagebeyond.data.local.relations.UserWithRoles
-import com.cabbagebeyond.data.remote.UserService
+import com.cabbagebeyond.data.remote.service.UserService
 import com.cabbagebeyond.model.Role
 import com.cabbagebeyond.model.User
 import kotlinx.coroutines.CoroutineDispatcher

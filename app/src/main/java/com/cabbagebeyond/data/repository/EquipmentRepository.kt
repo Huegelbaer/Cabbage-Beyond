@@ -3,10 +3,10 @@ package com.cabbagebeyond.data.repository
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.local.dao.EquipmentDao
-import com.cabbagebeyond.data.dto.EquipmentDTO
+import com.cabbagebeyond.data.remote.dto.EquipmentDTO
 import com.cabbagebeyond.data.local.entities.EquipmentEntity
 import com.cabbagebeyond.data.local.relations.asDomainModel
-import com.cabbagebeyond.data.remote.EquipmentService
+import com.cabbagebeyond.data.remote.service.EquipmentService
 import com.cabbagebeyond.model.Equipment
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

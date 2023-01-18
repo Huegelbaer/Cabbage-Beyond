@@ -1,4 +1,4 @@
-package com.cabbagebeyond.data.dto
+package com.cabbagebeyond.data.remote.dto
 
 import com.cabbagebeyond.model.User
 import com.google.firebase.firestore.DocumentId

@@ -1,8 +1,8 @@
-package com.cabbagebeyond.data.remote
+package com.cabbagebeyond.data.remote.service
 
-import com.cabbagebeyond.data.dto.EquipmentDTO
-import com.cabbagebeyond.data.local.dao.extractDouble
-import com.cabbagebeyond.data.local.dao.extractString
+import com.cabbagebeyond.data.remote.dto.EquipmentDTO
+import com.cabbagebeyond.data.remote.extractDouble
+import com.cabbagebeyond.data.remote.extractString
 import com.cabbagebeyond.util.FirebaseUtil
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Source

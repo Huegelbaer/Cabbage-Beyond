@@ -2,7 +2,7 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dto.ForceDTO
+import com.cabbagebeyond.data.remote.dto.ForceDTO
 import com.cabbagebeyond.data.local.asDatabaseModel
 import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.ForceDao
@@ -10,7 +10,7 @@ import com.cabbagebeyond.data.local.entities.ForceEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.relations.ForceWithWorld
 import com.cabbagebeyond.data.local.valueToRank
-import com.cabbagebeyond.data.remote.ForceService
+import com.cabbagebeyond.data.remote.service.ForceService
 import com.cabbagebeyond.model.Force
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers

@@ -2,12 +2,12 @@ package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.HandicapDataSource
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dto.HandicapDTO
+import com.cabbagebeyond.data.remote.dto.HandicapDTO
 import com.cabbagebeyond.data.local.dao.HandicapDao
 import com.cabbagebeyond.data.local.entities.HandicapEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.local.relations.HandicapWithWorld
-import com.cabbagebeyond.data.remote.HandicapService
+import com.cabbagebeyond.data.remote.service.HandicapService
 import com.cabbagebeyond.model.Handicap
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
