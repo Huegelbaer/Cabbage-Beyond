@@ -58,7 +58,7 @@ class MyApp : Application() {
             }
             single { RaceRepository(database.raceDao(), RaceService(), get()) as RaceDataSource }
             single { RoleRepository(database.roleDao(), RoleService()) as RoleDataSource }
-            single { SessionRepository(Database.sessionDao) as SessionDataSource }
+            single { SessionRepository(database.sessionDao(), SessionService()) as SessionDataSource }
             single { StoryRepository(database.storyDao(), StoryService()) as StoryDataSource }
             single {
                 TalentRepository(

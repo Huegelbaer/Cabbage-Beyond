@@ -5,8 +5,8 @@ data class Session(
     var description: String,
     var player: String,
     var status: String,
-    var invitedPlayers: List<String>,
-    var owner: String,
-    var story: String,
+    var invitedPlayers: List<User>,
+    var owner: User,
+    var story: Story,
     val id: String
 )

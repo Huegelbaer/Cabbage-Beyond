@@ -51,22 +51,3 @@ data class SessionDTO(
         )
     }
 }
-fun List<SessionDTO>.asDomainModel(): List<Session> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun SessionDTO.asDomainModel(): Session {
-    return Session(name, description, player, status, invitedPlayers, owner, story, id)
-}
-
-fun List<Session>.asDatabaseModel(): List<SessionDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun Session.asDatabaseModel(): SessionDTO {
-    return SessionDTO(name, description, player, status, invitedPlayers, owner, story, id)
-}

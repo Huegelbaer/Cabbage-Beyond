@@ -10,6 +10,8 @@ import com.cabbagebeyond.data.local.relations.StoryWithEverything
 import com.cabbagebeyond.data.local.relations.StoryWorldCrossRef
 import com.cabbagebeyond.data.remote.StoryService
 import com.cabbagebeyond.model.Story
+import com.cabbagebeyond.model.User
+import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -79,9 +81,13 @@ fun StoryDTO.asDatabaseModel(): StoryEntity {
 }
 
 fun Story.asDatabaseModel(): StoryEntity {
-    return StoryEntity(name, description, story, owner.id, world.id, id)
+    return StoryEntity(name, description, story, owner.id, world?.id, id)
 }
 
 fun StoryWithEverything.asDomainModel(): Story {
-    return Story(story.name, story.description, story.story, owner.asDomainModel(listOf()), world.asDomainModel(), story.id)
+    return story.asDomainModel(owner.asDomainModel(listOf()), world.asDomainModel())
+}
+
+fun StoryEntity.asDomainModel(owner: User, world: World?): Story {
+    return Story(name, description, story, owner, world, id)
 }

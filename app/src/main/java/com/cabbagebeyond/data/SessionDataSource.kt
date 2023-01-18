@@ -20,5 +20,5 @@ interface SessionDataSource {
 
     //suspend fun deleteAllSessions()
 
-    suspend fun deleteSession(id: String)
+    suspend fun deleteSession(session: Session)
 }

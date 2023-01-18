@@ -6,6 +6,6 @@ data class Story(
     var description: String,
     var story: String,
     var owner: User,
-    var world: World,
+    var world: World?,
     val id: String
 )

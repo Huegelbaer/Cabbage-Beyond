@@ -31,9 +31,13 @@ import com.cabbagebeyond.data.local.relations.*
         WorldEntity::class,
         StoryEntity::class,
         StoryOwnerCrossRef::class,
-        StoryWorldCrossRef::class
+        StoryWorldCrossRef::class,
+        SessionEntity::class,
+        SessionOwnerCrossRef::class,
+        SessionPlayersCrossRef::class,
+        SessionStoryCrossRef::class,
                ],
-    version = 15,
+    version = 16,
     exportSchema = false
 )
 @TypeConverters(
@@ -57,6 +61,7 @@ abstract class CabbageDatabase : RoomDatabase() {
     abstract fun userDao(): UserDao
 
     abstract fun storyDao(): StoryDao
+    abstract fun sessionDao(): SessionDao
 
     companion object {
         @Volatile
