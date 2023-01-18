@@ -72,11 +72,11 @@ class UserRepository(
     }
 }
 
-fun UserDTO.asDatabaseModel(): UserEntity {
+private fun UserDTO.asDatabaseModel(): UserEntity {
     return UserEntity(username, email, features, roles_ids, id)
 }
 
-fun UserWithRoles.asDomainModel(): User {
+private fun UserWithRoles.asDomainModel(): User {
     val roles = roles.map { it.asDomainModel() }
     return user.asDomainModel(roles)
 }
@@ -85,12 +85,12 @@ fun UserEntity.asDomainModel(roles: List<Role>): User {
     return User(username, email, features, roles, id)
 }
 
-fun List<User>.asDatabaseModel(): List<UserEntity> {
+private fun List<User>.asDatabaseModel(): List<UserEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun User.asDatabaseModel(): UserEntity {
+private fun User.asDatabaseModel(): UserEntity {
     return UserEntity(name, email, features, roles.map { it.id }, id)
 }

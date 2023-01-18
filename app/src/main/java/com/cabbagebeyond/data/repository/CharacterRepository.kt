@@ -4,7 +4,6 @@ import com.cabbagebeyond.data.*
 import com.cabbagebeyond.data.dto.CharacterDTO
 import com.cabbagebeyond.data.local.dao.CharacterDao
 import com.cabbagebeyond.data.local.entities.CharacterEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.*
 import com.cabbagebeyond.data.remote.CharacterService
 import com.cabbagebeyond.model.*

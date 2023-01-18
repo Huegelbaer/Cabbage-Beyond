@@ -36,23 +36,3 @@ data class WorldEntity(
     }
 
 }
-
-fun List<WorldEntity>.asDomainModel(): List<World> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
-fun WorldEntity.asDomainModel(): World {
-    return World(name, description, rulebook, id)
-}
-
-fun List<World>.asDatabaseModel(): List<WorldEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
-fun World.asDatabaseModel(): WorldEntity {
-    return WorldEntity(name, description, rulebook, id)
-}

@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.cabbagebeyond.data.local.entities.AbilityEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.repository.asDomainModel
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.Attribute
 

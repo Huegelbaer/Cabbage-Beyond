@@ -13,4 +13,5 @@ data class RaceFeatureEntity(
     var description: String,
     @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "id")
-    val id: String = UUID.randomUUID().toString())
+    val id: String = UUID.randomUUID().toString()
+)

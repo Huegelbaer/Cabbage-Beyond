@@ -3,8 +3,7 @@ package com.cabbagebeyond.data.repository
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.dto.asDomainModel
 import com.cabbagebeyond.data.local.dao.WorldDao
-import com.cabbagebeyond.data.local.entities.asDatabaseModel
-import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.local.entities.WorldEntity
 import com.cabbagebeyond.data.remote.WorldService
 import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
@@ -55,4 +54,24 @@ class WorldRepository(
             }
         }
     }
+}
+
+fun List<WorldEntity>.asDomainModel(): List<World> {
+    return map {
+        it.asDomainModel()
+    }
+}
+
+fun WorldEntity.asDomainModel(): World {
+    return World(name, description, rulebook, id)
+}
+
+fun List<World>.asDatabaseModel(): List<WorldEntity> {
+    return map {
+        it.asDatabaseModel()
+    }
+}
+
+fun World.asDatabaseModel(): WorldEntity {
+    return WorldEntity(name, description, rulebook, id)
 }

@@ -38,21 +38,21 @@ class SessionRepository(
     }
 }
 
-fun List<SessionDTO>.asDatabaseModel(): List<SessionEntity> {
+private fun List<SessionDTO>.asDatabaseModel(): List<SessionEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun SessionDTO.asDatabaseModel(): SessionEntity {
+private fun SessionDTO.asDatabaseModel(): SessionEntity {
     return SessionEntity(name, description, player, status, invitedPlayers, owner, story, id)
 }
 
-fun Session.asDatabaseModel(): SessionEntity {
+private fun Session.asDatabaseModel(): SessionEntity {
     return SessionEntity(name, description, player, status, invitedPlayers.map { it.id }, owner.id, story.id, id)
 }
 
-fun SessionWithEverything.asDomainModel(): Session {
+private fun SessionWithEverything.asDomainModel(): Session {
     return Session(session.name, session.description, session.player, session.status, players.map { it.asDomainModel(
         listOf()
     ) }, owner.asDomainModel(listOf()), story.asDomainModel(owner.asDomainModel(listOf()), null), session.id)

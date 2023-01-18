@@ -4,7 +4,6 @@ import com.cabbagebeyond.data.StoryDataSource
 import com.cabbagebeyond.data.dto.StoryDTO
 import com.cabbagebeyond.data.local.dao.StoryDao
 import com.cabbagebeyond.data.local.entities.StoryEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.StoryOwnerCrossRef
 import com.cabbagebeyond.data.local.relations.StoryWithEverything
 import com.cabbagebeyond.data.local.relations.StoryWorldCrossRef
@@ -70,21 +69,21 @@ class StoryRepository(
     }
 }
 
-fun List<StoryDTO>.asDatabaseModel(): List<StoryEntity> {
+private fun List<StoryDTO>.asDatabaseModel(): List<StoryEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun StoryDTO.asDatabaseModel(): StoryEntity {
+private fun StoryDTO.asDatabaseModel(): StoryEntity {
     return StoryEntity(name, description, story, owner, world, id)
 }
 
-fun Story.asDatabaseModel(): StoryEntity {
+private fun Story.asDatabaseModel(): StoryEntity {
     return StoryEntity(name, description, story, owner.id, world?.id, id)
 }
 
-fun StoryWithEverything.asDomainModel(): Story {
+private fun StoryWithEverything.asDomainModel(): Story {
     return story.asDomainModel(owner.asDomainModel(listOf()), world.asDomainModel())
 }
 

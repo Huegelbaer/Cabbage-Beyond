@@ -8,7 +8,6 @@ import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.TalentDao
 import com.cabbagebeyond.data.local.entities.TalentEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.TalentWithWorld
 import com.cabbagebeyond.data.local.valueToRank
 import com.cabbagebeyond.data.remote.TalentService
@@ -71,7 +70,7 @@ class TalentRepository(
     }
 }
 
-fun TalentDTO.asDatabaseModel(): TalentEntity {
+private fun TalentDTO.asDatabaseModel(): TalentEntity {
     return TalentEntity(
         name,
         description,
@@ -83,13 +82,13 @@ fun TalentDTO.asDatabaseModel(): TalentEntity {
     )
 }
 
-fun List<Talent>.asDatabaseModel(): List<TalentEntity> {
+private fun List<Talent>.asDatabaseModel(): List<TalentEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Talent.asDatabaseModel(): TalentEntity {
+private fun Talent.asDatabaseModel(): TalentEntity {
     return TalentEntity(
         name,
         description,
@@ -101,13 +100,13 @@ fun Talent.asDatabaseModel(): TalentEntity {
     )
 }
 
-fun List<TalentWithWorld>.asDomainModel(): List<Talent> {
+private fun List<TalentWithWorld>.asDomainModel(): List<Talent> {
     return map {
         it.asDomainModel()
     }
 }
 
-fun TalentWithWorld.asDomainModel(): Talent {
+private fun TalentWithWorld.asDomainModel(): Talent {
     return talent.asDomainModel(world)
 }
 
@@ -123,7 +122,7 @@ fun TalentEntity.asDomainModel(worldEntity: WorldEntity?): Talent {
     )
 }
 
-fun valueToTalentType(dtoValue: String?): TalentEntity.Type {
+private fun valueToTalentType(dtoValue: String?): TalentEntity.Type {
     return when (dtoValue) {
         "Hintergrundtalent" -> TalentEntity.Type.BACKGROUND
         "Anführertalent" -> TalentEntity.Type.LEADER
@@ -149,7 +148,7 @@ fun valueToTalentType(dtoValue: String?): TalentEntity.Type {
     }
 }
 
-fun Talent.Type.asDatabaseModel(): TalentEntity.Type {
+private fun Talent.Type.asDatabaseModel(): TalentEntity.Type {
     return when (this) {
         Talent.Type.BACKGROUND -> TalentEntity.Type.BACKGROUND
         Talent.Type.LEADER -> TalentEntity.Type.LEADER
@@ -174,7 +173,7 @@ fun Talent.Type.asDatabaseModel(): TalentEntity.Type {
     }
 }
 
-fun TalentEntity.Type.asDomainModel(): Talent.Type {
+private fun TalentEntity.Type.asDomainModel(): Talent.Type {
     return when (this) {
         TalentEntity.Type.BACKGROUND -> Talent.Type.BACKGROUND
         TalentEntity.Type.LEADER -> Talent.Type.LEADER

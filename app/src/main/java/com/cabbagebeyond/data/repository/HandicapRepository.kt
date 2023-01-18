@@ -6,7 +6,6 @@ import com.cabbagebeyond.data.dto.HandicapDTO
 import com.cabbagebeyond.data.local.dao.HandicapDao
 import com.cabbagebeyond.data.local.entities.HandicapEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.HandicapWithWorld
 import com.cabbagebeyond.data.remote.HandicapService
 import com.cabbagebeyond.model.Handicap
@@ -70,13 +69,13 @@ class HandicapRepository(
     }
 }
 
-fun List<HandicapWithWorld>.asDomainModel(): List<Handicap> {
+private fun List<HandicapWithWorld>.asDomainModel(): List<Handicap> {
     return map { handicap ->
         handicap.asDomainModel()
     }
 }
 
-fun HandicapWithWorld.asDomainModel(): Handicap {
+private fun HandicapWithWorld.asDomainModel(): Handicap {
     return handicap.asDomainModel(world)
 }
 
@@ -90,22 +89,21 @@ fun HandicapEntity.asDomainModel(worldEntity: WorldEntity?): Handicap {
     )
 }
 
-fun List<Handicap>.asDatabaseModel(): List<HandicapEntity> {
+private fun List<Handicap>.asDatabaseModel(): List<HandicapEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Handicap.asDatabaseModel(): HandicapEntity {
+private fun Handicap.asDatabaseModel(): HandicapEntity {
     return HandicapEntity(name, description, type.asDatabaseModel(), world?.id ?: "", id)
 }
 
-fun HandicapDTO.asDatabaseModel(): HandicapEntity {
+private fun HandicapDTO.asDatabaseModel(): HandicapEntity {
     return HandicapEntity(name, description, valueToHandicapType(type), world, id)
 }
 
-
-fun valueToHandicapType(dtoValue: String): HandicapEntity.Type {
+private fun valueToHandicapType(dtoValue: String): HandicapEntity.Type {
     return when (dtoValue) {
         "Leicht" -> HandicapEntity.Type.SLIGHT
         "Leicht/Schwer" -> HandicapEntity.Type.SLIGHT_OR_HEAVY
@@ -114,7 +112,7 @@ fun valueToHandicapType(dtoValue: String): HandicapEntity.Type {
     }
 }
 
-fun Handicap.Type.asDatabaseModel(): HandicapEntity.Type {
+private fun Handicap.Type.asDatabaseModel(): HandicapEntity.Type {
     return when (this) {
         Handicap.Type.SLIGHT -> HandicapEntity.Type.SLIGHT
         Handicap.Type.SLIGHT_OR_HEAVY -> HandicapEntity.Type.SLIGHT_OR_HEAVY
@@ -122,7 +120,7 @@ fun Handicap.Type.asDatabaseModel(): HandicapEntity.Type {
     }
 }
 
-fun HandicapEntity.Type.asDomainModel(): Handicap.Type {
+private fun HandicapEntity.Type.asDomainModel(): Handicap.Type {
     return when (this) {
         HandicapEntity.Type.SLIGHT -> Handicap.Type.SLIGHT
         HandicapEntity.Type.SLIGHT_OR_HEAVY -> Handicap.Type.SLIGHT_OR_HEAVY

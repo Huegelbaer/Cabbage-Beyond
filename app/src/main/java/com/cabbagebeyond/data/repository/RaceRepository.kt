@@ -7,7 +7,6 @@ import com.cabbagebeyond.data.local.dao.RaceDao
 import com.cabbagebeyond.data.local.entities.RaceEntity
 import com.cabbagebeyond.data.local.entities.RaceFeatureEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
 import com.cabbagebeyond.data.local.relations.RaceWithWorld
 import com.cabbagebeyond.data.remote.RaceService
@@ -71,25 +70,25 @@ class RaceRepository(
     }
 }
 
-fun RaceDTO.asDatabaseModel(): RaceEntity {
+private fun RaceDTO.asDatabaseModel(): RaceEntity {
     return RaceEntity(name, description, world, id)
 }
 
-fun RaceDTO.Feature.asDatabaseModel(): RaceFeatureEntity {
+private fun RaceDTO.Feature.asDatabaseModel(): RaceFeatureEntity {
     return RaceFeatureEntity(description, name, id)
 }
 
-fun Race.asDatabaseModel(): RaceEntity {
+private fun Race.asDatabaseModel(): RaceEntity {
     return RaceEntity(name, description, world?.id ?: "", id)
 }
 
-fun List<RaceWithWorld>.asDomainModel(): List<Race> {
+private fun List<RaceWithWorld>.asDomainModel(): List<Race> {
     return map {
         it.asDomainModel()
     }
 }
 
-fun RaceWithWorld.asDomainModel(): Race {
+private fun RaceWithWorld.asDomainModel(): Race {
     return race.asDomainModel(world)
 }
 
@@ -103,6 +102,6 @@ fun RaceEntity.asDomainModel(worldEntity: WorldEntity?): Race {
     )
 }
 
-fun RaceFeatureEntity.asDomainModel(): Race.Feature {
+private fun RaceFeatureEntity.asDomainModel(): Race.Feature {
     return Race.Feature(description, name, id)
 }

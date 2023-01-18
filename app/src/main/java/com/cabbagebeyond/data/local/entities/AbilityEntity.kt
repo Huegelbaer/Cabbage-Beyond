@@ -27,14 +27,3 @@ data class AbilityEntity(
         UNKNOWN
     }
 }
-
-fun Ability.asDatabaseModel(): AbilityEntity {
-    val attr = when(attribute) {
-        Attribute.STRENGTH -> AbilityEntity.Attribute.STRENGTH
-        Attribute.INTELLECT -> AbilityEntity.Attribute.INTELLECT
-        Attribute.CONSTITUTION -> AbilityEntity.Attribute.CONSTITUTION
-        Attribute.DEXTERITY -> AbilityEntity.Attribute.DEXTERITY
-        Attribute.WILLPOWER -> AbilityEntity.Attribute.WILLPOWER
-    }
-    return AbilityEntity(name, description, attr, world?.asDatabaseModel()?.id, id)
-}

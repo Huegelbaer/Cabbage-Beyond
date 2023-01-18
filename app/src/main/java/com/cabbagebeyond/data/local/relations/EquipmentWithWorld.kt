@@ -4,7 +4,7 @@ import androidx.room.Embedded
 import androidx.room.Relation
 import com.cabbagebeyond.data.local.entities.EquipmentEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
+import com.cabbagebeyond.data.repository.asDomainModel
 import com.cabbagebeyond.model.Equipment
 
 data class EquipmentWithWorld(

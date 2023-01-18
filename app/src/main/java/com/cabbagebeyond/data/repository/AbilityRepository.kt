@@ -67,22 +67,22 @@ class AbilityRepository(
     }
 }
 
-fun AbilityDTO.asDatabaseModel(): AbilityEntity {
+private fun AbilityDTO.asDatabaseModel(): AbilityEntity {
     val attribute = valueToAbilityAttribute(attribute)
     return AbilityEntity(name, description, attribute, world, id)
 }
 
-fun List<Ability>.asDatabaseModel(): List<AbilityEntity> {
+private fun List<Ability>.asDatabaseModel(): List<AbilityEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Ability.asDatabaseModel(): AbilityEntity {
+private fun Ability.asDatabaseModel(): AbilityEntity {
     return AbilityEntity(name, description, attribute.asDatabaseModel(), world?.id ?: "", id)
 }
 
-fun valueToAbilityAttribute(dtoValue: String?): AbilityEntity.Attribute {
+private fun valueToAbilityAttribute(dtoValue: String?): AbilityEntity.Attribute {
     return when(dtoValue) {
         "Stärke" -> AbilityEntity.Attribute.STRENGTH
         "Verstand" -> AbilityEntity.Attribute.INTELLECT
@@ -93,7 +93,7 @@ fun valueToAbilityAttribute(dtoValue: String?): AbilityEntity.Attribute {
     }
 }
 
-fun Attribute.asDatabaseModel(): AbilityEntity.Attribute {
+private fun Attribute.asDatabaseModel(): AbilityEntity.Attribute {
     return when(this) {
         Attribute.STRENGTH -> AbilityEntity.Attribute.STRENGTH
         Attribute.INTELLECT -> AbilityEntity.Attribute.INTELLECT

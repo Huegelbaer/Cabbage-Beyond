@@ -66,21 +66,21 @@ class EquipmentRepository(
     }
 }
 
-fun EquipmentDTO.asDatabaseModel(): EquipmentEntity {
+private fun EquipmentDTO.asDatabaseModel(): EquipmentEntity {
     return EquipmentEntity(name, description, cost, weight, requirements.split(", "), valueToEquipmentType(type), world, id)
 }
 
-fun List<Equipment>.asDatabaseModel(): List<EquipmentEntity> {
+private fun List<Equipment>.asDatabaseModel(): List<EquipmentEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Equipment.asDatabaseModel(): EquipmentEntity {
+private fun Equipment.asDatabaseModel(): EquipmentEntity {
     return EquipmentEntity(name, description, cost, weight, requirements, type?.asDatabaseModel() ?: EquipmentEntity.Type.OTHERS, world?.id ?: "", id)
 }
 
-fun valueToEquipmentType(dtoValue: String?): EquipmentEntity.Type {
+private fun valueToEquipmentType(dtoValue: String?): EquipmentEntity.Type {
     return when(dtoValue) {
         "Waffe" -> EquipmentEntity.Type.WEAPON
         "Rüstung" -> EquipmentEntity.Type.ARMOR
@@ -89,7 +89,7 @@ fun valueToEquipmentType(dtoValue: String?): EquipmentEntity.Type {
     }
 }
 
-fun Equipment.Type.asDatabaseModel(): EquipmentEntity.Type {
+private fun Equipment.Type.asDatabaseModel(): EquipmentEntity.Type {
     return when(this) {
         Equipment.Type.WEAPON -> EquipmentEntity.Type.WEAPON
         Equipment.Type.ARMOR -> EquipmentEntity.Type.ARMOR

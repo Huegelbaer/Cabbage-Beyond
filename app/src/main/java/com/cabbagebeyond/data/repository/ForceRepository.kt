@@ -8,7 +8,6 @@ import com.cabbagebeyond.data.local.asDomainModel
 import com.cabbagebeyond.data.local.dao.ForceDao
 import com.cabbagebeyond.data.local.entities.ForceEntity
 import com.cabbagebeyond.data.local.entities.WorldEntity
-import com.cabbagebeyond.data.local.entities.asDomainModel
 import com.cabbagebeyond.data.local.relations.ForceWithWorld
 import com.cabbagebeyond.data.local.valueToRank
 import com.cabbagebeyond.data.remote.ForceService
@@ -73,13 +72,13 @@ class ForceRepository(
 }
 
 
-fun List<ForceWithWorld>.asDomainModel(): List<Force> {
+private fun List<ForceWithWorld>.asDomainModel(): List<Force> {
     return map { force ->
         force.asDomainModel()
     }
 }
 
-fun ForceWithWorld.asDomainModel(): Force {
+private fun ForceWithWorld.asDomainModel(): Force {
     return force.asDomainModel(world)
 }
 
@@ -97,13 +96,13 @@ fun ForceEntity.asDomainModel(worldEntity: WorldEntity?): Force {
     )
 }
 
-fun List<Force>.asDatabaseModel(): List<ForceEntity> {
+private fun List<Force>.asDatabaseModel(): List<ForceEntity> {
     return map {
         it.asDatabaseModel()
     }
 }
 
-fun Force.asDatabaseModel(): ForceEntity {
+private fun Force.asDatabaseModel(): ForceEntity {
     return ForceEntity(
         name,
         description,
@@ -117,7 +116,7 @@ fun Force.asDatabaseModel(): ForceEntity {
     )
 }
 
-fun ForceDTO.asDatabaseModel(): ForceEntity {
+private fun ForceDTO.asDatabaseModel(): ForceEntity {
     return ForceEntity(
         name,
         description,
