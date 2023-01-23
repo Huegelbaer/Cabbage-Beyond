@@ -1,25 +1,24 @@
 package com.cabbagebeyond.ui.collection.characters.details
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.databinding.FragmentCharacterDetailsBinding
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
-import org.koin.android.ext.android.inject
-
 import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.RadarData
 import com.github.mikephil.charting.data.RadarDataSet
 import com.github.mikephil.charting.data.RadarEntry
-import com.github.mikephil.charting.components.YAxis
-import android.graphics.Typeface
-import androidx.navigation.fragment.findNavController
-import com.cabbagebeyond.R
 import com.github.mikephil.charting.formatter.ValueFormatter
+import org.koin.android.ext.android.inject
 
 
 class CharacterDetailsFragment : DetailsFragment() {

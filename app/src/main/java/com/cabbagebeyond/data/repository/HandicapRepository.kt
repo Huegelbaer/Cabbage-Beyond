@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.HandicapDataSource
-import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.remote.dto.HandicapDTO
 import com.cabbagebeyond.data.local.dao.HandicapDao
 import com.cabbagebeyond.data.local.entities.HandicapEntity
@@ -16,7 +15,6 @@ import kotlinx.coroutines.withContext
 class HandicapRepository(
     private val handicapDao: HandicapDao,
     private val handicapService: HandicapService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : HandicapDataSource {
 
@@ -69,12 +67,6 @@ class HandicapRepository(
     }
 }
 
-private fun List<HandicapWithWorld>.asDomainModel(): List<Handicap> {
-    return map { handicap ->
-        handicap.asDomainModel()
-    }
-}
-
 private fun HandicapWithWorld.asDomainModel(): Handicap {
     return handicap.asDomainModel(world)
 }
@@ -87,12 +79,6 @@ fun HandicapEntity.asDomainModel(worldEntity: WorldEntity?): Handicap {
         worldEntity?.asDomainModel(),
         id
     )
-}
-
-private fun List<Handicap>.asDatabaseModel(): List<HandicapEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
 }
 
 private fun Handicap.asDatabaseModel(): HandicapEntity {

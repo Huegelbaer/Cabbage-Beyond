@@ -55,24 +55,12 @@ class RoleRepository(
     }
 }
 
-private fun List<RoleDTO>.asDomainModel(): List<Role> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
 private fun RoleDTO.asDomainModel(): Role {
     return Role(name, features, id)
 }
 
 fun RoleEntity.asDomainModel(): Role {
     return Role(name, features, id)
-}
-
-private fun List<Role>.asDatabaseModel(): List<RoleEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
 }
 
 private fun Role.asDatabaseModel(): RoleEntity {

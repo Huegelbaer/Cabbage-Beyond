@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.RaceDataSource
-import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.remote.dto.RaceDTO
 import com.cabbagebeyond.data.local.dao.RaceDao
 import com.cabbagebeyond.data.local.entities.RaceEntity
@@ -18,7 +17,6 @@ import kotlinx.coroutines.withContext
 class RaceRepository(
     private val raceDao: RaceDao,
     private val raceService: RaceService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RaceDataSource {
 
@@ -82,12 +80,6 @@ private fun Race.asDatabaseModel(): RaceEntity {
     return RaceEntity(name, description, world?.id ?: "", id)
 }
 
-private fun List<RaceWithWorld>.asDomainModel(): List<Race> {
-    return map {
-        it.asDomainModel()
-    }
-}
-
 private fun RaceWithWorld.asDomainModel(): Race {
     return race.asDomainModel(world)
 }
@@ -100,8 +92,4 @@ fun RaceEntity.asDomainModel(worldEntity: WorldEntity?): Race {
         worldEntity?.asDomainModel(),
         id
     )
-}
-
-private fun RaceFeatureEntity.asDomainModel(): Race.Feature {
-    return Race.Feature(description, name, id)
 }

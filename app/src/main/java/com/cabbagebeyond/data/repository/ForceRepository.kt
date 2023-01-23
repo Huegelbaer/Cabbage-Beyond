@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.ForceDataSource
-import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.remote.dto.ForceDTO
 import com.cabbagebeyond.data.local.asDatabaseModel
 import com.cabbagebeyond.data.local.asDomainModel
@@ -19,7 +18,6 @@ import kotlinx.coroutines.withContext
 class ForceRepository(
     private val forceDao: ForceDao,
     private val forceService: ForceService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : ForceDataSource {
 
@@ -68,14 +66,6 @@ class ForceRepository(
             }
         }
     }
-
-}
-
-
-private fun List<ForceWithWorld>.asDomainModel(): List<Force> {
-    return map { force ->
-        force.asDomainModel()
-    }
 }
 
 private fun ForceWithWorld.asDomainModel(): Force {
@@ -94,12 +84,6 @@ fun ForceEntity.asDomainModel(worldEntity: WorldEntity?): Force {
         worldEntity?.asDomainModel(),
         id
     )
-}
-
-private fun List<Force>.asDatabaseModel(): List<ForceEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
 }
 
 private fun Force.asDatabaseModel(): ForceEntity {

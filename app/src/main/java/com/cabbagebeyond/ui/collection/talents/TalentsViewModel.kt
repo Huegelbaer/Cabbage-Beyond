@@ -63,8 +63,8 @@ class TalentsViewModel(
 
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val types = _talents.mapNotNull { talent -> talent.type?.let { TalentType.create(it, app) } }.toSet().toList()
-        val ranks = _talents.mapNotNull { talent -> talent.rangRequirement?.let { TalentRank.create(it, app) } }.toSet().toList()
+        val types = _talents.mapNotNull { talent -> talent.type.let { TalentType.create(it, app) } }.toSet().toList()
+        val ranks = _talents.mapNotNull { talent -> talent.rangRequirement.let { TalentRank.create(it, app) } }.toSet().toList()
         val worlds = _talents.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(

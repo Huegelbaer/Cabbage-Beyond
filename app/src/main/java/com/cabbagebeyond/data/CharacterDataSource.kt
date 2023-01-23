@@ -3,10 +3,6 @@ package com.cabbagebeyond.data
 import com.cabbagebeyond.model.Character
 
 interface CharacterDataSource {
-    
-    //fun observeCharacters(): LiveData<Result<List<Character>>>
-
-    //fun observeCharacter(id: String): LiveData<Result<Character>>
 
     suspend fun getCharacters(): Result<List<Character>>
 

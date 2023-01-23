@@ -62,7 +62,7 @@ class ForcesViewModel(
 
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val ranks = _forces.mapNotNull { force -> force.rangRequirement?.let { ForceRank.create(it, application) } }.toSet().toList()
+        val ranks = _forces.mapNotNull { force -> force.rangRequirement.let { ForceRank.create(it, application) } }.toSet().toList()
         val worlds = _forces.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(

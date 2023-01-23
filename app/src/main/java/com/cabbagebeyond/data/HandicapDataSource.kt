@@ -3,10 +3,6 @@ package com.cabbagebeyond.data
 import com.cabbagebeyond.model.Handicap
 
 interface HandicapDataSource {
-    
-    //fun observeHandicaps(): LiveData<Result<List<Handicap>>>
-
-    //fun observeHandicap(id: String): LiveData<Result<Handicap>>
 
     suspend fun getHandicaps(): Result<List<Handicap>>
 

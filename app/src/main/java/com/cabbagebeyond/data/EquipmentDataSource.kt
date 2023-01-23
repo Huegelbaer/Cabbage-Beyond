@@ -4,10 +4,6 @@ import com.cabbagebeyond.model.Equipment
 
 interface EquipmentDataSource {
 
-    //fun observeEquipments(): LiveData<Result<List<Equipment>>>
-
-    //fun observeEquipment(id: String): LiveData<Result<Equipment>>
-
     suspend fun getEquipments(): Result<List<Equipment>>
 
     suspend fun getEquipments(ids: List<String>): Result<List<Equipment>>

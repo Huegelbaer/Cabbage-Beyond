@@ -14,13 +14,6 @@ import kotlinx.coroutines.withContext
 class CharacterRepository(
     private val characterDao: CharacterDao,
     private val characterService: CharacterService,
-    private val abilityDataSource: AbilityDataSource,
-    private val equipmentDataSource: EquipmentDataSource,
-    private val forceDataSource: ForceDataSource,
-    private val handicapDataSource: HandicapDataSource,
-    private val raceDataSource: RaceDataSource,
-    private val talentDataSource: TalentDataSource,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : CharacterDataSource {
 

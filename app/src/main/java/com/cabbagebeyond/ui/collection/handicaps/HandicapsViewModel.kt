@@ -62,7 +62,7 @@ class HandicapsViewModel(
 
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val types = _handicaps.mapNotNull { handicap -> handicap.type?.let { HandicapType.create(it, application) } }.toSet().toList()
+        val types = _handicaps.mapNotNull { handicap -> handicap.type.let { HandicapType.create(it, application) } }.toSet().toList()
         val worlds = _handicaps.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(

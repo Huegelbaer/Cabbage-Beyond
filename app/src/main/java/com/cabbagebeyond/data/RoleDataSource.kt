@@ -3,10 +3,6 @@ package com.cabbagebeyond.data
 import com.cabbagebeyond.model.Role
 
 interface RoleDataSource {
-    
-    //fun observeRoles(): LiveData<Result<List<Role>>>
-
-    //fun observeRole(id: String): LiveData<Result<Role>>
 
     suspend fun getRoles(): Result<List<Role>>
 

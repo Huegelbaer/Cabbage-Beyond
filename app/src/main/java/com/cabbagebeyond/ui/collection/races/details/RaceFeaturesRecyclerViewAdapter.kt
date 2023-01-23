@@ -9,7 +9,7 @@ import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.ui.CollectionDiffCallback
 
 
-class RaceFeaturesRecyclerViewAdapter() :
+class RaceFeaturesRecyclerViewAdapter :
     ListAdapter<Race.Feature, RaceFeaturesRecyclerViewAdapter.ViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

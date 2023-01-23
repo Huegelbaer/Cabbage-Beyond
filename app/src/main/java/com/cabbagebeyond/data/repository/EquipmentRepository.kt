@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.EquipmentDataSource
-import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.local.dao.EquipmentDao
 import com.cabbagebeyond.data.remote.dto.EquipmentDTO
 import com.cabbagebeyond.data.local.entities.EquipmentEntity
@@ -15,7 +14,6 @@ import kotlinx.coroutines.withContext
 class EquipmentRepository(
     private val equipmentDao: EquipmentDao,
     private val equipmentService: EquipmentService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : EquipmentDataSource {
 
@@ -68,12 +66,6 @@ class EquipmentRepository(
 
 private fun EquipmentDTO.asDatabaseModel(): EquipmentEntity {
     return EquipmentEntity(name, description, cost, weight, requirements.split(", "), valueToEquipmentType(type), world, id)
-}
-
-private fun List<Equipment>.asDatabaseModel(): List<EquipmentEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
 }
 
 private fun Equipment.asDatabaseModel(): EquipmentEntity {

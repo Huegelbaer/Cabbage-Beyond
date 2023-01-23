@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.TalentDataSource
-import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.remote.dto.TalentDTO
 import com.cabbagebeyond.data.local.asDatabaseModel
 import com.cabbagebeyond.data.local.asDomainModel
@@ -19,7 +18,6 @@ import kotlinx.coroutines.withContext
 class TalentRepository(
     private val talentDao: TalentDao,
     private val talentService: TalentService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : TalentDataSource {
 
@@ -82,12 +80,6 @@ private fun TalentDTO.asDatabaseModel(): TalentEntity {
     )
 }
 
-private fun List<Talent>.asDatabaseModel(): List<TalentEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
 private fun Talent.asDatabaseModel(): TalentEntity {
     return TalentEntity(
         name,
@@ -98,12 +90,6 @@ private fun Talent.asDatabaseModel(): TalentEntity {
         world?.id ?: "",
         id
     )
-}
-
-private fun List<TalentWithWorld>.asDomainModel(): List<Talent> {
-    return map {
-        it.asDomainModel()
-    }
 }
 
 private fun TalentWithWorld.asDomainModel(): Talent {

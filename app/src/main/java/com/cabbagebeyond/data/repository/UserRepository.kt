@@ -85,12 +85,6 @@ fun UserEntity.asDomainModel(roles: List<Role>): User {
     return User(username, email, features, roles, id)
 }
 
-private fun List<User>.asDatabaseModel(): List<UserEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
-}
-
 private fun User.asDatabaseModel(): UserEntity {
     return UserEntity(name, email, features, roles.map { it.id }, id)
 }

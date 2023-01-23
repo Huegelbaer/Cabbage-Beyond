@@ -1,7 +1,6 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.AbilityDataSource
-import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.data.remote.dto.AbilityDTO
 import com.cabbagebeyond.data.local.dao.AbilityDao
 import com.cabbagebeyond.data.local.entities.AbilityEntity
@@ -16,7 +15,6 @@ import kotlinx.coroutines.withContext
 class AbilityRepository(
     private val abilityDao: AbilityDao,
     private val abilityService: AbilityService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : AbilityDataSource {
 
@@ -70,12 +68,6 @@ class AbilityRepository(
 private fun AbilityDTO.asDatabaseModel(): AbilityEntity {
     val attribute = valueToAbilityAttribute(attribute)
     return AbilityEntity(name, description, attribute, world, id)
-}
-
-private fun List<Ability>.asDatabaseModel(): List<AbilityEntity> {
-    return map {
-        it.asDatabaseModel()
-    }
 }
 
 private fun Ability.asDatabaseModel(): AbilityEntity {
