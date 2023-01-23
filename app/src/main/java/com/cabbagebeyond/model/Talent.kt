@@ -39,7 +39,6 @@ data class Talent(
         STRENGTH
     }
 
-
     constructor(parcel: Parcel) : this(
         parcel.readString()!!,
         parcel.readString()!!,
@@ -49,6 +48,8 @@ data class Talent(
         parcel.readParcelable(World::class.java.classLoader)!!,
         parcel.readString()!!
     )
+
+    constructor(id: String): this("", "", Rank.ROOKIE, listOf(), Type.BACKGROUND, null, id)
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)

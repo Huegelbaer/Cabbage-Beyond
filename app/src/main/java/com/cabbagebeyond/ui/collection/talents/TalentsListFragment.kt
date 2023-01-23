@@ -45,6 +45,10 @@ class TalentsListFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addTalent()
+        }
+
         setupViewModelObservers()
 
         setHasOptionsMenu(true)
@@ -63,7 +67,13 @@ class TalentsListFragment : CollectionListFragment() {
 
         _viewModel.selectedTalent.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it)
+                showDetails(it.first, it.second)
+            }
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
             }
         }
 
@@ -120,8 +130,8 @@ class TalentsListFragment : CollectionListFragment() {
         dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
-    private fun showDetails(talent: Talent) {
-        findNavController().navigate(TalentsListFragmentDirections.actionTalentsToDetails(talent))
+    private fun showDetails(talent: Talent, startEditing: Boolean) {
+        findNavController().navigate(TalentsListFragmentDirections.actionTalentsToDetails(talent, startEditing))
         _viewModel.onNavigationCompleted()
     }
 }

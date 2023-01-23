@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class TalentsViewModel(
     user: User,
@@ -33,8 +34,8 @@ class TalentsViewModel(
     val items: LiveData<List<Talent>>
         get() = _items
 
-    private var _selectedTalent = MutableLiveData<Talent?>()
-    val selectedTalent: LiveData<Talent?>
+    private var _selectedTalent = MutableLiveData<Pair<Talent, Boolean>?>()
+    val selectedTalent: LiveData<Pair<Talent, Boolean>?>
         get() = _selectedTalent
 
     private var _interaction = MutableLiveData<Interaction?>()
@@ -54,7 +55,11 @@ class TalentsViewModel(
     }
 
     fun onTalentClicked(talent: Talent) {
-        _selectedTalent.value = talent
+        _selectedTalent.value = Pair(talent, false)
+    }
+
+    fun addTalent() {
+        _selectedTalent.value = Pair(Talent(UUID.randomUUID().toString()), true)
     }
 
     fun onNavigationCompleted() {

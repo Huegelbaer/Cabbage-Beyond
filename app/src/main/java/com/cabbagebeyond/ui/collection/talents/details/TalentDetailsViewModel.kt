@@ -97,18 +97,26 @@ class TalentDetailsViewModel(
     override fun onSave() {
         super.onSave()
         talent.value?.let {
-            save(it)
+            if (verify(it)) {
+                save(it)
+            } else {
+                onSaveFailed()
+            }
         }
+    }
+
+    private fun verify(talent: Talent): Boolean {
+        return talent.name.isNotBlank()
     }
 
     private fun save(toSafe: Talent) {
         viewModelScope.launch {
             val result = _talentDataSource.saveTalent(toSafe)
             if (result.isSuccess) {
-                message.value = R.string.save_completed
+                onSaveSucceeded()
                 talent.value = toSafe
             } else {
-                message.value = R.string.save_failed
+                onSaveFailed()
             }
         }
     }

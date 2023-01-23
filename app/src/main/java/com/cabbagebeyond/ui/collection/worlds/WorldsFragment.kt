@@ -42,7 +42,9 @@ class WorldsFragment : CollectionListFragment() {
             adapter = _adapter
         }
 
-        _binding.floatingActionButton.setOnClickListener { _viewModel.addWorld() }
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addWorld()
+        }
 
         setupViewModelObservers()
 
