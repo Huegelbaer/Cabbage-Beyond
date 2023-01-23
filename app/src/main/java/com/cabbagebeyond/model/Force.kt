@@ -8,7 +8,7 @@ data class Force(
     var description: String,
     var cost: String,
     var duration: String,
-    var rangRequirement: Rank?,
+    var rangRequirement: Rank,
     var range: String,
     var shaping: String,
     var world: World?,

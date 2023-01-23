@@ -5,9 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.cabbagebeyond.R
+import com.cabbagebeyond.model.User
+import com.cabbagebeyond.util.Feature
 import kotlin.reflect.KProperty1
 
-abstract class CollectionListViewModel(app: Application) : AndroidViewModel(app) {
+abstract class CollectionListViewModel(private val user: User, app: Application) : AndroidViewModel(app) {
 
     class FilterData<T: Any>(var title: String, var values: List<T>, var selected: T?, var titleProperty: KProperty1<T, String>)
 
@@ -16,6 +18,14 @@ abstract class CollectionListViewModel(app: Application) : AndroidViewModel(app)
     private var _emptyListState = MutableLiveData<EmptyListState?>()
     val emptyListState: LiveData<EmptyListState?>
         get() = _emptyListState
+
+    private val _userCanAddNewContent = MutableLiveData<Boolean>()
+    val userCanAddNewContent: LiveData<Boolean>
+        get() = _userCanAddNewContent
+
+    init {
+        _userCanAddNewContent.value = user.features.contains(Feature.CONFIGURE_APP.name)
+    }
 
     protected fun showNoContentAvailable() {
         val resources = getApplication<Application>().resources

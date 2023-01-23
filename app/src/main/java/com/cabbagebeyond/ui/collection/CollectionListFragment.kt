@@ -2,14 +2,11 @@ package com.cabbagebeyond.ui.collection
 
 import android.app.SearchManager
 import android.content.Context
-import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.*
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.cabbagebeyond.R
-import com.google.android.material.chip.Chip
-import com.google.android.material.chip.ChipGroup
 
 abstract class CollectionListFragment : Fragment() {
 

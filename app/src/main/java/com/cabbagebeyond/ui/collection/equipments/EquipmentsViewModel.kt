@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.model.Equipment
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class EquipmentsViewModel(
+    user: User,
     application: Application,
     private val equipmentDataSource: EquipmentDataSource
-) : CollectionListViewModel(application) {
+) : CollectionListViewModel(user, application) {
 
     object Filter {
         var selectedType: EquipmentType? = null

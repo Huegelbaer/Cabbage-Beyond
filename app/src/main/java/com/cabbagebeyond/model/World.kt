@@ -17,6 +17,8 @@ data class World(
         parcel.readString()!!
     )
 
+    constructor(id: String): this("", null, "", id)
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(description)

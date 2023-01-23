@@ -16,11 +16,12 @@ import kotlinx.coroutines.launch
 
 class RaceDetailsViewModel(
     givenRace: Race,
+    isEditingActive: Boolean,
     private val _raceDataSource: RaceDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     var race = MutableLiveData(givenRace)
 
@@ -28,12 +29,18 @@ class RaceDetailsViewModel(
     val worlds: LiveData<List<World?>>
         get() = _worlds
 
+    private var _features = MutableLiveData<List<Race.Feature>>()
+    val features: LiveData<List<Race.Feature>>
+        get() = _features
+
 
     init {
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        _features.value = givenRace.raceFeatures
     }
 
     override fun onEdit() {
@@ -52,7 +59,7 @@ class RaceDetailsViewModel(
     }
 
     private fun loadRanks() {
-
+        //TODO: Load ranks
     }
 
     override fun onSave() {

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.data.RaceDataSource
 import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentRaceDetailsBinding
@@ -23,6 +24,7 @@ class RaceDetailsFragment : DetailsFragment() {
         get() = viewModel as RaceDetailsViewModel
 
     private lateinit var _binding: FragmentRaceDetailsBinding
+    private lateinit var _adapter: RaceFeaturesRecyclerViewAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,11 +38,18 @@ class RaceDetailsFragment : DetailsFragment() {
         val dataSource: RaceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = RaceDetailsViewModel(
-            race, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            race, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel
         _binding.lifecycleOwner = this
+
+        _adapter = RaceFeaturesRecyclerViewAdapter()
+
+        _binding.featureList.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = _adapter
+        }
 
         _viewModel.fabImage.observe(viewLifecycleOwner) {
             it?.let {
@@ -52,6 +61,10 @@ class RaceDetailsFragment : DetailsFragment() {
             it?.let { isEditing ->
                 toggleVisibility(_binding.readGroup, _binding.editGroup, isEditing)
             }
+        }
+
+        _viewModel.features.observe(viewLifecycleOwner) {
+            _adapter.submitList(it)
         }
 
         _viewModel.worlds.observe(viewLifecycleOwner) {

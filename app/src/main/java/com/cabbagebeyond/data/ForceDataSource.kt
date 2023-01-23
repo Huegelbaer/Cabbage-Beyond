@@ -4,10 +4,6 @@ import com.cabbagebeyond.model.Force
 
 interface ForceDataSource {
 
-    //fun observeForces(): LiveData<Result<List<Force>>>
-
-    //fun observeForce(id: String): LiveData<Result<Force>>
-
     suspend fun getForces(): Result<List<Force>>
 
     suspend fun getForces(ids: List<String>): Result<List<Force>>
@@ -16,13 +12,13 @@ interface ForceDataSource {
 
     suspend fun saveForce(force: Force): Result<Boolean>
 
-    suspend fun deleteForce(id: String): Result<Boolean>
+    suspend fun deleteForce(force: Force): Result<Boolean>
 
     /*
         REMOTE
     */
 
-    suspend fun refreshForces(): Result<Boolean>
+    suspend fun refreshForces()
 
-    suspend fun refreshForce(id: String): Result<Boolean>
+    suspend fun refreshForce(id: String)
 }

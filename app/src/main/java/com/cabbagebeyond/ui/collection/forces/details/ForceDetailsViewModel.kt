@@ -18,11 +18,12 @@ import kotlinx.coroutines.launch
 
 class ForceDetailsViewModel(
     givenForce: Force,
+    isEditingActive: Boolean,
     private val _forceDataSource: ForceDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     data class RankSelection(var selected: ForceRank?, var values: List<ForceRank>)
     data class WorldSelection(var selected: World?, var values: List<World?>)

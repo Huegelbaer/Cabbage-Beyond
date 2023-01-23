@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.model.Ability
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class AbilitiesViewModel(
+    user: User,
     private val app: Application,
     private val abilityDataSource: AbilityDataSource
-) : CollectionListViewModel(app) {
+) : CollectionListViewModel(user, app) {
 
     object Filter {
         var selectedAttribute: AbilityAttribute? = null

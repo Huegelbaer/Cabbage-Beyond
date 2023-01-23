@@ -12,6 +12,7 @@ import com.cabbagebeyond.data.TalentDataSource
 import com.cabbagebeyond.databinding.FragmentTalentsListBinding
 import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -32,7 +33,7 @@ class TalentsListFragment : CollectionListFragment() {
         _binding = FragmentTalentsListBinding.inflate(inflater)
 
         val dataSource: TalentDataSource by inject()
-        viewModel = TalentsViewModel(requireActivity().application, dataSource)
+        viewModel = TalentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = TalentClickListener {
             _viewModel.onTalentClicked(it)

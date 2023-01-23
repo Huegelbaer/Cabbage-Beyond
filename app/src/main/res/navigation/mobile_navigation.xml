@@ -38,6 +38,10 @@
         <action
             android:id="@+id/action_worldDetails_to_ocr"
             app:destination="@id/ocr" />
+        <argument
+            android:name="isEditing"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/nav_admin_panel"

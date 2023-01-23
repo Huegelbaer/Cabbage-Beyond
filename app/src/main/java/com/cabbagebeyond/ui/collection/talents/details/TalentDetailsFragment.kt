@@ -38,7 +38,7 @@ class TalentDetailsFragment : DetailsFragment() {
         val dataSource: TalentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = TalentDetailsViewModel(
-            talent, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            talent, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

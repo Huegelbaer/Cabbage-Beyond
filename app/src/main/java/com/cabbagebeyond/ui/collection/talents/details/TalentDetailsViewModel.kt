@@ -16,11 +16,12 @@ import kotlinx.coroutines.launch
 
 class TalentDetailsViewModel(
     givenTalent: Talent,
+    isEditingActive: Boolean,
     private val _talentDataSource: TalentDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     data class RankSelection(var selected: TalentRank?, var values: List<TalentRank>)
     data class TypeSelection(var selected: TalentType?, var values: List<TalentType>)

@@ -14,10 +14,11 @@ import kotlinx.coroutines.launch
 
 class CharacterDetailsViewModel(
     givenCharacter: Character,
+    isEditingActive: Boolean,
     private val _characterDataSource: CharacterDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     sealed class Item(val title: String)
     class HeaderItem(title: String, val icon: Int, var items: MutableList<ListItem>): Item(title)
@@ -97,7 +98,7 @@ class CharacterDetailsViewModel(
     }
 
     fun show(listItem: ListItem) {
-
+        // TODO: Show list item
     }
 
     override fun onPropertiesReceived(properties: Array<CollectionProperty>) {

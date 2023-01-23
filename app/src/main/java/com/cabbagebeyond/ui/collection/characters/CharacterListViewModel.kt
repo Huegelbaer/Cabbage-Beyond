@@ -6,14 +6,16 @@ import com.cabbagebeyond.R
 import com.cabbagebeyond.data.*
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class CharacterListViewModel(
+    user: User,
     private val app: Application,
     private val characterDataSource: CharacterDataSource
-) : CollectionListViewModel(app) {
+) : CollectionListViewModel(user, app) {
 
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE

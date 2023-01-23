@@ -37,7 +37,7 @@ class ForceDetailsFragment : DetailsFragment() {
         val dataSource: ForceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = ForceDetailsViewModel(
-            force, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            force, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

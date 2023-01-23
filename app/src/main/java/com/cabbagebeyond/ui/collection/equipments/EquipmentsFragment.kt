@@ -12,6 +12,7 @@ import com.cabbagebeyond.data.EquipmentDataSource
 import com.cabbagebeyond.databinding.FragmentEquipmentsListBinding
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -32,7 +33,7 @@ class EquipmentsFragment : CollectionListFragment() {
         _binding = FragmentEquipmentsListBinding.inflate(inflater)
 
         val dataSource: EquipmentDataSource by inject()
-        viewModel = EquipmentsViewModel(requireActivity().application, dataSource)
+        viewModel = EquipmentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = EquipmentClickListener {
             _viewModel.onEquipmentClicked(it)

@@ -45,10 +45,8 @@ class UserService {
     }
 
     private suspend fun loadCurrentUser(email: String): User {
-        val result = scope.async {
-            dataSource.getUserByEmail(email)
-        }.await()
-        return result.getOrDefault(backupUser(email))
+        val result = dataSource.getUserByEmail(email)
+        return result.getOrNull() ?: backupUser(email)
     }
 
     private fun backupUser(email: String): User {

@@ -7,14 +7,16 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.model.Force
+import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
 class ForcesViewModel(
+    user: User,
     application: Application,
     private val forceDataSource: ForceDataSource
-) : CollectionListViewModel(application) {
+) : CollectionListViewModel(user, application) {
 
     object Filter {
         var selectedRank: ForceRank? = null
@@ -60,7 +62,7 @@ class ForcesViewModel(
 
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val ranks = _forces.mapNotNull { force -> force.rangRequirement?.let { ForceRank.create(it, application) } }.toSet().toList()
+        val ranks = _forces.mapNotNull { force -> force.rangRequirement.let { ForceRank.create(it, application) } }.toSet().toList()
         val worlds = _forces.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(

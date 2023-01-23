@@ -18,16 +18,19 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         Log.d(TAG, "doWork")
 
         return try {
+            refreshRoles()
+            refreshUsers()
+
+            refreshWorlds()
             refreshAbilities()
-            refreshCharacters()
             refreshEquipments()
             refreshForces()
             refreshHandicaps()
             refreshRaces()
-            refreshRoles()
             refreshTalents()
-            refreshUsers()
-            refreshWorlds()
+            refreshCharacters()
+
+            refreshStories()
 
             Log.d(TAG, "success")
             Result.success()
@@ -40,32 +43,32 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
 
     private suspend fun refreshAbilities() {
         val abilityDataSource: AbilityDataSource by inject(AbilityDataSource::class.java)
-        abilityDataSource.refreshAbilities().onFailure { throw it }
+        abilityDataSource.refreshAbilities()
     }
 
     private suspend fun refreshCharacters() {
         val characterDataSource: CharacterDataSource by inject(CharacterDataSource::class.java)
-        characterDataSource.refreshCharacters().onFailure { throw it }
+        characterDataSource.refreshCharacters()
     }
 
     private suspend fun refreshEquipments() {
         val equipmentDataSource: EquipmentDataSource by inject(EquipmentDataSource::class.java)
-        equipmentDataSource.refreshEquipments().onFailure { throw it }
+        equipmentDataSource.refreshEquipments()
     }
 
     private suspend fun refreshForces() {
         val forceDataSource: ForceDataSource by inject(ForceDataSource::class.java)
-        forceDataSource.refreshForces().onFailure { throw it }
+        forceDataSource.refreshForces()
     }
 
     private suspend fun refreshHandicaps() {
         val handicapDataSource: HandicapDataSource by inject(HandicapDataSource::class.java)
-        handicapDataSource.refreshHandicaps().onFailure { throw it }
+        handicapDataSource.refreshHandicaps()
     }
 
     private suspend fun refreshRaces() {
         val raceDataSource: RaceDataSource by inject(RaceDataSource::class.java)
-        raceDataSource.refreshRaces().onFailure { throw it }
+        raceDataSource.refreshRaces()
     }
 
     private suspend fun refreshRoles() {
@@ -88,6 +91,10 @@ class RefreshDataWorker(appContext: Context, params: WorkerParameters):
         worldDataSource.refreshWorlds()
     }
 
+    private suspend fun refreshStories() {
+        val storyDataSource: StoryDataSource by inject(StoryDataSource::class.java)
+        storyDataSource.refreshStories()
+    }
 }
 
 fun startRefreshWorker(context: Context) {

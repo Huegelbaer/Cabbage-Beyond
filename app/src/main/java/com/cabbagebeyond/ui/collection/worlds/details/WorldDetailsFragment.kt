@@ -27,10 +27,11 @@ class WorldDetailsFragment : DetailsFragment() {
         _binding = FragmentWorldDetailsBinding.inflate(inflater)
 
         val world = WorldDetailsFragmentArgs.fromBundle(requireArguments()).world
+        val isEditing = WorldDetailsFragmentArgs.fromBundle(requireArguments()).isEditing
 
         val dataSource: WorldDataSource by inject()
         viewModel = WorldDetailsViewModel(
-            world, dataSource, UserService.currentUser, requireActivity().application
+            world, isEditing, dataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

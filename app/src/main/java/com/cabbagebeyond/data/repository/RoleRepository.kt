@@ -1,10 +1,10 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.RoleDataSource
-import com.cabbagebeyond.data.dao.RoleDao
-import com.cabbagebeyond.data.dto.asDatabaseModel
-import com.cabbagebeyond.data.dto.asDomainModel
-import com.cabbagebeyond.data.remote.RoleService
+import com.cabbagebeyond.data.remote.dto.RoleDTO
+import com.cabbagebeyond.data.local.dao.RoleDao
+import com.cabbagebeyond.data.local.entities.RoleEntity
+import com.cabbagebeyond.data.remote.service.RoleService
 import com.cabbagebeyond.model.Role
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -17,26 +17,52 @@ class RoleRepository(
 ) : RoleDataSource {
 
     override suspend fun getRoles(): Result<List<Role>> = withContext(ioDispatcher) {
-        return@withContext roleDao.getRoles().mapCatching { it.asDomainModel() }
+        val result = roleDao.getRoles()
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
     override suspend fun getRole(id: String): Result<Role> = withContext(ioDispatcher) {
-        return@withContext roleDao.getRole(id).mapCatching { it.asDomainModel() }
+        val result = roleDao.getRole(id)
+        val role = result.asDomainModel()
+        return@withContext Result.success(role)
     }
 
     override suspend fun saveRole(role: Role) = withContext(ioDispatcher) {
         roleDao.saveRole(role.asDatabaseModel())
     }
 
-    override suspend fun deleteRole(id: String) = withContext(ioDispatcher) {
-        roleDao.deleteRole(id)
+    override suspend fun deleteRole(role: Role) = withContext(ioDispatcher) {
+        roleDao.deleteRole(role.asDatabaseModel())
     }
 
-    override suspend fun refreshRoles(): Result<Boolean> = withContext(ioDispatcher) {
-        roleService.refreshRoles()
+    override suspend fun refreshRoles() = withContext(ioDispatcher) {
+        val result = roleService.refreshRoles()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                saveRole(it.asDomainModel())
+            }
+        }
     }
 
-    override suspend fun refreshRole(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        roleService.refreshRole(id)
+    override suspend fun refreshRole(id: String) = withContext(ioDispatcher) {
+        val result = roleService.refreshRole(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                saveRole(it.asDomainModel())
+            }
+        }
     }
+}
+
+private fun RoleDTO.asDomainModel(): Role {
+    return Role(name, features, id)
+}
+
+fun RoleEntity.asDomainModel(): Role {
+    return Role(name, features, id)
+}
+
+private fun Role.asDatabaseModel(): RoleEntity {
+    return RoleEntity(name, features, id)
 }

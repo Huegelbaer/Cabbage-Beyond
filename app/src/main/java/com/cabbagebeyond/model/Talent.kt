@@ -8,35 +8,35 @@ import kotlinx.parcelize.Parcelize
 data class Talent(
     var name: String,
     var description: String,
-    var rangRequirement: Rank?,
+    var rangRequirement: Rank,
     var requirements: List<String>,
-    var type: Type?,
+    var type: Type,
     var world: World?,
     val id: String
 ): Parcelable {
 
     @Parcelize
-    enum class Type(val value: String) : Parcelable {
-        BACKGROUND("Hintergrundtalent"),
-        LEADER("Anführertalent"),
-        EXPERT("Expertentalent"),
-        FIGHT("Kampftalent"),
-        FORCE("Machttalent"),
-        RACE("Rassentalent"),
-        SOCIAL("Soziales Talent"),
-        SUPERNATURAL("Übernatürliches Talent"),
-        WILDCARD("Wildcard Talent"),
-        LEGENDARY("Legendäres Talent"),
-        DRAGON("Drachentalent"),
-        ATHLETIC("Athletiktalent"),
-        PERCEPTION("Wahrnehmungstalent"),
-        ILLUSION("Täuschungstalent"),
-        PROVOKE("Provozierentalent"),
-        THIEVERY("Diebeskunsttalent"),
-        STEALTH("Heimlichkeitstalent"),
-        TERRITORY("Reviertalent"),
-        INTELLECT("Verstandstalent"),
-        STRENGTH("Krafttalent")
+    enum class Type : Parcelable {
+        BACKGROUND,
+        LEADER,
+        EXPERT,
+        FIGHT,
+        FORCE,
+        RACE,
+        SOCIAL,
+        SUPERNATURAL,
+        WILDCARD,
+        LEGENDARY,
+        DRAGON,
+        ATHLETIC,
+        PERCEPTION,
+        ILLUSION,
+        PROVOKE,
+        THIEVERY,
+        STEALTH,
+        TERRITORY,
+        INTELLECT,
+        STRENGTH
     }
 
 

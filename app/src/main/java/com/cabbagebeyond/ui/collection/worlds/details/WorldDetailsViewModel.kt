@@ -13,10 +13,11 @@ import kotlinx.coroutines.launch
 
 class WorldDetailsViewModel(
     givenWorld: World,
+    isEditingActive: Boolean,
     private val worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     var world = MutableLiveData(givenWorld)
 
@@ -29,21 +30,28 @@ class WorldDetailsViewModel(
 
     override fun onSave() {
         super.onSave()
-        world.value?.let {
-            save(it)
+
+        val toSafe = world.value ?: return
+        viewModelScope.launch {
+            if (save(toSafe)) {
+                world.value = toSafe
+                onSaveSucceeded()
+            } else {
+                onSaveFailed()
+            }
         }
     }
 
-    private fun save(toSafe: World) {
-        viewModelScope.launch {
-            val result = worldDataSource.saveWorld(toSafe)
-            if (result.isSuccess) {
-                message.value = R.string.save_completed
-                world.value = toSafe
-            } else {
-                message.value = R.string.save_failed
-            }
+    private suspend fun save(toSafe: World): Boolean {
+        if (!validate(toSafe)) {
+            message.value = R.string.save_failed
+            return false
         }
+        return worldDataSource.saveWorld(toSafe).isSuccess
+    }
+
+    private fun validate(world: World): Boolean {
+        return world.name.isNotBlank()
     }
 
     override fun onPropertiesReceived(properties: Array<CollectionProperty>) {

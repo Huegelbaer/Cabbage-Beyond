@@ -10,6 +10,7 @@ import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.databinding.FragmentAbilitiesListBinding
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.World
+import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
@@ -29,7 +30,7 @@ class AbilitiesListFragment : CollectionListFragment() {
         _binding = FragmentAbilitiesListBinding.inflate(inflater)
 
         val dataSource: AbilityDataSource by inject()
-        viewModel = AbilitiesViewModel(requireActivity().application, dataSource)
+        viewModel = AbilitiesViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = AbilityClickListener {
             _viewModel.onAbilityClicked(it)

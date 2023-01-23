@@ -1,12 +1,15 @@
 package com.cabbagebeyond.data.repository
 
 import com.cabbagebeyond.data.RaceDataSource
-import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.data.dao.RaceDao
-import com.cabbagebeyond.data.dto.RaceDTO
-import com.cabbagebeyond.data.remote.RaceService
+import com.cabbagebeyond.data.remote.dto.RaceDTO
+import com.cabbagebeyond.data.local.dao.RaceDao
+import com.cabbagebeyond.data.local.entities.RaceEntity
+import com.cabbagebeyond.data.local.entities.RaceFeatureEntity
+import com.cabbagebeyond.data.local.entities.WorldEntity
+import com.cabbagebeyond.data.local.relations.RaceFeatureCrossRef
+import com.cabbagebeyond.data.local.relations.RaceWithWorld
+import com.cabbagebeyond.data.remote.service.RaceService
 import com.cabbagebeyond.model.Race
-import com.cabbagebeyond.model.World
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -14,68 +17,79 @@ import kotlinx.coroutines.withContext
 class RaceRepository(
     private val raceDao: RaceDao,
     private val raceService: RaceService,
-    private val worldDataSource: WorldDataSource,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) : RaceDataSource {
 
     override suspend fun getRaces(): Result<List<Race>> = withContext(ioDispatcher) {
         val result = raceDao.getRaces()
-        return@withContext mapList(result)
+        val list = result.map { it.asDomainModel() }
+        return@withContext Result.success(list)
     }
 
     override suspend fun getRace(id: String): Result<Race> = withContext(ioDispatcher) {
         val result = raceDao.getRace(id)
-        return@withContext map(result)
+        return@withContext Result.success(result.asDomainModel())
     }
 
     override suspend fun saveRace(race: Race): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext raceDao.saveRace(race.asDatabaseModel())
+        raceDao.saveRace(race.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun deleteRace(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        return@withContext raceDao.deleteRace(id)
+    override suspend fun deleteRace(race: Race): Result<Boolean> = withContext(ioDispatcher) {
+        raceDao.deleteRace(race.asDatabaseModel())
+        return@withContext Result.success(true)
     }
 
-    override suspend fun refreshRaces(): Result<Boolean> = withContext(ioDispatcher) {
-        raceService.refreshRaces()
-    }
-
-    override suspend fun refreshRace(id: String): Result<Boolean> = withContext(ioDispatcher) {
-        raceService.refreshRace(id)
-    }
-
-    private suspend fun mapList(result: Result<List<RaceDTO>>): Result<List<Race>> {
-        val worlds = worldDataSource.getWorlds().getOrDefault(listOf())
-        return result.mapCatching {
-            it.asDomainModel(worlds)
+    override suspend fun refreshRaces() = withContext(ioDispatcher) {
+        val result = raceService.refreshRaces()
+        if (result.isSuccess) {
+            result.getOrNull()?.forEach {
+                save(it)
+            }
         }
     }
 
-    private suspend fun map(result: Result<RaceDTO>): Result<Race> {
-        return result.mapCatching {
-            val world = worldDataSource.getWorld(it.world).getOrNull()
-            it.asDomainModel(world)
+    override suspend fun refreshRace(id: String) = withContext(ioDispatcher) {
+        val result = raceService.refreshRace(id)
+        if (result.isSuccess) {
+            result.getOrNull()?.let {
+                save(it)
+            }
         }
     }
-}
 
-
-fun List<RaceDTO>.asDomainModel(worlds: List<World>): List<Race> {
-    return map { race ->
-        race.asDomainModel(worlds.firstOrNull { it.id == race.world })
+    private suspend fun save(raceDTO: RaceDTO) {
+        val race = raceDTO.asDatabaseModel()
+        val features = raceDTO.raceFeatures.map { it.asDatabaseModel() }
+        raceDao.saveRace(race)
+        raceDao.saveFeatures(features)
+        raceDao.saveRaceFeatures(features.map { RaceFeatureCrossRef(race.id, it.id) })
     }
 }
 
-fun RaceDTO.asDomainModel(world: World?): Race {
-    return Race(name, description, raceFeatures, world, id)
+private fun RaceDTO.asDatabaseModel(): RaceEntity {
+    return RaceEntity(name, description, world, id)
 }
 
-fun List<Race>.asDatabaseModel(): List<RaceDTO> {
-    return map {
-        it.asDatabaseModel()
-    }
+private fun RaceDTO.Feature.asDatabaseModel(): RaceFeatureEntity {
+    return RaceFeatureEntity(description, name, id)
 }
 
-fun Race.asDatabaseModel(): RaceDTO {
-    return RaceDTO(name, description, raceFeatures, world?.id ?: "", id)
+private fun Race.asDatabaseModel(): RaceEntity {
+    return RaceEntity(name, description, world?.id ?: "", id)
+}
+
+private fun RaceWithWorld.asDomainModel(): Race {
+    return race.asDomainModel(world)
+}
+
+fun RaceEntity.asDomainModel(worldEntity: WorldEntity?): Race {
+    return Race(
+        name,
+        description,
+        listOf(),
+        worldEntity?.asDomainModel(),
+        id
+    )
 }

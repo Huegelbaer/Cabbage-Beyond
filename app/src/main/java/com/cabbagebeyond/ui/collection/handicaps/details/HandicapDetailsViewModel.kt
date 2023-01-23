@@ -16,17 +16,18 @@ import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.launch
 
 class HandicapDetailsViewModel(
-    private val _givenHandicap: Handicap,
+    givenHandicap: Handicap,
+    isEditingActive: Boolean,
     private val _handicapDataSource: HandicapDataSource,
     private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
-) : DetailsViewModel(user, app) {
+) : DetailsViewModel(user, isEditingActive, app) {
 
     data class TypeSelection(var selected: HandicapType?, var values: List<HandicapType>)
     data class WorldSelection(var selected: World?, var values: List<World?>)
 
-    var handicap = MutableLiveData(_givenHandicap)
+    var handicap = MutableLiveData(givenHandicap)
 
     private var _worlds = MutableLiveData<WorldSelection>()
     val worlds: LiveData<WorldSelection>

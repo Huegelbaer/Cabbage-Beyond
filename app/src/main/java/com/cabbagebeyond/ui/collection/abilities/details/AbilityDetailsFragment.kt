@@ -38,6 +38,7 @@ class AbilityDetailsFragment : DetailsFragment() {
         val worldDataSource: WorldDataSource by inject()
         viewModel = AbilityDetailsViewModel(
             ability,
+            false,
             dataSource,
             worldDataSource,
             UserService.currentUser,

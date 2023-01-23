@@ -37,7 +37,7 @@ class HandicapDetailsFragment : DetailsFragment() {
         val dataSource: HandicapDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = HandicapDetailsViewModel(
-            handicap, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            handicap, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

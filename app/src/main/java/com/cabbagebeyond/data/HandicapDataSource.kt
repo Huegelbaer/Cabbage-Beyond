@@ -3,10 +3,6 @@ package com.cabbagebeyond.data
 import com.cabbagebeyond.model.Handicap
 
 interface HandicapDataSource {
-    
-    //fun observeHandicaps(): LiveData<Result<List<Handicap>>>
-
-    //fun observeHandicap(id: String): LiveData<Result<Handicap>>
 
     suspend fun getHandicaps(): Result<List<Handicap>>
 
@@ -16,14 +12,14 @@ interface HandicapDataSource {
 
     suspend fun saveHandicap(handicap: Handicap): Result<Boolean>
 
-    suspend fun deleteHandicap(id: String): Result<Boolean>
+    suspend fun deleteHandicap(handicap: Handicap): Result<Boolean>
 
     /*
         REMOTE
      */
 
-    suspend fun refreshHandicaps(): Result<Boolean>
+    suspend fun refreshHandicaps()
 
-    suspend fun refreshHandicap(id: String): Result<Boolean>
+    suspend fun refreshHandicap(id: String)
 
 }

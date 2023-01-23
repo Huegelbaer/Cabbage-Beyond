@@ -3,10 +3,6 @@ package com.cabbagebeyond.data
 import com.cabbagebeyond.model.Role
 
 interface RoleDataSource {
-    
-    //fun observeRoles(): LiveData<Result<List<Role>>>
-
-    //fun observeRole(id: String): LiveData<Result<Role>>
 
     suspend fun getRoles(): Result<List<Role>>
 
@@ -14,13 +10,13 @@ interface RoleDataSource {
 
     suspend fun saveRole(role: Role)
 
-    suspend fun deleteRole(id: String)
+    suspend fun deleteRole(role: Role)
 
     /*
         REMOTE
      */
 
-    suspend fun refreshRoles(): Result<Boolean>
+    suspend fun refreshRoles()
 
-    suspend fun refreshRole(id: String): Result<Boolean>
+    suspend fun refreshRole(id: String)
 }

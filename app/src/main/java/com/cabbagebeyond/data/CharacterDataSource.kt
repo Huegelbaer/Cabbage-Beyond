@@ -3,10 +3,6 @@ package com.cabbagebeyond.data
 import com.cabbagebeyond.model.Character
 
 interface CharacterDataSource {
-    
-    //fun observeCharacters(): LiveData<Result<List<Character>>>
-
-    //fun observeCharacter(id: String): LiveData<Result<Character>>
 
     suspend fun getCharacters(): Result<List<Character>>
 
@@ -24,13 +20,13 @@ interface CharacterDataSource {
 
     suspend fun saveCharacter(character: Character): Result<Boolean>
 
-    suspend fun deleteCharacter(id: String): Result<Boolean>
+    suspend fun deleteCharacter(character: Character): Result<Boolean>
 
     /*
         REMOTE
     */
 
-    suspend fun refreshCharacters(): Result<Boolean>
+    suspend fun refreshCharacters()
 
-    suspend fun refreshCharacter(id: String): Result<Boolean>
+    suspend fun refreshCharacter(id: String)
 }
