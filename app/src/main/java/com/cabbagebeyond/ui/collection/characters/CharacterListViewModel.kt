@@ -1,9 +1,11 @@
 package com.cabbagebeyond.ui.collection.characters
 
 import android.app.Application
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.*
+import com.cabbagebeyond.data.CharacterDataSource
 import com.cabbagebeyond.model.Character
 import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.User
@@ -15,7 +17,7 @@ class CharacterListViewModel(
     user: User,
     private val app: Application,
     private val characterDataSource: CharacterDataSource
-) : CollectionListViewModel(user, app) {
+) : CollectionListViewModel<Character>(user, app) {
 
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE
@@ -30,7 +32,11 @@ class CharacterListViewModel(
     }
 
     sealed class Interaction {
-        data class OpenFilter(val races: FilterData<Race>, val types: FilterData<CharacterType>, val worlds: FilterData<World>) : Interaction()
+        data class OpenFilter(
+            val races: FilterData<Race>,
+            val types: FilterData<CharacterType>,
+            val worlds: FilterData<World>
+        ) : Interaction()
     }
 
     private var _activeFilter = Filter
@@ -40,18 +46,11 @@ class CharacterListViewModel(
         get() = _interaction
 
     private var _characters: List<Character> = listOf()
-    private var _items = MutableLiveData<List<Character>>()
-    val items: LiveData<List<Character>>
-        get() = _items
-
-    private var _selectedCharacter = MutableLiveData<Character?>()
-    val selectedCharacter: LiveData<Character?>
-        get() = _selectedCharacter
 
     init {
         viewModelScope.launch {
             _characters = characterDataSource.getCharacters().getOrDefault(listOf())
-            _items.value = _characters
+            mutableItems.value = _characters
             if (_characters.isEmpty()) {
                 showNoContentAvailable()
             }
@@ -59,13 +58,13 @@ class CharacterListViewModel(
     }
 
     override fun onSearch(query: String) {
-        _items.value = _characters.filter {
+        mutableItems.value = _characters.filter {
             it.name.contains(query) || it.description.contains(query)
         }
     }
 
     override fun onSearchCanceled() {
-        _items.value = _characters
+        mutableItems.value = _characters
     }
 
     fun onSelectSort(sortType: SortType) {
@@ -88,7 +87,7 @@ class CharacterListViewModel(
                 }
             }
             _characters = result.getOrDefault(listOf())
-            _items.value = _characters
+            mutableItems.value = _characters
         }
     }
 
@@ -101,9 +100,24 @@ class CharacterListViewModel(
         val worlds = _characters.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(application.resources.getString(R.string.character_race), races, _activeFilter.selectedRace, Race::name),
-            FilterData(application.resources.getString(R.string.character_type), types, _activeFilter.selectedType, CharacterType::title),
-            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(
+                application.resources.getString(R.string.character_race),
+                races,
+                _activeFilter.selectedRace,
+                Race::name
+            ),
+            FilterData(
+                application.resources.getString(R.string.character_type),
+                types,
+                _activeFilter.selectedType,
+                CharacterType::title
+            ),
+            FilterData(
+                application.resources.getString(R.string.character_world),
+                worlds,
+                _activeFilter.selectedWorld,
+                World::name
+            )
         )
     }
 
@@ -136,7 +150,7 @@ class CharacterListViewModel(
 
                 iRace && iType && iWorld
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(race?.name, characterType?.title, world?.name)
                 showNoFilterResult(searchTerm) {
@@ -152,18 +166,10 @@ class CharacterListViewModel(
         _activeFilter.selectedRace = null
         _activeFilter.selectedType = null
         _activeFilter.selectedWorld = null
-        _items.value = _characters
+        mutableItems.value = _characters
     }
 
     fun onInteractionCompleted() {
         _interaction.value = null
-    }
-
-    fun onCharacterClicked(character: Character) {
-        _selectedCharacter.value = character
-    }
-
-    fun onNavigationCompleted() {
-        _selectedCharacter.value = null
     }
 }

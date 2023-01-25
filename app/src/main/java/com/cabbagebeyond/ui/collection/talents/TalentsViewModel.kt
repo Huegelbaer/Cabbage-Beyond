@@ -17,7 +17,7 @@ class TalentsViewModel(
     user: User,
     private val app: Application,
     private val talentDataSource: TalentDataSource
-) : CollectionListViewModel(user, app) {
+) : CollectionListViewModel<Talent>(user, app) {
 
     object Filter {
         var selectedType: TalentType? = null
@@ -26,17 +26,14 @@ class TalentsViewModel(
     }
 
     sealed class Interaction {
-        data class OpenFilter(val types: FilterData<TalentType>, val ranks: FilterData<TalentRank>, val worlds: FilterData<World>) : Interaction()
+        data class OpenFilter(
+            val types: FilterData<TalentType>,
+            val ranks: FilterData<TalentRank>,
+            val worlds: FilterData<World>
+        ) : Interaction()
     }
 
-    private var _talents = listOf<Talent>()
-    private var _items = MutableLiveData<List<Talent>>()
-    val items: LiveData<List<Talent>>
-        get() = _items
-
-    private var _selectedTalent = MutableLiveData<Pair<Talent, Boolean>?>()
-    val selectedTalent: LiveData<Pair<Talent, Boolean>?>
-        get() = _selectedTalent
+    private var _allItems = listOf<Talent>()
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -46,36 +43,48 @@ class TalentsViewModel(
 
     init {
         viewModelScope.launch {
-            _talents = talentDataSource.getTalents().getOrDefault(listOf())
-            _items.value = _talents
-            if (_talents.isEmpty()) {
+            _allItems = talentDataSource.getTalents().getOrDefault(listOf())
+            mutableItems.value = _allItems
+            if (_allItems.isEmpty()) {
                 showNoContentAvailable()
             }
         }
     }
 
-    fun onTalentClicked(talent: Talent) {
-        _selectedTalent.value = Pair(talent, false)
-    }
-
     fun addTalent() {
-        _selectedTalent.value = Pair(Talent(UUID.randomUUID().toString()), true)
-    }
-
-    fun onNavigationCompleted() {
-        _selectedTalent.value = null
+        val newTalent = Talent(UUID.randomUUID().toString())
+        onCreateNewItem(newTalent)
     }
 
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val types = _talents.mapNotNull { talent -> talent.type.let { TalentType.create(it, app) } }.toSet().toList()
-        val ranks = _talents.mapNotNull { talent -> talent.rangRequirement.let { TalentRank.create(it, app) } }.toSet().toList()
-        val worlds = _talents.mapNotNull { it.world }.toSet().toList()
+        val types =
+            _allItems.map { talent -> talent.type.let { TalentType.create(it, app) } }.toSet()
+                .toList()
+        val ranks =
+            _allItems.map { talent -> talent.rangRequirement.let { TalentRank.create(it, app) } }
+                .toSet().toList()
+        val worlds = _allItems.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(application.resources.getString(R.string.character_type), types, _activeFilter.selectedType, TalentType::title),
-            FilterData(application.resources.getString(R.string.talent_rang_requirement), ranks, _activeFilter.selectedRank, TalentRank::title),
-            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(
+                application.resources.getString(R.string.character_type),
+                types,
+                _activeFilter.selectedType,
+                TalentType::title
+            ),
+            FilterData(
+                application.resources.getString(R.string.talent_rang_requirement),
+                ranks,
+                _activeFilter.selectedRank,
+                TalentRank::title
+            ),
+            FilterData(
+                application.resources.getString(R.string.character_world),
+                worlds,
+                _activeFilter.selectedWorld,
+                World::name
+            )
         )
     }
 
@@ -85,7 +94,7 @@ class TalentsViewModel(
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            val filteredItems = _talents.filter { talent ->
+            val filteredItems = _allItems.filter { talent ->
                 val iType = type?.let { type ->
                     talent.type == type.type
                 } ?: true
@@ -98,7 +107,7 @@ class TalentsViewModel(
 
                 iType && iRank && iWorld
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(type?.title, rank?.title, world?.name)
                 showNoFilterResult(searchTerm) {
@@ -118,6 +127,6 @@ class TalentsViewModel(
         _activeFilter.selectedType = null
         _activeFilter.selectedRank = null
         _activeFilter.selectedWorld = null
-        _items.value = _talents
+        mutableItems.value = _allItems
     }
 }

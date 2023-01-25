@@ -1,11 +1,11 @@
 package com.cabbagebeyond.ui.collection.handicaps
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.HandicapDataSource
@@ -17,7 +17,7 @@ import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class HandicapsFragment : CollectionListFragment() {
+class HandicapsFragment : CollectionListFragment<Handicap>() {
 
     private val _viewModel: HandicapsViewModel
         get() = viewModel as HandicapsViewModel
@@ -32,10 +32,11 @@ class HandicapsFragment : CollectionListFragment() {
         _binding = FragmentHandicapsListBinding.inflate(inflater)
 
         val dataSource: HandicapDataSource by inject()
-        viewModel = HandicapsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            HandicapsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = HandicapClickListener {
-            _viewModel.onHandicapClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = HandicapsRecyclerViewAdapter(clickListener)
 
@@ -60,9 +61,9 @@ class HandicapsFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedHandicap.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it)
+                showDetails(it.first)
             }
         }
 
@@ -96,7 +97,10 @@ class HandicapsFragment : CollectionListFragment() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showFilterDialog(types: CollectionListViewModel.FilterData<HandicapType>, worlds: CollectionListViewModel.FilterData<World>) {
+    private fun showFilterDialog(
+        types: CollectionListViewModel.FilterData<HandicapType>,
+        worlds: CollectionListViewModel.FilterData<World>
+    ) {
 
         var selectedType = types.selected
         var selectedWorld = worlds.selected
@@ -108,7 +112,12 @@ class HandicapsFragment : CollectionListFragment() {
         dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
             selectedType = it
         }
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 

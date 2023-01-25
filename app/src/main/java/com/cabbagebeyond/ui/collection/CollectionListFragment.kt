@@ -8,9 +8,9 @@ import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import com.cabbagebeyond.R
 
-abstract class CollectionListFragment : Fragment() {
+abstract class CollectionListFragment<T> : Fragment() {
 
-    protected open lateinit var viewModel: CollectionListViewModel
+    protected open lateinit var viewModel: CollectionListViewModel<T>
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -16,7 +16,7 @@ class ForcesViewModel(
     user: User,
     application: Application,
     private val forceDataSource: ForceDataSource
-) : CollectionListViewModel(user, application) {
+) : CollectionListViewModel<Force>(user, application) {
 
     object Filter {
         var selectedRank: ForceRank? = null
@@ -24,17 +24,11 @@ class ForcesViewModel(
     }
 
     sealed class Interaction {
-        data class OpenFilter(val ranks: FilterData<ForceRank>, val worlds: FilterData<World>) : Interaction()
+        data class OpenFilter(val ranks: FilterData<ForceRank>, val worlds: FilterData<World>) :
+            Interaction()
     }
 
     private var _forces = listOf<Force>()
-    private var _items = MutableLiveData<List<Force>>()
-    val items: LiveData<List<Force>>
-        get() = _items
-
-    private var _selectedForce = MutableLiveData<Force?>()
-    val selectedForce: LiveData<Force?>
-        get() = _selectedForce
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -45,29 +39,33 @@ class ForcesViewModel(
     init {
         viewModelScope.launch {
             _forces = forceDataSource.getForces().getOrDefault(listOf())
-            _items.value = _forces
+            mutableItems.value = _forces
             if (_forces.isEmpty()) {
                 showNoContentAvailable()
             }
         }
     }
 
-    fun onForceClicked(force: Force) {
-        _selectedForce.value = force
-    }
-
-    fun onNavigationCompleted() {
-        _selectedForce.value = null
-    }
-
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val ranks = _forces.mapNotNull { force -> force.rangRequirement.let { ForceRank.create(it, application) } }.toSet().toList()
+        val ranks =
+            _forces.map { force -> force.rangRequirement.let { ForceRank.create(it, application) } }
+                .toSet().toList()
         val worlds = _forces.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(application.resources.getString(R.string.talent_rang_requirement), ranks, _activeFilter.selectedRank, ForceRank::title),
-            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(
+                application.resources.getString(R.string.talent_rang_requirement),
+                ranks,
+                _activeFilter.selectedRank,
+                ForceRank::title
+            ),
+            FilterData(
+                application.resources.getString(R.string.character_world),
+                worlds,
+                _activeFilter.selectedWorld,
+                World::name
+            )
         )
     }
 
@@ -86,7 +84,7 @@ class ForcesViewModel(
 
                 iRank && iWorld
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(rank?.title, world?.name)
                 showNoFilterResult(searchTerm) {
@@ -101,7 +99,7 @@ class ForcesViewModel(
     private fun resetFilter() {
         _activeFilter.selectedRank = null
         _activeFilter.selectedWorld = null
-        _items.value = _forces
+        mutableItems.value = _forces
     }
 
     fun onInteractionCompleted() {

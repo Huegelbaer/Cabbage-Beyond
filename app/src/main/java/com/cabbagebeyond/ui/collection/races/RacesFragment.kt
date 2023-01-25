@@ -1,11 +1,11 @@
 package com.cabbagebeyond.ui.collection.races
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.RaceDataSource
@@ -17,7 +17,7 @@ import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class RacesFragment : CollectionListFragment() {
+class RacesFragment : CollectionListFragment<Race>() {
 
     private val _viewModel: RacesViewModel
         get() = viewModel as RacesViewModel
@@ -32,10 +32,11 @@ class RacesFragment : CollectionListFragment() {
         _binding = FragmentRacesListBinding.inflate(inflater)
 
         val dataSource: RaceDataSource by inject()
-        viewModel = RacesViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            RacesViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = RaceClickListener {
-            _viewModel.onRaceClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = RacesRecyclerViewAdapter(clickListener)
 
@@ -60,9 +61,9 @@ class RacesFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedRace.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it)
+                showDetails(it.first)
             }
         }
 
@@ -104,7 +105,12 @@ class RacesFragment : CollectionListFragment() {
             _viewModel.filter(selectedWorld)
         })
 
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 

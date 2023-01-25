@@ -1,11 +1,11 @@
 package com.cabbagebeyond.ui.collection.equipments
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.EquipmentDataSource
@@ -18,7 +18,7 @@ import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
 
-class EquipmentsFragment : CollectionListFragment() {
+class EquipmentsFragment : CollectionListFragment<Equipment>() {
 
     private val _viewModel: EquipmentsViewModel
         get() = viewModel as EquipmentsViewModel
@@ -33,10 +33,11 @@ class EquipmentsFragment : CollectionListFragment() {
         _binding = FragmentEquipmentsListBinding.inflate(inflater)
 
         val dataSource: EquipmentDataSource by inject()
-        viewModel = EquipmentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            EquipmentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = EquipmentClickListener {
-            _viewModel.onEquipmentClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = EquipmentsRecyclerViewAdapter(clickListener)
 
@@ -61,9 +62,9 @@ class EquipmentsFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedEquipment.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it)
+                showDetails(it.first)
             }
         }
 
@@ -97,7 +98,10 @@ class EquipmentsFragment : CollectionListFragment() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showFilterDialog(types: CollectionListViewModel.FilterData<EquipmentType>, worlds: CollectionListViewModel.FilterData<World>) {
+    private fun showFilterDialog(
+        types: CollectionListViewModel.FilterData<EquipmentType>,
+        worlds: CollectionListViewModel.FilterData<World>
+    ) {
 
         var selectedType = types.selected
         var selectedWorld = worlds.selected
@@ -109,7 +113,12 @@ class EquipmentsFragment : CollectionListFragment() {
         dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
             selectedType = it
         }
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 
@@ -117,7 +126,11 @@ class EquipmentsFragment : CollectionListFragment() {
     }
 
     private fun showDetails(equipment: Equipment) {
-        findNavController().navigate(EquipmentsFragmentDirections.actionEquipmentsToDetails(equipment))
+        findNavController().navigate(
+            EquipmentsFragmentDirections.actionEquipmentsToDetails(
+                equipment
+            )
+        )
         _viewModel.onNavigationCompleted()
     }
 }

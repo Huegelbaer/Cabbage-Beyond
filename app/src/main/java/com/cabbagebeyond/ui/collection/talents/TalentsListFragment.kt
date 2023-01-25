@@ -18,7 +18,7 @@ import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
 
-class TalentsListFragment : CollectionListFragment() {
+class TalentsListFragment : CollectionListFragment<Talent>() {
 
     private val _viewModel: TalentsViewModel
         get() = viewModel as TalentsViewModel
@@ -33,10 +33,11 @@ class TalentsListFragment : CollectionListFragment() {
         _binding = FragmentTalentsListBinding.inflate(inflater)
 
         val dataSource: TalentDataSource by inject()
-        viewModel = TalentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            TalentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = TalentClickListener {
-            _viewModel.onTalentClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = TalentsRecyclerViewAdapter(clickListener)
 
@@ -65,7 +66,7 @@ class TalentsListFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedTalent.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
                 showDetails(it.first, it.second)
             }
@@ -107,7 +108,11 @@ class TalentsListFragment : CollectionListFragment() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showFilterDialog(types: CollectionListViewModel.FilterData<TalentType>, ranks: CollectionListViewModel.FilterData<TalentRank>, worlds: CollectionListViewModel.FilterData<World>) {
+    private fun showFilterDialog(
+        types: CollectionListViewModel.FilterData<TalentType>,
+        ranks: CollectionListViewModel.FilterData<TalentRank>,
+        worlds: CollectionListViewModel.FilterData<World>
+    ) {
 
         var selectedType = types.selected
         var selectedRank = ranks.selected
@@ -123,7 +128,12 @@ class TalentsListFragment : CollectionListFragment() {
         dialog.addFilterChipGroup(ranks.title, ranks.values, ranks.selected, ranks.titleProperty) {
             selectedRank = it
         }
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 
@@ -131,7 +141,12 @@ class TalentsListFragment : CollectionListFragment() {
     }
 
     private fun showDetails(talent: Talent, startEditing: Boolean) {
-        findNavController().navigate(TalentsListFragmentDirections.actionTalentsToDetails(talent, startEditing))
+        findNavController().navigate(
+            TalentsListFragmentDirections.actionTalentsToDetails(
+                talent,
+                startEditing
+            )
+        )
         _viewModel.onNavigationCompleted()
     }
 }

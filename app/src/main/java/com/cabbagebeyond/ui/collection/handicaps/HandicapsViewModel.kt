@@ -16,7 +16,7 @@ class HandicapsViewModel(
     user: User,
     app: Application,
     private val handicapsDataSource: HandicapDataSource
-) : CollectionListViewModel(user, app) {
+) : CollectionListViewModel<Handicap>(user, app) {
 
     object Filter {
         var selectedType: HandicapType? = null
@@ -28,13 +28,6 @@ class HandicapsViewModel(
     }
 
     private var _handicaps = listOf<Handicap>()
-    private var _items = MutableLiveData<List<Handicap>>()
-    val items: LiveData<List<Handicap>>
-        get() = _items
-
-    private var _selectedHandicap = MutableLiveData<Handicap?>()
-    val selectedHandicap: LiveData<Handicap?>
-        get() = _selectedHandicap
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -45,24 +38,16 @@ class HandicapsViewModel(
     init {
         viewModelScope.launch {
             _handicaps = handicapsDataSource.getHandicaps().getOrDefault(listOf())
-            _items.value = _handicaps
+            mutableItems.value = _handicaps
             if (_handicaps.isEmpty()) {
                 showNoContentAvailable()
             }
         }
     }
 
-    fun onHandicapClicked(handicap: Handicap) {
-        _selectedHandicap.value = handicap
-    }
-
-    fun onNavigationCompleted() {
-        _selectedHandicap.value = null
-    }
-
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val types = _handicaps.mapNotNull { handicap -> handicap.type.let { HandicapType.create(it, application) } }.toSet().toList()
+        val types = _handicaps.map { handicap -> handicap.type.let { HandicapType.create(it, application) } }.toSet().toList()
         val worlds = _handicaps.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
@@ -86,7 +71,7 @@ class HandicapsViewModel(
 
                 iType && iWorld
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(type?.title, world?.name)
                 showNoFilterResult(searchTerm) {
@@ -101,7 +86,7 @@ class HandicapsViewModel(
     private fun resetFilter() {
         _activeFilter.selectedType = null
         _activeFilter.selectedWorld = null
-        _items.value = _handicaps
+        mutableItems.value = _handicaps
     }
 
     fun onInteractionCompleted() {

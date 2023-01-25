@@ -11,12 +11,13 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class AbilitiesViewModel(
     user: User,
     private val app: Application,
     private val abilityDataSource: AbilityDataSource
-) : CollectionListViewModel(user, app) {
+) : CollectionListViewModel<Ability>(user, app) {
 
     object Filter {
         var selectedAttribute: AbilityAttribute? = null
@@ -24,17 +25,13 @@ class AbilitiesViewModel(
     }
 
     sealed class Interaction {
-        data class OpenFilter(val attributes: FilterData<AbilityAttribute>, val worlds: FilterData<World>) : Interaction()
+        data class OpenFilter(
+            val attributes: FilterData<AbilityAttribute>,
+            val worlds: FilterData<World>
+        ) : Interaction()
     }
 
     private var _abilities: List<Ability> = listOf()
-    private var _items = MutableLiveData<List<Ability>>()
-    val items: LiveData<List<Ability>>
-        get() = _items
-
-    private var _selectedAbility = MutableLiveData<Ability?>()
-    val selectedAbility: LiveData<Ability?>
-        get() = _selectedAbility
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -45,30 +42,32 @@ class AbilitiesViewModel(
     init {
         viewModelScope.launch {
             _abilities = abilityDataSource.getAbilities().getOrDefault(listOf())
-            _items.value = _abilities
+            mutableItems.value = _abilities
             if (_abilities.isEmpty()) {
                 showNoContentAvailable()
             }
         }
     }
 
-    fun onAbilityClicked(ability: Ability) {
-        _selectedAbility.value = ability
-    }
-
-    fun onNavigationCompleted() {
-        _selectedAbility.value = null
-    }
-
-
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val attributes = _abilities.map { AbilityAttribute.create(it.attribute, app) }.toSet().toList()
+        val attributes =
+            _abilities.map { AbilityAttribute.create(it.attribute, app) }.toSet().toList()
         val worlds = _abilities.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(application.resources.getString(R.string.attribute), attributes, _activeFilter.selectedAttribute, AbilityAttribute::title),
-            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(
+                application.resources.getString(R.string.attribute),
+                attributes,
+                _activeFilter.selectedAttribute,
+                AbilityAttribute::title
+            ),
+            FilterData(
+                application.resources.getString(R.string.character_world),
+                worlds,
+                _activeFilter.selectedWorld,
+                World::name
+            )
         )
     }
 
@@ -79,7 +78,7 @@ class AbilitiesViewModel(
         viewModelScope.launch {
             val filteredItems = _abilities.filter { ability ->
                 val iAttribute = attribute?.let { attribute ->
-                     ability.attribute == attribute.attribute
+                    ability.attribute == attribute.attribute
                 } ?: true
                 val iWorld = world?.let { world ->
                     ability.world == world
@@ -87,7 +86,7 @@ class AbilitiesViewModel(
 
                 iAttribute && iWorld
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(attribute?.title, world?.name)
                 showNoFilterResult(searchTerm) {
@@ -102,7 +101,7 @@ class AbilitiesViewModel(
     private fun resetFilter() {
         _activeFilter.selectedAttribute = null
         _activeFilter.selectedWorld = null
-        _items.value = _abilities
+        mutableItems.value = _abilities
     }
 
     fun onInteractionCompleted() {

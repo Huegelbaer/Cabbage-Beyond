@@ -15,10 +15,10 @@ import com.cabbagebeyond.ui.collection.CollectionListFragment
 import org.koin.android.ext.android.inject
 
 
-class WorldsFragment : CollectionListFragment() {
+class WorldsFragment : CollectionListFragment<World>() {
 
-    private val _viewModel: WorldsViewModel
-        get() = viewModel as WorldsViewModel
+    private val _viewModel: WorldListViewModel
+        get() = viewModel as WorldListViewModel
 
     private lateinit var _binding: FragmentWorldsListBinding
     private lateinit var _adapter: WorldRecyclerViewAdapter
@@ -30,10 +30,11 @@ class WorldsFragment : CollectionListFragment() {
         _binding = FragmentWorldsListBinding.inflate(inflater)
 
         val dataSource: WorldDataSource by inject()
-        viewModel = WorldsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            WorldListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = WorldClickListener {
-            _viewModel.onSelectWorld(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = WorldRecyclerViewAdapter(clickListener)
 
@@ -60,7 +61,7 @@ class WorldsFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedWorld.observe(viewLifecycleOwner) { world ->
+        _viewModel.selectedItem.observe(viewLifecycleOwner) { world ->
             world?.let {
                 navigateToDetails(it.first, it.second)
             }
@@ -92,7 +93,12 @@ class WorldsFragment : CollectionListFragment() {
     }
 
     private fun navigateToDetails(world: World, startEditing: Boolean) {
-        findNavController().navigate(WorldsFragmentDirections.actionHomeToWorldDetails(world, startEditing))
+        findNavController().navigate(
+            WorldsFragmentDirections.actionHomeToWorldDetails(
+                world,
+                startEditing
+            )
+        )
         _viewModel.onNavigationCompleted()
     }
 }

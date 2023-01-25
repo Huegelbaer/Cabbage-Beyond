@@ -1,11 +1,11 @@
 package com.cabbagebeyond.ui.collection.forces
 
 import android.os.Bundle
-import androidx.recyclerview.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.ForceDataSource
@@ -17,7 +17,7 @@ import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class ForcesFragment : CollectionListFragment() {
+class ForcesFragment : CollectionListFragment<Force>() {
 
     private val _viewModel: ForcesViewModel
         get() = viewModel as ForcesViewModel
@@ -32,10 +32,11 @@ class ForcesFragment : CollectionListFragment() {
         _binding = FragmentForcesListBinding.inflate(inflater)
 
         val dataSource: ForceDataSource by inject()
-        viewModel = ForcesViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            ForcesViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = ForceClickListener {
-            _viewModel.onForceClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = ForcesRecyclerViewAdapter(clickListener)
 
@@ -66,9 +67,9 @@ class ForcesFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedForce.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it)
+                showDetails(it.first)
             }
         }
 
@@ -102,7 +103,10 @@ class ForcesFragment : CollectionListFragment() {
         }
     }
 
-    private fun showFilterDialog(ranks: CollectionListViewModel.FilterData<ForceRank>, worlds: CollectionListViewModel.FilterData<World>) {
+    private fun showFilterDialog(
+        ranks: CollectionListViewModel.FilterData<ForceRank>,
+        worlds: CollectionListViewModel.FilterData<World>
+    ) {
 
         var selectedRank = ranks.selected
         var selectedWorld = worlds.selected
@@ -114,7 +118,12 @@ class ForcesFragment : CollectionListFragment() {
         dialog.addFilterChipGroup(ranks.title, ranks.values, ranks.selected, ranks.titleProperty) {
             selectedRank = it
         }
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 

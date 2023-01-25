@@ -16,7 +16,7 @@ class RacesViewModel(
     user: User,
     application: Application,
     private val raceDataSource: RaceDataSource
-) : CollectionListViewModel(user, application) {
+) : CollectionListViewModel<Race>(user, application) {
 
     object Filter {
         var selectedWorld: World? = null
@@ -27,13 +27,6 @@ class RacesViewModel(
     }
 
     private var _races = listOf<Race>()
-    private var _items = MutableLiveData<List<Race>>()
-    val items: LiveData<List<Race>>
-        get() = _items
-
-    private var _selectedRace = MutableLiveData<Race?>()
-    val selectedRace: LiveData<Race?>
-        get() = _selectedRace
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -44,19 +37,11 @@ class RacesViewModel(
     init {
         viewModelScope.launch {
             _races = raceDataSource.getRaces().getOrDefault(listOf())
-            _items.value = _races
+            mutableItems.value = _races
             if (_races.isEmpty()) {
                 showNoContentAvailable()
             }
         }
-    }
-
-    fun onRaceClicked(race: Race) {
-        _selectedRace.value = race
-    }
-
-    fun onNavigationCompleted() {
-        _selectedRace.value = null
     }
 
     override fun onSelectFilter() {
@@ -77,7 +62,7 @@ class RacesViewModel(
                     handicap.world == world
                 } ?: true
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(world?.name)
                 showNoFilterResult(searchTerm) {
@@ -91,7 +76,7 @@ class RacesViewModel(
 
     private fun resetFilter() {
         _activeFilter.selectedWorld = null
-        _items.value = _races
+        mutableItems.value = _races
     }
 
     fun onInteractionCompleted() {

@@ -16,7 +16,7 @@ class EquipmentsViewModel(
     user: User,
     application: Application,
     private val equipmentDataSource: EquipmentDataSource
-) : CollectionListViewModel(user, application) {
+) : CollectionListViewModel<Equipment>(user, application) {
 
     object Filter {
         var selectedType: EquipmentType? = null
@@ -24,17 +24,11 @@ class EquipmentsViewModel(
     }
 
     sealed class Interaction {
-        data class OpenFilter(val types: FilterData<EquipmentType>, val worlds: FilterData<World>) : Interaction()
+        data class OpenFilter(val types: FilterData<EquipmentType>, val worlds: FilterData<World>) :
+            Interaction()
     }
 
     private var _equipments = listOf<Equipment>()
-    private var _items = MutableLiveData<List<Equipment>>()
-    val items: LiveData<List<Equipment>>
-        get() = _items
-
-    private var _selectedEquipment = MutableLiveData<Equipment?>()
-    val selectedEquipment: LiveData<Equipment?>
-        get() = _selectedEquipment
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -45,30 +39,38 @@ class EquipmentsViewModel(
     init {
         viewModelScope.launch {
             _equipments = equipmentDataSource.getEquipments().getOrDefault(listOf())
-            _items.value = _equipments
+            mutableItems.value = _equipments
             if (_equipments.isEmpty()) {
                 showNoContentAvailable()
             }
         }
     }
 
-
-    fun onEquipmentClicked(equipment: Equipment) {
-        _selectedEquipment.value = equipment
-    }
-
-    fun onNavigationCompleted() {
-        _selectedEquipment.value = null
-    }
-
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val types = _equipments.mapNotNull { equipment -> equipment.type?.let { EquipmentType.create(it, application) } }.toSet().toList()
+        val types = _equipments.mapNotNull { equipment ->
+            equipment.type?.let {
+                EquipmentType.create(
+                    it,
+                    application
+                )
+            }
+        }.toSet().toList()
         val worlds = _equipments.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
-            FilterData(application.resources.getString(R.string.character_type), types, _activeFilter.selectedType, EquipmentType::title),
-            FilterData(application.resources.getString(R.string.character_world), worlds, _activeFilter.selectedWorld, World::name)
+            FilterData(
+                application.resources.getString(R.string.character_type),
+                types,
+                _activeFilter.selectedType,
+                EquipmentType::title
+            ),
+            FilterData(
+                application.resources.getString(R.string.character_world),
+                worlds,
+                _activeFilter.selectedWorld,
+                World::name
+            )
         )
     }
 
@@ -87,7 +89,7 @@ class EquipmentsViewModel(
 
                 iType && iWorld
             }
-            _items.value = filteredItems
+            mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
                 val searchTerm = listOfNotNull(type?.title, world?.name)
                 showNoFilterResult(searchTerm) {
@@ -102,7 +104,7 @@ class EquipmentsViewModel(
     private fun resetFilter() {
         _activeFilter.selectedType = null
         _activeFilter.selectedWorld = null
-        _items.value = _equipments
+        mutableItems.value = _equipments
     }
 
     fun onInteractionCompleted() {

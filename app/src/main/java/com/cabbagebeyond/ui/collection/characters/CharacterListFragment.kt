@@ -17,7 +17,7 @@ import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class CharacterListFragment : CollectionListFragment() {
+class CharacterListFragment : CollectionListFragment<Character>() {
 
     private val _viewModel: CharacterListViewModel
         get() = viewModel as CharacterListViewModel
@@ -32,10 +32,14 @@ class CharacterListFragment : CollectionListFragment() {
         _binding = FragmentCharacterListBinding.inflate(inflater)
 
         val dataSource: CharacterDataSource by inject()
-        viewModel = CharacterListViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel = CharacterListViewModel(
+            UserService.currentUser,
+            requireActivity().application,
+            dataSource
+        )
 
         val clickListener = CharacterClickListener {
-            _viewModel.onCharacterClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = CharacterListAdapter(clickListener)
 
@@ -87,9 +91,9 @@ class CharacterListFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedCharacter.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showCharacterDetails(it)
+                showCharacterDetails(it.first)
             }
         }
 
@@ -123,7 +127,11 @@ class CharacterListFragment : CollectionListFragment() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showFilterDialog(races: CollectionListViewModel.FilterData<Race>, types: CollectionListViewModel.FilterData<CharacterListViewModel.CharacterType>, worlds: CollectionListViewModel.FilterData<World>) {
+    private fun showFilterDialog(
+        races: CollectionListViewModel.FilterData<Race>,
+        types: CollectionListViewModel.FilterData<CharacterListViewModel.CharacterType>,
+        worlds: CollectionListViewModel.FilterData<World>
+    ) {
 
         var selectedRace = races.selected
         var selectedType = types.selected
@@ -139,7 +147,12 @@ class CharacterListFragment : CollectionListFragment() {
         dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
             selectedType = it
         }
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 
@@ -147,7 +160,11 @@ class CharacterListFragment : CollectionListFragment() {
     }
 
     private fun showCharacterDetails(character: Character) {
-        findNavController().navigate(CharacterListFragmentDirections.actionCharactersListToDetails(character))
+        findNavController().navigate(
+            CharacterListFragmentDirections.actionCharactersListToDetails(
+                character
+            )
+        )
         _viewModel.onNavigationCompleted()
     }
 }

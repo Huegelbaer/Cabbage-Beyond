@@ -1,9 +1,11 @@
 package com.cabbagebeyond.ui.collection.abilities
 
 import android.os.Bundle
-import android.view.*
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.AbilityDataSource
@@ -15,7 +17,7 @@ import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class AbilitiesListFragment : CollectionListFragment() {
+class AbilitiesListFragment : CollectionListFragment<Ability>() {
 
     private val _viewModel: AbilitiesViewModel
         get() = viewModel as AbilitiesViewModel
@@ -30,10 +32,11 @@ class AbilitiesListFragment : CollectionListFragment() {
         _binding = FragmentAbilitiesListBinding.inflate(inflater)
 
         val dataSource: AbilityDataSource by inject()
-        viewModel = AbilitiesViewModel(UserService.currentUser, requireActivity().application, dataSource)
+        viewModel =
+            AbilitiesViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = AbilityClickListener {
-            _viewModel.onAbilityClicked(it)
+            _viewModel.onItemSelected(it)
         }
         _adapter = AbilitiesRecyclerViewAdapter(clickListener)
 
@@ -58,9 +61,9 @@ class AbilitiesListFragment : CollectionListFragment() {
             }
         }
 
-        _viewModel.selectedAbility.observe(viewLifecycleOwner) {
+        _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it)
+                showDetails(it.first)
             }
         }
 
@@ -94,7 +97,10 @@ class AbilitiesListFragment : CollectionListFragment() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showFilterDialog(attributes: CollectionListViewModel.FilterData<AbilityAttribute>, worlds: CollectionListViewModel.FilterData<World>) {
+    private fun showFilterDialog(
+        attributes: CollectionListViewModel.FilterData<AbilityAttribute>,
+        worlds: CollectionListViewModel.FilterData<World>
+    ) {
 
         var selectedAttribute = attributes.selected
         var selectedWorld = worlds.selected
@@ -103,10 +109,20 @@ class AbilitiesListFragment : CollectionListFragment() {
             _viewModel.filter(selectedAttribute, selectedWorld)
         })
 
-        dialog.addFilterChipGroup(attributes.title, attributes.values, attributes.selected, attributes.titleProperty) {
+        dialog.addFilterChipGroup(
+            attributes.title,
+            attributes.values,
+            attributes.selected,
+            attributes.titleProperty
+        ) {
             selectedAttribute = it
         }
-        dialog.addFilterChipGroup(worlds.title, worlds.values, worlds.selected, worlds.titleProperty) {
+        dialog.addFilterChipGroup(
+            worlds.title,
+            worlds.values,
+            worlds.selected,
+            worlds.titleProperty
+        ) {
             selectedWorld = it
         }
 
@@ -114,7 +130,11 @@ class AbilitiesListFragment : CollectionListFragment() {
     }
 
     private fun showDetails(ability: Ability) {
-        findNavController().navigate(AbilitiesListFragmentDirections.actionAbilitiesToDetails(ability))
+        findNavController().navigate(
+            AbilitiesListFragmentDirections.actionAbilitiesToDetails(
+                ability
+            )
+        )
         _viewModel.onNavigationCompleted()
     }
 }
