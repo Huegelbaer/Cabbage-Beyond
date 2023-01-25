@@ -1,16 +1,16 @@
-package com.cabbagebeyond.ui.collection.handicaps
+package com.cabbagebeyond.ui.collection.talents
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.cabbagebeyond.databinding.FragmentHandicapsListItemBinding
-import com.cabbagebeyond.model.Handicap
+import com.cabbagebeyond.databinding.FragmentTalentListItemBinding
+import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.ui.CollectionDiffCallback
 import com.cabbagebeyond.ui.CollectionItemClickListener
 
-class HandicapsRecyclerViewAdapter(private val clickListener: HandicapClickListener) :
-    ListAdapter<Handicap, HandicapsRecyclerViewAdapter.ViewHolder>(DiffCallback) {
+class TalentListAdapter(private val clickListener: TalentClickListener) :
+    ListAdapter<Talent, TalentListAdapter.ViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -21,11 +21,11 @@ class HandicapsRecyclerViewAdapter(private val clickListener: HandicapClickListe
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder(private val binding: FragmentHandicapsListItemBinding) :
+    class ViewHolder(private val binding: FragmentTalentListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Handicap, clickListener: HandicapClickListener) {
-            binding.handicap = item
+        fun bind(item: Talent, clickListener: TalentClickListener) {
+            binding.talent = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -34,14 +34,14 @@ class HandicapsRecyclerViewAdapter(private val clickListener: HandicapClickListe
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding =
-                    FragmentHandicapsListItemBinding.inflate(layoutInflater, parent, false)
+                    FragmentTalentListItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
     }
 
-    companion object DiffCallback : CollectionDiffCallback<Handicap>()
+    companion object DiffCallback : CollectionDiffCallback<Talent>()
 }
 
-class HandicapClickListener(clickListener: (item: Handicap) -> Unit) :
-    CollectionItemClickListener<Handicap>(clickListener)
+class TalentClickListener(clickListener: (item: Talent) -> Unit) :
+    CollectionItemClickListener<Talent>(clickListener)

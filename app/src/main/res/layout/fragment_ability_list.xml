@@ -16,7 +16,7 @@
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
         tools:context=".ui.collection.abilities.AbilitiesListFragment"
-        tools:listitem="@layout/fragment_abilities_list_item" />
+        tools:listitem="@layout/fragment_ability_list_item" />
 
     <include
         android:id="@+id/empty_state_view"

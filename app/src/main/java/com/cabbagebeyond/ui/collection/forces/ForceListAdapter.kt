@@ -1,16 +1,17 @@
-package com.cabbagebeyond.ui.collection.races
+package com.cabbagebeyond.ui.collection.forces
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.cabbagebeyond.databinding.FragmentRacesListItemBinding
-import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.databinding.FragmentForceListItemBinding
+import com.cabbagebeyond.model.Force
 import com.cabbagebeyond.ui.CollectionDiffCallback
 import com.cabbagebeyond.ui.CollectionItemClickListener
 
-class RacesRecyclerViewAdapter(private val clickListener: RaceClickListener) :
-    ListAdapter<Race, RacesRecyclerViewAdapter.ViewHolder>(DiffCallback) {
+
+class ForceListAdapter(private val clickListener: ForceClickListener) :
+    ListAdapter<Force, ForceListAdapter.ViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -21,11 +22,11 @@ class RacesRecyclerViewAdapter(private val clickListener: RaceClickListener) :
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder(private val binding: FragmentRacesListItemBinding) :
+    class ViewHolder(private val binding: FragmentForceListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: Race, clickListener: RaceClickListener) {
-            binding.race = item
+        fun bind(item: Force, clickListener: ForceClickListener) {
+            binding.force = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }
@@ -34,14 +35,14 @@ class RacesRecyclerViewAdapter(private val clickListener: RaceClickListener) :
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding =
-                    FragmentRacesListItemBinding.inflate(layoutInflater, parent, false)
+                    FragmentForceListItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
     }
 
-    companion object DiffCallback : CollectionDiffCallback<Race>()
+    companion object DiffCallback : CollectionDiffCallback<Force>()
 }
 
-class RaceClickListener(clickListener: (item: Race) -> Unit) :
-    CollectionItemClickListener<Race>(clickListener)
+class ForceClickListener(clickListener: (item: Force) -> Unit) :
+    CollectionItemClickListener<Force>(clickListener)

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.EquipmentDataSource
-import com.cabbagebeyond.databinding.FragmentEquipmentsListBinding
+import com.cabbagebeyond.databinding.FragmentEquipmentListBinding
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
@@ -18,28 +18,28 @@ import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
 
-class EquipmentsFragment : CollectionListFragment<Equipment>() {
+class EquipmentListFragment : CollectionListFragment<Equipment>() {
 
-    private val _viewModel: EquipmentsViewModel
-        get() = viewModel as EquipmentsViewModel
+    private val _viewModel: EquipmentListViewModel
+        get() = viewModel as EquipmentListViewModel
 
-    private lateinit var _binding: FragmentEquipmentsListBinding
-    private lateinit var _adapter: EquipmentsRecyclerViewAdapter
+    private lateinit var _binding: FragmentEquipmentListBinding
+    private lateinit var _adapter: EquipmentListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentEquipmentsListBinding.inflate(inflater)
+        _binding = FragmentEquipmentListBinding.inflate(inflater)
 
         val dataSource: EquipmentDataSource by inject()
         viewModel =
-            EquipmentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+            EquipmentListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = EquipmentClickListener {
             _viewModel.onItemSelected(it)
         }
-        _adapter = EquipmentsRecyclerViewAdapter(clickListener)
+        _adapter = EquipmentListAdapter(clickListener)
 
         _binding.list.apply {
             layoutManager = LinearLayoutManager(context)
@@ -71,7 +71,7 @@ class EquipmentsFragment : CollectionListFragment<Equipment>() {
         _viewModel.interaction.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
-                    is EquipmentsViewModel.Interaction.OpenFilter -> {
+                    is EquipmentListViewModel.Interaction.OpenFilter -> {
                         showFilterDialog(it.types, it.worlds)
                     }
                 }
@@ -127,7 +127,7 @@ class EquipmentsFragment : CollectionListFragment<Equipment>() {
 
     private fun showDetails(equipment: Equipment) {
         findNavController().navigate(
-            EquipmentsFragmentDirections.actionEquipmentsToDetails(
+            EquipmentListFragmentDirections.actionEquipmentsToDetails(
                 equipment
             )
         )

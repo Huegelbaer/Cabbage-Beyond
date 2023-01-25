@@ -1,34 +1,34 @@
-package com.cabbagebeyond.ui.collection.equipments
+package com.cabbagebeyond.ui.collection.forces
 
 import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.EquipmentDataSource
-import com.cabbagebeyond.model.Equipment
+import com.cabbagebeyond.data.ForceDataSource
+import com.cabbagebeyond.model.Force
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
-class EquipmentsViewModel(
+class ForceListViewModel(
     user: User,
     application: Application,
-    private val equipmentDataSource: EquipmentDataSource
-) : CollectionListViewModel<Equipment>(user, application) {
+    private val forceDataSource: ForceDataSource
+) : CollectionListViewModel<Force>(user, application) {
 
     object Filter {
-        var selectedType: EquipmentType? = null
+        var selectedRank: ForceRank? = null
         var selectedWorld: World? = null
     }
 
     sealed class Interaction {
-        data class OpenFilter(val types: FilterData<EquipmentType>, val worlds: FilterData<World>) :
+        data class OpenFilter(val ranks: FilterData<ForceRank>, val worlds: FilterData<World>) :
             Interaction()
     }
 
-    private var _equipments = listOf<Equipment>()
+    private var _forces = listOf<Force>()
 
     private var _interaction = MutableLiveData<Interaction?>()
     val interaction: LiveData<Interaction?>
@@ -38,9 +38,9 @@ class EquipmentsViewModel(
 
     init {
         viewModelScope.launch {
-            _equipments = equipmentDataSource.getEquipments().getOrDefault(listOf())
-            mutableItems.value = _equipments
-            if (_equipments.isEmpty()) {
+            _forces = forceDataSource.getForces().getOrDefault(listOf())
+            mutableItems.value = _forces
+            if (_forces.isEmpty()) {
                 showNoContentAvailable()
             }
         }
@@ -48,22 +48,17 @@ class EquipmentsViewModel(
 
     override fun onSelectFilter() {
         val application = getApplication<Application>()
-        val types = _equipments.mapNotNull { equipment ->
-            equipment.type?.let {
-                EquipmentType.create(
-                    it,
-                    application
-                )
-            }
-        }.toSet().toList()
-        val worlds = _equipments.mapNotNull { it.world }.toSet().toList()
+        val ranks =
+            _forces.map { force -> force.rangRequirement.let { ForceRank.create(it, application) } }
+                .toSet().toList()
+        val worlds = _forces.mapNotNull { it.world }.toSet().toList()
 
         _interaction.value = Interaction.OpenFilter(
             FilterData(
-                application.resources.getString(R.string.character_type),
-                types,
-                _activeFilter.selectedType,
-                EquipmentType::title
+                application.resources.getString(R.string.talent_rang_requirement),
+                ranks,
+                _activeFilter.selectedRank,
+                ForceRank::title
             ),
             FilterData(
                 application.resources.getString(R.string.character_world),
@@ -74,24 +69,24 @@ class EquipmentsViewModel(
         )
     }
 
-    fun filter(type: EquipmentType?, world: World?) {
-        _activeFilter.selectedType = type
+    fun filter(rank: ForceRank?, world: World?) {
+        _activeFilter.selectedRank = rank
         _activeFilter.selectedWorld = world
 
         viewModelScope.launch {
-            val filteredItems = _equipments.filter { equipment ->
-                val iType = type?.let { type ->
-                    equipment.type == type.type
+            val filteredItems = _forces.filter { force ->
+                val iRank = rank?.let { rank ->
+                    force.rangRequirement == rank.rank
                 } ?: true
                 val iWorld = world?.let { world ->
-                    equipment.world == world
+                    force.world == world
                 } ?: true
 
-                iType && iWorld
+                iRank && iWorld
             }
             mutableItems.value = filteredItems
             if (filteredItems.isEmpty()) {
-                val searchTerm = listOfNotNull(type?.title, world?.name)
+                val searchTerm = listOfNotNull(rank?.title, world?.name)
                 showNoFilterResult(searchTerm) {
                     resetFilter()
                 }
@@ -102,9 +97,9 @@ class EquipmentsViewModel(
     }
 
     private fun resetFilter() {
-        _activeFilter.selectedType = null
+        _activeFilter.selectedRank = null
         _activeFilter.selectedWorld = null
-        mutableItems.value = _equipments
+        mutableItems.value = _forces
     }
 
     fun onInteractionCompleted() {

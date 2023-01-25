@@ -12,7 +12,7 @@ import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
-class RacesViewModel(
+class RaceListViewModel(
     user: User,
     application: Application,
     private val raceDataSource: RaceDataSource

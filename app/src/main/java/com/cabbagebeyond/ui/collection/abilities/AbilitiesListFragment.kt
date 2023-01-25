@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.AbilityDataSource
-import com.cabbagebeyond.databinding.FragmentAbilitiesListBinding
+import com.cabbagebeyond.databinding.FragmentAbilityListBinding
 import com.cabbagebeyond.model.Ability
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
@@ -19,26 +19,26 @@ import org.koin.android.ext.android.inject
 
 class AbilitiesListFragment : CollectionListFragment<Ability>() {
 
-    private val _viewModel: AbilitiesViewModel
-        get() = viewModel as AbilitiesViewModel
+    private val _viewModel: AbilityListViewModel
+        get() = viewModel as AbilityListViewModel
 
-    private lateinit var _binding: FragmentAbilitiesListBinding
-    private lateinit var _adapter: AbilitiesRecyclerViewAdapter
+    private lateinit var _binding: FragmentAbilityListBinding
+    private lateinit var _adapter: AbilityListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentAbilitiesListBinding.inflate(inflater)
+        _binding = FragmentAbilityListBinding.inflate(inflater)
 
         val dataSource: AbilityDataSource by inject()
         viewModel =
-            AbilitiesViewModel(UserService.currentUser, requireActivity().application, dataSource)
+            AbilityListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = AbilityClickListener {
             _viewModel.onItemSelected(it)
         }
-        _adapter = AbilitiesRecyclerViewAdapter(clickListener)
+        _adapter = AbilityListAdapter(clickListener)
 
         _binding.list.apply {
             layoutManager = LinearLayoutManager(context)
@@ -70,7 +70,7 @@ class AbilitiesListFragment : CollectionListFragment<Ability>() {
         _viewModel.interaction.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
-                    is AbilitiesViewModel.Interaction.OpenFilter -> {
+                    is AbilityListViewModel.Interaction.OpenFilter -> {
                         showFilterDialog(it.attributes, it.worlds)
                     }
                 }

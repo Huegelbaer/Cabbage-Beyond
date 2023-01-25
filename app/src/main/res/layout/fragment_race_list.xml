@@ -13,8 +13,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         app:layoutManager="LinearLayoutManager"
-        tools:context=".ui.collection.races.RacesFragment"
-        tools:listitem="@layout/fragment_races_list_item" />
+        tools:context=".ui.collection.races.RaceListFragment"
+        tools:listitem="@layout/fragment_race_list_item" />
 
     <include
         android:id="@+id/empty_state_view"

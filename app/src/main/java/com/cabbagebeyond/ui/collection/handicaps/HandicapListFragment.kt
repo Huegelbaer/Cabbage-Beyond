@@ -1,4 +1,4 @@
-package com.cabbagebeyond.ui.collection.forces
+package com.cabbagebeyond.ui.collection.handicaps
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,37 +8,37 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
-import com.cabbagebeyond.data.ForceDataSource
-import com.cabbagebeyond.databinding.FragmentForcesListBinding
-import com.cabbagebeyond.model.Force
+import com.cabbagebeyond.data.HandicapDataSource
+import com.cabbagebeyond.databinding.FragmentHandicapListBinding
+import com.cabbagebeyond.model.Handicap
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class ForcesFragment : CollectionListFragment<Force>() {
+class HandicapListFragment : CollectionListFragment<Handicap>() {
 
-    private val _viewModel: ForcesViewModel
-        get() = viewModel as ForcesViewModel
+    private val _viewModel: HandicapListViewModel
+        get() = viewModel as HandicapListViewModel
 
-    private lateinit var _binding: FragmentForcesListBinding
-    private lateinit var _adapter: ForcesRecyclerViewAdapter
+    private lateinit var _binding: FragmentHandicapListBinding
+    private lateinit var _adapter: HandicapListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentForcesListBinding.inflate(inflater)
+        _binding = FragmentHandicapListBinding.inflate(inflater)
 
-        val dataSource: ForceDataSource by inject()
+        val dataSource: HandicapDataSource by inject()
         viewModel =
-            ForcesViewModel(UserService.currentUser, requireActivity().application, dataSource)
+            HandicapListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
-        val clickListener = ForceClickListener {
+        val clickListener = HandicapClickListener {
             _viewModel.onItemSelected(it)
         }
-        _adapter = ForcesRecyclerViewAdapter(clickListener)
+        _adapter = HandicapListAdapter(clickListener)
 
         _binding.list.apply {
             layoutManager = LinearLayoutManager(context)
@@ -61,12 +61,6 @@ class ForcesFragment : CollectionListFragment<Force>() {
             }
         }
 
-        _viewModel.items.observe(viewLifecycleOwner) {
-            it?.let {
-                _adapter.submitList(it)
-            }
-        }
-
         _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
                 showDetails(it.first)
@@ -76,18 +70,13 @@ class ForcesFragment : CollectionListFragment<Force>() {
         _viewModel.interaction.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
-                    is ForcesViewModel.Interaction.OpenFilter -> {
-                        showFilterDialog(it.ranks, it.worlds)
+                    is HandicapListViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(it.types, it.worlds)
                     }
                 }
                 _viewModel.onInteractionCompleted()
             }
         }
-    }
-
-    override fun showList() {
-        _binding.list.visibility = View.VISIBLE
-        _binding.emptyStateView.root.visibility = View.GONE
     }
 
     override fun showEmptyState(
@@ -103,20 +92,25 @@ class ForcesFragment : CollectionListFragment<Force>() {
         }
     }
 
+    override fun showList() {
+        _binding.list.visibility = View.VISIBLE
+        _binding.emptyStateView.root.visibility = View.GONE
+    }
+
     private fun showFilterDialog(
-        ranks: CollectionListViewModel.FilterData<ForceRank>,
+        types: CollectionListViewModel.FilterData<HandicapType>,
         worlds: CollectionListViewModel.FilterData<World>
     ) {
 
-        var selectedRank = ranks.selected
+        var selectedType = types.selected
         var selectedWorld = worlds.selected
 
         val dialog = FilterDialogFragment(onFilter = {
-            _viewModel.filter(selectedRank, selectedWorld)
+            _viewModel.filter(selectedType, selectedWorld)
         })
 
-        dialog.addFilterChipGroup(ranks.title, ranks.values, ranks.selected, ranks.titleProperty) {
-            selectedRank = it
+        dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
+            selectedType = it
         }
         dialog.addFilterChipGroup(
             worlds.title,
@@ -127,11 +121,11 @@ class ForcesFragment : CollectionListFragment<Force>() {
             selectedWorld = it
         }
 
-        dialog.show(requireActivity().supportFragmentManager, "force_dialog_filter")
+        dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
-    private fun showDetails(force: Force) {
-        findNavController().navigate(ForcesFragmentDirections.actionForcesToDetails(force))
+    private fun showDetails(handicap: Handicap) {
+        findNavController().navigate(HandicapListFragmentDirections.actionHandicapsToDetails(handicap))
         _viewModel.onNavigationCompleted()
     }
 }

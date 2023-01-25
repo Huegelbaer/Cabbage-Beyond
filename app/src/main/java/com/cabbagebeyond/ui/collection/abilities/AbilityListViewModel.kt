@@ -11,9 +11,8 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
-import java.util.*
 
-class AbilitiesViewModel(
+class AbilityListViewModel(
     user: User,
     private val app: Application,
     private val abilityDataSource: AbilityDataSource

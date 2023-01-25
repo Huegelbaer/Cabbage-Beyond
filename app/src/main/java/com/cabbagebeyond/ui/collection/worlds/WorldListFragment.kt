@@ -8,26 +8,26 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.data.WorldDataSource
-import com.cabbagebeyond.databinding.FragmentWorldsListBinding
+import com.cabbagebeyond.databinding.FragmentWorldListBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import org.koin.android.ext.android.inject
 
 
-class WorldsFragment : CollectionListFragment<World>() {
+class WorldListFragment : CollectionListFragment<World>() {
 
     private val _viewModel: WorldListViewModel
         get() = viewModel as WorldListViewModel
 
-    private lateinit var _binding: FragmentWorldsListBinding
-    private lateinit var _adapter: WorldRecyclerViewAdapter
+    private lateinit var _binding: FragmentWorldListBinding
+    private lateinit var _adapter: WorldListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentWorldsListBinding.inflate(inflater)
+        _binding = FragmentWorldListBinding.inflate(inflater)
 
         val dataSource: WorldDataSource by inject()
         viewModel =
@@ -36,7 +36,7 @@ class WorldsFragment : CollectionListFragment<World>() {
         val clickListener = WorldClickListener {
             _viewModel.onItemSelected(it)
         }
-        _adapter = WorldRecyclerViewAdapter(clickListener)
+        _adapter = WorldListAdapter(clickListener)
 
         _binding.list.apply {
             layoutManager = LinearLayoutManager(context)
@@ -94,7 +94,7 @@ class WorldsFragment : CollectionListFragment<World>() {
 
     private fun navigateToDetails(world: World, startEditing: Boolean) {
         findNavController().navigate(
-            WorldsFragmentDirections.actionHomeToWorldDetails(
+            WorldListFragmentDirections.actionHomeToWorldDetails(
                 world,
                 startEditing
             )

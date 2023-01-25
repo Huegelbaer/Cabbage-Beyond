@@ -4,13 +4,13 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.cabbagebeyond.databinding.FragmentEquipmentsListItemBinding
+import com.cabbagebeyond.databinding.FragmentEquipmentListItemBinding
 import com.cabbagebeyond.model.Equipment
 import com.cabbagebeyond.ui.CollectionDiffCallback
 import com.cabbagebeyond.ui.CollectionItemClickListener
 
-class EquipmentsRecyclerViewAdapter(private val clickListener: EquipmentClickListener) :
-    ListAdapter<Equipment, EquipmentsRecyclerViewAdapter.ViewHolder>(DiffCallback) {
+class EquipmentListAdapter(private val clickListener: EquipmentClickListener) :
+    ListAdapter<Equipment, EquipmentListAdapter.ViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = getItem(position)
@@ -21,7 +21,7 @@ class EquipmentsRecyclerViewAdapter(private val clickListener: EquipmentClickLis
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder(private val binding: FragmentEquipmentsListItemBinding) :
+    class ViewHolder(private val binding: FragmentEquipmentListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Equipment, clickListener: EquipmentClickListener) {
@@ -34,7 +34,7 @@ class EquipmentsRecyclerViewAdapter(private val clickListener: EquipmentClickLis
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding =
-                    FragmentEquipmentsListItemBinding.inflate(layoutInflater, parent, false)
+                    FragmentEquipmentListItemBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

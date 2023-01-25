@@ -1,4 +1,4 @@
-package com.cabbagebeyond.ui.collection.handicaps
+package com.cabbagebeyond.ui.collection.races
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,37 +8,37 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
-import com.cabbagebeyond.data.HandicapDataSource
-import com.cabbagebeyond.databinding.FragmentHandicapsListBinding
-import com.cabbagebeyond.model.Handicap
+import com.cabbagebeyond.data.RaceDataSource
+import com.cabbagebeyond.databinding.FragmentRaceListBinding
+import com.cabbagebeyond.model.Race
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.collection.CollectionListFragment
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
-class HandicapsFragment : CollectionListFragment<Handicap>() {
+class RaceListFragment : CollectionListFragment<Race>() {
 
-    private val _viewModel: HandicapsViewModel
-        get() = viewModel as HandicapsViewModel
+    private val _viewModel: RaceListViewModel
+        get() = viewModel as RaceListViewModel
 
-    private lateinit var _binding: FragmentHandicapsListBinding
-    private lateinit var _adapter: HandicapsRecyclerViewAdapter
+    private lateinit var _binding: FragmentRaceListBinding
+    private lateinit var _adapter: RaceListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHandicapsListBinding.inflate(inflater)
+        _binding = FragmentRaceListBinding.inflate(inflater)
 
-        val dataSource: HandicapDataSource by inject()
+        val dataSource: RaceDataSource by inject()
         viewModel =
-            HandicapsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+            RaceListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
-        val clickListener = HandicapClickListener {
+        val clickListener = RaceClickListener {
             _viewModel.onItemSelected(it)
         }
-        _adapter = HandicapsRecyclerViewAdapter(clickListener)
+        _adapter = RaceListAdapter(clickListener)
 
         _binding.list.apply {
             layoutManager = LinearLayoutManager(context)
@@ -70,8 +70,8 @@ class HandicapsFragment : CollectionListFragment<Handicap>() {
         _viewModel.interaction.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
-                    is HandicapsViewModel.Interaction.OpenFilter -> {
-                        showFilterDialog(it.types, it.worlds)
+                    is RaceListViewModel.Interaction.OpenFilter -> {
+                        showFilterDialog(it.worlds)
                     }
                 }
                 _viewModel.onInteractionCompleted()
@@ -97,21 +97,14 @@ class HandicapsFragment : CollectionListFragment<Handicap>() {
         _binding.emptyStateView.root.visibility = View.GONE
     }
 
-    private fun showFilterDialog(
-        types: CollectionListViewModel.FilterData<HandicapType>,
-        worlds: CollectionListViewModel.FilterData<World>
-    ) {
+    private fun showFilterDialog(worlds: CollectionListViewModel.FilterData<World>) {
 
-        var selectedType = types.selected
         var selectedWorld = worlds.selected
 
         val dialog = FilterDialogFragment(onFilter = {
-            _viewModel.filter(selectedType, selectedWorld)
+            _viewModel.filter(selectedWorld)
         })
 
-        dialog.addFilterChipGroup(types.title, types.values, types.selected, types.titleProperty) {
-            selectedType = it
-        }
         dialog.addFilterChipGroup(
             worlds.title,
             worlds.values,
@@ -124,8 +117,8 @@ class HandicapsFragment : CollectionListFragment<Handicap>() {
         dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
-    private fun showDetails(handicap: Handicap) {
-        findNavController().navigate(HandicapsFragmentDirections.actionHandicapsToDetails(handicap))
+    private fun showDetails(race: Race) {
+        findNavController().navigate(RaceListFragmentDirections.actionRacesToDetails(race))
         _viewModel.onNavigationCompleted()
     }
 }

@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.EmptyListStateModel
 import com.cabbagebeyond.FilterDialogFragment
 import com.cabbagebeyond.data.TalentDataSource
-import com.cabbagebeyond.databinding.FragmentTalentsListBinding
+import com.cabbagebeyond.databinding.FragmentTalentListBinding
 import com.cabbagebeyond.model.Talent
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
@@ -18,28 +18,28 @@ import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import org.koin.android.ext.android.inject
 
 
-class TalentsListFragment : CollectionListFragment<Talent>() {
+class TalentListFragment : CollectionListFragment<Talent>() {
 
-    private val _viewModel: TalentsViewModel
-        get() = viewModel as TalentsViewModel
+    private val _viewModel: TalentListViewModel
+        get() = viewModel as TalentListViewModel
 
-    private lateinit var _binding: FragmentTalentsListBinding
-    private lateinit var _adapter: TalentsRecyclerViewAdapter
+    private lateinit var _binding: FragmentTalentListBinding
+    private lateinit var _adapter: TalentListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentTalentsListBinding.inflate(inflater)
+        _binding = FragmentTalentListBinding.inflate(inflater)
 
         val dataSource: TalentDataSource by inject()
         viewModel =
-            TalentsViewModel(UserService.currentUser, requireActivity().application, dataSource)
+            TalentListViewModel(UserService.currentUser, requireActivity().application, dataSource)
 
         val clickListener = TalentClickListener {
             _viewModel.onItemSelected(it)
         }
-        _adapter = TalentsRecyclerViewAdapter(clickListener)
+        _adapter = TalentListAdapter(clickListener)
 
         _binding.list.apply {
             layoutManager = LinearLayoutManager(context)
@@ -81,7 +81,7 @@ class TalentsListFragment : CollectionListFragment<Talent>() {
         _viewModel.interaction.observe(viewLifecycleOwner) {
             it?.let {
                 when (it) {
-                    is TalentsViewModel.Interaction.OpenFilter -> {
+                    is TalentListViewModel.Interaction.OpenFilter -> {
                         showFilterDialog(it.types, it.ranks, it.worlds)
                     }
                 }
@@ -142,7 +142,7 @@ class TalentsListFragment : CollectionListFragment<Talent>() {
 
     private fun showDetails(talent: Talent, startEditing: Boolean) {
         findNavController().navigate(
-            TalentsListFragmentDirections.actionTalentsToDetails(
+            TalentListFragmentDirections.actionTalentsToDetails(
                 talent,
                 startEditing
             )

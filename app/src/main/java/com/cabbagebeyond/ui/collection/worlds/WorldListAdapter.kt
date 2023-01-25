@@ -4,14 +4,14 @@ import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import com.cabbagebeyond.databinding.FragmentWorldsListItemBinding
+import com.cabbagebeyond.databinding.FragmentWorldListItemBinding
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.CollectionDiffCallback
 import com.cabbagebeyond.ui.CollectionItemClickListener
 
 
-class WorldRecyclerViewAdapter(private val clickListener: WorldClickListener) :
-    ListAdapter<World, WorldRecyclerViewAdapter.WorldViewHolder>(DiffCallback) {
+class WorldListAdapter(private val clickListener: WorldClickListener) :
+    ListAdapter<World, WorldListAdapter.WorldViewHolder>(DiffCallback) {
 
     override fun onBindViewHolder(holder: WorldViewHolder, position: Int) {
         val item = getItem(position)
@@ -22,7 +22,7 @@ class WorldRecyclerViewAdapter(private val clickListener: WorldClickListener) :
         return WorldViewHolder.from(parent)
     }
 
-    class WorldViewHolder(private val binding: FragmentWorldsListItemBinding) :
+    class WorldViewHolder(private val binding: FragmentWorldListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(world: World, clickListener: WorldClickListener) {
@@ -34,7 +34,7 @@ class WorldRecyclerViewAdapter(private val clickListener: WorldClickListener) :
         companion object {
             fun from(parent: ViewGroup): WorldViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = FragmentWorldsListItemBinding.inflate(layoutInflater, parent, false)
+                val binding = FragmentWorldListItemBinding.inflate(layoutInflater, parent, false)
                 return WorldViewHolder(binding)
             }
         }

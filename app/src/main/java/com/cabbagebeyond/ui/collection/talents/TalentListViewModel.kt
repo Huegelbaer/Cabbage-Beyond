@@ -13,7 +13,7 @@ import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 import java.util.*
 
-class TalentsViewModel(
+class TalentListViewModel(
     user: User,
     private val app: Application,
     private val talentDataSource: TalentDataSource

@@ -12,7 +12,7 @@ import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
 
-class HandicapsViewModel(
+class HandicapListViewModel(
     user: User,
     app: Application,
     private val handicapsDataSource: HandicapDataSource
