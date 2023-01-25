@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.AbilityDataSource
 import com.cabbagebeyond.model.Ability
+import com.cabbagebeyond.model.Attribute
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class AbilityListViewModel(
     user: User,
@@ -95,6 +97,11 @@ class AbilityListViewModel(
                 resetEmptyState()
             }
         }
+    }
+
+    fun addAbility() {
+        val newAbility = Ability("", "", Attribute.CONSTITUTION, null, UUID.randomUUID().toString())
+        onCreateNewItem(newAbility)
     }
 
     private fun resetFilter() {

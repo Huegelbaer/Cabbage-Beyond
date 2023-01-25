@@ -45,6 +45,16 @@ class AbilitiesListFragment : CollectionListFragment<Ability>() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addAbility()
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+
         setupViewModelObservers()
 
         setHasOptionsMenu(true)
@@ -63,7 +73,7 @@ class AbilitiesListFragment : CollectionListFragment<Ability>() {
 
         _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it.first)
+                showDetails(it.first, it.second)
             }
         }
 
@@ -129,10 +139,11 @@ class AbilitiesListFragment : CollectionListFragment<Ability>() {
         dialog.show(requireActivity().supportFragmentManager, "ability_dialog_filter")
     }
 
-    private fun showDetails(ability: Ability) {
+    private fun showDetails(ability: Ability, startEditing: Boolean) {
         findNavController().navigate(
             AbilitiesListFragmentDirections.actionAbilitiesToDetails(
-                ability
+                ability,
+                startEditing
             )
         )
         _viewModel.onNavigationCompleted()

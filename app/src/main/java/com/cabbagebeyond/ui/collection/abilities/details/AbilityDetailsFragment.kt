@@ -33,12 +33,13 @@ class AbilityDetailsFragment : DetailsFragment() {
         _binding = FragmentAbilityDetailsBinding.inflate(inflater)
 
         val ability = AbilityDetailsFragmentArgs.fromBundle(requireArguments()).ability
+        val isEditingActive = AbilityDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: AbilityDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = AbilityDetailsViewModel(
             ability,
-            false,
+            isEditingActive,
             dataSource,
             worldDataSource,
             UserService.currentUser,
@@ -86,7 +87,7 @@ class AbilityDetailsFragment : DetailsFragment() {
     }
 
     private fun setupWorldSpinner(preSelection: World?, worlds: List<World?>) {
-        if (worlds.isNullOrEmpty()) return
+        if (worlds.isEmpty()) return
 
         setupSpinner(
             preSelection?.name,
@@ -99,7 +100,7 @@ class AbilityDetailsFragment : DetailsFragment() {
     }
 
     private fun setupAttributeSpinner(preSelection: AbilityAttribute?, attributes: List<AbilityAttribute>) {
-        if (attributes.isNullOrEmpty()) return
+        if (attributes.isEmpty()) return
 
         setupSpinner(
             preSelection?.title,

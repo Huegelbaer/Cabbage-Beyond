@@ -82,18 +82,26 @@ class AbilityDetailsViewModel(
     override fun onSave() {
         super.onSave()
         ability.value?.let {
-            save(it)
+            if (verify(it)) {
+                save(it)
+            } else {
+                onSaveFailed()
+            }
         }
+    }
+
+    private fun verify(ability: Ability): Boolean {
+        return ability.name.isNotBlank()
     }
 
     private fun save(toSafe: Ability) {
         viewModelScope.launch {
             val result = _abilityDataSource.saveAbility(toSafe)
             if (result.isSuccess) {
-                message.value = R.string.save_completed
+                onSaveSucceeded()
                 ability.value = toSafe
             } else {
-                message.value = R.string.save_failed
+                onSaveFailed()
             }
         }
     }
