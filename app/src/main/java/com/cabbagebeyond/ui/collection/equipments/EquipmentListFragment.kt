@@ -46,6 +46,16 @@ class EquipmentListFragment : CollectionListFragment<Equipment>() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addEquipment()
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+
         setupViewModelObservers()
 
         setHasOptionsMenu(true)
@@ -64,7 +74,7 @@ class EquipmentListFragment : CollectionListFragment<Equipment>() {
 
         _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it.first)
+                showDetails(it.first, it.second)
             }
         }
 
@@ -125,10 +135,11 @@ class EquipmentListFragment : CollectionListFragment<Equipment>() {
         dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
-    private fun showDetails(equipment: Equipment) {
+    private fun showDetails(equipment: Equipment, startEditing: Boolean) {
         findNavController().navigate(
             EquipmentListFragmentDirections.actionEquipmentsToDetails(
-                equipment
+                equipment,
+                startEditing
             )
         )
         _viewModel.onNavigationCompleted()

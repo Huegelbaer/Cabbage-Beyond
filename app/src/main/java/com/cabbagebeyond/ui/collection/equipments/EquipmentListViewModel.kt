@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class EquipmentListViewModel(
     user: User,
@@ -110,4 +111,11 @@ class EquipmentListViewModel(
     fun onInteractionCompleted() {
         _interaction.value = null
     }
+
+    fun addEquipment() {
+        val newEquipment =
+            Equipment("", "", "", 0.0, listOf(), null, null, UUID.randomUUID().toString())
+        onCreateNewItem(newEquipment)
+    }
+
 }

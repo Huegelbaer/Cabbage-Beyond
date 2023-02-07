@@ -33,12 +33,13 @@ class EquipmentDetailsFragment : DetailsFragment() {
         _binding = FragmentEquipmentDetailsBinding.inflate(inflater)
 
         val equipment = EquipmentDetailsFragmentArgs.fromBundle(requireArguments()).equipment
+        val isEditingActive = EquipmentDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: EquipmentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = EquipmentDetailsViewModel(
             equipment,
-            false,
+            isEditingActive,
             dataSource,
             worldDataSource,
             UserService.currentUser,
