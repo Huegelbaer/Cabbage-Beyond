@@ -14,7 +14,9 @@ import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.ui.collection.forces.ForceRank
 import com.cabbagebeyond.util.CollectionProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ForceDetailsViewModel(
     givenForce: Force,
@@ -46,13 +48,16 @@ class ForceDetailsViewModel(
             CollectionProperty("range", R.string.range, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        loadRanks()
+        loadWorlds()
     }
 
     override fun onEdit() {
         super.onEdit()
 
-        _ranks.value?.values?.let { updateRankSelection(it) } ?: loadRanks()
-        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+        _ranks.value?.values?.let { updateRankSelection(it) }
+        _worlds.value?.values?.let { updateWorldSelection(it) }
 
     }
 
@@ -72,7 +77,9 @@ class ForceDetailsViewModel(
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            updateWorldSelection(worlds)
+            withContext(Dispatchers.Main) {
+                updateWorldSelection(worlds)
+            }
         }
     }
 

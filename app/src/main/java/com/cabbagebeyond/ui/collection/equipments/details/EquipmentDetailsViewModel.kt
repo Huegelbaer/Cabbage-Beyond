@@ -13,7 +13,9 @@ import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.ui.collection.equipments.EquipmentType
 import com.cabbagebeyond.util.CollectionProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EquipmentDetailsViewModel(
     givenEquipment: Equipment,
@@ -46,20 +48,22 @@ class EquipmentDetailsViewModel(
             CollectionProperty("requirements", R.string.requirement_title, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        loadTypes()
+        loadWorlds()
     }
 
     override fun onEdit() {
         super.onEdit()
 
-        _types.value?.values?.let { updateTypeSelection(it) } ?: loadTypes()
-        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
-
+        _types.value?.values?.let { updateTypeSelection(it) }
+        _worlds.value?.values?.let { updateWorldSelection(it) }
     }
 
     private fun loadTypes() {
         val application = getApplication<Application>()
-        val attributes = Equipment.Type.values().map { EquipmentType.create(it, application) }
-        updateTypeSelection(attributes)
+        val types = Equipment.Type.values().map { EquipmentType.create(it, application) }
+        updateTypeSelection(types)
     }
 
     private fun updateTypeSelection(types: List<EquipmentType>) {
@@ -69,10 +73,13 @@ class EquipmentDetailsViewModel(
     }
 
     private fun loadWorlds() {
-        viewModelScope.launch {
-            val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
+        viewModelScope.launch(Dispatchers.IO) {
+            val worlds: MutableList<World?> =
+                _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            updateWorldSelection(worlds)
+            withContext(Dispatchers.Main) {
+                updateWorldSelection(worlds)
+            }
         }
     }
 

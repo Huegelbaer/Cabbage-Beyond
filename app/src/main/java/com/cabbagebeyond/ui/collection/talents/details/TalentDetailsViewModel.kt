@@ -12,7 +12,9 @@ import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.ui.collection.talents.TalentRank
 import com.cabbagebeyond.ui.collection.talents.TalentType
 import com.cabbagebeyond.util.CollectionProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class TalentDetailsViewModel(
     givenTalent: Talent,
@@ -48,14 +50,18 @@ class TalentDetailsViewModel(
         //    CollectionProperty("rank", R.string.talent_rang_requirement, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        loadRanks()
+        loadTypes()
+        loadWorlds()
     }
 
     override fun onEdit() {
         super.onEdit()
 
-        _ranks.value?.values?.let { updateRankSelection(it) } ?: loadRanks()
-        _types.value?.values?.let { updateTypeSelection(it) } ?: loadTypes()
-        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+        _ranks.value?.values?.let { updateRankSelection(it) }
+        _types.value?.values?.let { updateTypeSelection(it) }
+        _worlds.value?.values?.let { updateWorldSelection(it) }
     }
 
     private fun loadRanks() {
@@ -86,7 +92,9 @@ class TalentDetailsViewModel(
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            updateWorldSelection(worlds)
+            withContext(Dispatchers.Main) {
+                updateWorldSelection(worlds)
+            }
         }
     }
 

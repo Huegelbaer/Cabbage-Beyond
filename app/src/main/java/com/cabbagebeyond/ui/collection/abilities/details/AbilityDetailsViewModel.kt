@@ -14,7 +14,9 @@ import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.ui.collection.abilities.AbilityAttribute
 import com.cabbagebeyond.util.CollectionProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class AbilityDetailsViewModel(
     givenAbility: Ability,
@@ -45,20 +47,25 @@ class AbilityDetailsViewModel(
          //   CollectionProperty("attribute", R.string.attribute, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        loadAttributes()
+        loadWorlds()
     }
 
     override fun onEdit() {
         super.onEdit()
-        _worlds.value?.values?.let { updateWorldSelection(it) } ?: loadWorlds()
+        _worlds.value?.values?.let { updateWorldSelection(it) }
 
-        _attributes.value?.values?.let { updateAttributeSelection(it) } ?: loadAttributes()
+        _attributes.value?.values?.let { updateAttributeSelection(it) }
     }
 
     private fun loadWorlds() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            updateWorldSelection(worlds)
+            withContext(Dispatchers.Main) {
+                updateWorldSelection(worlds)
+            }
         }
     }
 

@@ -12,7 +12,9 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.util.CollectionProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class RaceDetailsViewModel(
     givenRace: Race,
@@ -41,6 +43,9 @@ class RaceDetailsViewModel(
         )
 
         _features.value = givenRace.raceFeatures
+
+        loadRanks()
+        loadWorlds()
     }
 
     override fun onEdit() {
@@ -54,7 +59,9 @@ class RaceDetailsViewModel(
         viewModelScope.launch {
             val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
             worlds.add(0, null)
-            _worlds.value = worlds
+            withContext(Dispatchers.Main) {
+                _worlds.value = worlds
+            }
         }
     }
 
