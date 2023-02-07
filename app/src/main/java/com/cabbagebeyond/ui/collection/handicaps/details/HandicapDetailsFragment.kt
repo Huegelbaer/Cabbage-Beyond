@@ -33,11 +33,12 @@ class HandicapDetailsFragment : DetailsFragment() {
         _binding = FragmentHandicapDetailsBinding.inflate(inflater)
 
         val handicap = HandicapDetailsFragmentArgs.fromBundle(requireArguments()).handicap
+        val isEditingActive = HandicapDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: HandicapDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = HandicapDetailsViewModel(
-            handicap, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            handicap, isEditingActive, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

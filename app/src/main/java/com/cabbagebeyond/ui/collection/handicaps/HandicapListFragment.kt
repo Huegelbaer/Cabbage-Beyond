@@ -45,6 +45,16 @@ class HandicapListFragment : CollectionListFragment<Handicap>() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addHandicap()
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+
         setupViewModelObservers()
 
         setHasOptionsMenu(true)
@@ -63,7 +73,7 @@ class HandicapListFragment : CollectionListFragment<Handicap>() {
 
         _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it.first)
+                showDetails(it.first, it.second)
             }
         }
 
@@ -124,8 +134,8 @@ class HandicapListFragment : CollectionListFragment<Handicap>() {
         dialog.show(requireActivity().supportFragmentManager, "talent_dialog_filter")
     }
 
-    private fun showDetails(handicap: Handicap) {
-        findNavController().navigate(HandicapListFragmentDirections.actionHandicapsToDetails(handicap))
+    private fun showDetails(handicap: Handicap, startEditing: Boolean) {
+        findNavController().navigate(HandicapListFragmentDirections.actionHandicapsToDetails(handicap, startEditing))
         _viewModel.onNavigationCompleted()
     }
 }

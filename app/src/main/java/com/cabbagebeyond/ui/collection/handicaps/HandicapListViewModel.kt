@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class HandicapListViewModel(
     user: User,
@@ -92,4 +93,10 @@ class HandicapListViewModel(
     fun onInteractionCompleted() {
         _interaction.value = null
     }
+
+    fun addHandicap() {
+        val newEquipment = Handicap("", "", Handicap.Type.SLIGHT_OR_HEAVY, null, UUID.randomUUID().toString())
+        onCreateNewItem(newEquipment)
+    }
+
 }
