@@ -33,11 +33,12 @@ class ForceDetailsFragment : DetailsFragment() {
         _binding = FragmentForceDetailsBinding.inflate(inflater)
 
         val force = ForceDetailsFragmentArgs.fromBundle(requireArguments()).force
+        val isEditingActive = ForceDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: ForceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = ForceDetailsViewModel(
-            force, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            force, isEditingActive, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel

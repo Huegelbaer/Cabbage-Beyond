@@ -45,6 +45,16 @@ class ForceListFragment : CollectionListFragment<Force>() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addForce()
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+
         setupViewModelObservers()
 
         setHasOptionsMenu(true)
@@ -69,7 +79,7 @@ class ForceListFragment : CollectionListFragment<Force>() {
 
         _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showDetails(it.first)
+                showDetails(it.first, it.second)
             }
         }
 
@@ -130,8 +140,8 @@ class ForceListFragment : CollectionListFragment<Force>() {
         dialog.show(requireActivity().supportFragmentManager, "force_dialog_filter")
     }
 
-    private fun showDetails(force: Force) {
-        findNavController().navigate(ForceListFragmentDirections.actionForcesToDetails(force))
+    private fun showDetails(force: Force, startEditing: Boolean) {
+        findNavController().navigate(ForceListFragmentDirections.actionForcesToDetails(force, startEditing))
         _viewModel.onNavigationCompleted()
     }
 }

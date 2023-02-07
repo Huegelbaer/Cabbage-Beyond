@@ -7,10 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.ForceDataSource
 import com.cabbagebeyond.model.Force
+import com.cabbagebeyond.model.Rank
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class ForceListViewModel(
     user: User,
@@ -105,4 +107,10 @@ class ForceListViewModel(
     fun onInteractionCompleted() {
         _interaction.value = null
     }
+
+    fun addForce() {
+        val newEquipment = Force("", "", "", "", Rank.ROOKIE, "", "", null, UUID.randomUUID().toString())
+        onCreateNewItem(newEquipment)
+    }
+
 }
