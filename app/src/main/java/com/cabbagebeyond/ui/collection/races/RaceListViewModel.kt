@@ -11,6 +11,7 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class RaceListViewModel(
     user: User,
@@ -82,4 +83,11 @@ class RaceListViewModel(
     fun onInteractionCompleted() {
         _interaction.value = null
     }
+
+
+    fun addRace() {
+        val newEquipment = Race("", "", listOf(), null, UUID.randomUUID().toString())
+        onCreateNewItem(newEquipment)
+    }
+
 }

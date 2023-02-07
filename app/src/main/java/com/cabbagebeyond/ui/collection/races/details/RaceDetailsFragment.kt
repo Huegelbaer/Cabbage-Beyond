@@ -34,11 +34,12 @@ class RaceDetailsFragment : DetailsFragment() {
         _binding = FragmentRaceDetailsBinding.inflate(inflater)
 
         val race = RaceDetailsFragmentArgs.fromBundle(requireArguments()).race
+        val isEditingActive = RaceDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: RaceDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = RaceDetailsViewModel(
-            race, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            race, isEditingActive, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel
