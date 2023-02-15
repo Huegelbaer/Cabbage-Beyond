@@ -34,11 +34,12 @@ class TalentDetailsFragment : DetailsFragment() {
         _binding = FragmentTalentDetailsBinding.inflate(inflater)
 
         val talent = TalentDetailsFragmentArgs.fromBundle(requireArguments()).talent
+        val isEditingActive = TalentDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: TalentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = TalentDetailsViewModel(
-            talent, false, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            talent, isEditingActive, dataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel
