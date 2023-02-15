@@ -11,8 +11,6 @@ import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.model.*
 import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.ui.collection.characters.CharacterType
-import com.cabbagebeyond.ui.collection.talents.TalentRank
-import com.cabbagebeyond.ui.collection.talents.TalentType
 import com.cabbagebeyond.util.CollectionProperty
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -56,25 +54,36 @@ class CharacterDetailsViewModel(
         val talents = givenCharacter.talents.map {
                 ListItem(it.name, it)
             }.toMutableList()
-        val talentItem = HeaderItem("Talents", R.drawable.ic_thumb_up, talents)
+        val talentItem = HeaderItem(
+            app.resources.getString(R.string.character_details_talent_header, talents.size),
+            R.drawable.ic_thumb_up, talents
+        )
         itemList.add(talentItem)
 
         val handicaps = givenCharacter.handicaps.map {
             ListItem(it.name, it)
         }.toMutableList()
-        val handicapItem = HeaderItem("Handicaps", R.drawable.ic_thumb_down, handicaps)
+        val handicapItem = HeaderItem(app.resources.getString(R.string.character_details_handicap_header, handicaps.size),
+            R.drawable.ic_thumb_down, handicaps
+        )
         itemList.add(handicapItem)
 
         val forces = givenCharacter.forces.map {
             ListItem(it.name, it)
         }.toMutableList()
-        val forceItem = HeaderItem("Forces", R.drawable.ic_local_library, forces)
+        val forceItem = HeaderItem(
+            app.resources.getString(R.string.character_details_forces_header, forces.size),
+            R.drawable.ic_local_library, forces
+        )
         itemList.add(forceItem)
 
         val equipments = givenCharacter.equipments.map {
             ListItem(it.name, it)
         }.toMutableList()
-        val equipmentItem = HeaderItem("Equipments", R.drawable.ic_security, equipments)
+        val equipmentItem = HeaderItem(
+            app.resources.getString(R.string.character_details_equipment_header, equipments.size),
+            R.drawable.ic_security, equipments
+        )
         itemList.add(equipmentItem)
 
         _items.value = itemList

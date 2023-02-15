@@ -137,4 +137,8 @@
     <string name="talent_type_perception">Wahrnehmung</string>
     <string name="attribute_dexterity">Geschicklichkeit</string>
     <string name="nav_header_desc">20 seitiger Würfel</string>
+    <string name="character_details_talent_header">Talente (%d)</string>
+    <string name="character_details_handicap_header">Handicaps (%d)</string>
+    <string name="character_details_forces_header">Fertigkeiten (%d)</string>
+    <string name="character_details_equipment_header">Ausrüstung (%d)</string>
 </resources>

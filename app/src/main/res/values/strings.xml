@@ -166,4 +166,9 @@
     <string name="onboarding_ocr_description">Entering all content can be very time-consuming. To relieve you of the work, you can photograph the pages and mark the required text passages.</string>
     <string name="onboarding_stories_coming_soon_title">Manage your story and sessions\n(coming soon)</string>
     <string name="onboarding_stories_coming_soon_description">In the future you can also maintain your stories via the app.</string>
+
+    <string name="character_details_talent_header">Talents (%d)</string>
+    <string name="character_details_handicap_header">Handicaps (%d)</string>
+    <string name="character_details_forces_header">Forces (%d)</string>
+    <string name="character_details_equipment_header">Equipments (%d)</string>
 </resources>
