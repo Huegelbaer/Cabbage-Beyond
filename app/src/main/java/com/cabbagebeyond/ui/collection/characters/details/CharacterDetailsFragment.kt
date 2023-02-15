@@ -9,9 +9,14 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
+import com.cabbagebeyond.data.RaceDataSource
+import com.cabbagebeyond.data.WorldDataSource
 import com.cabbagebeyond.databinding.FragmentCharacterDetailsBinding
+import com.cabbagebeyond.model.Race
+import com.cabbagebeyond.model.World
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
+import com.cabbagebeyond.ui.collection.characters.CharacterType
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.RadarData
@@ -41,10 +46,13 @@ class CharacterDetailsFragment : DetailsFragment() {
         _binding = FragmentCharacterDetailsBinding.inflate(inflater)
 
         val character = CharacterDetailsFragmentArgs.fromBundle(requireArguments()).character
+        val isEditingActive = CharacterDetailsFragmentArgs.fromBundle(requireArguments()).startEditing
 
         val dataSource: CharacterDataSource by inject()
+        val raceDataSource: RaceDataSource by inject()
+        val worldDataSource: WorldDataSource by inject()
         viewModel = CharacterDetailsViewModel(
-            character, false, dataSource, UserService.currentUser, requireActivity().application
+            character, isEditingActive, dataSource, raceDataSource, worldDataSource, UserService.currentUser, requireActivity().application
         )
 
         _binding.viewModel = _viewModel
@@ -84,6 +92,18 @@ class CharacterDetailsFragment : DetailsFragment() {
             it?.let {
                 showSnackbar(resources.getString(it))
             }
+        }
+
+        _viewModel.types.observe(viewLifecycleOwner) {
+            setupTypeSpinner(it.selected, it.values)
+        }
+
+        _viewModel.races.observe(viewLifecycleOwner) {
+            setupRaceSpinner(it.selected, it.values)
+        }
+
+        _viewModel.worlds.observe(viewLifecycleOwner) {
+            setupWorldSpinner(it.selected, it.values)
         }
 
         setupChart()
@@ -142,7 +162,8 @@ class CharacterDetailsFragment : DetailsFragment() {
         attributes.add(character.constitution)
 
         val entries: List<RadarEntry> = attributes.map {
-            val value = it.replace("W", "").toFloat()
+            val diceValue = it.replace("W", "")
+            val value = diceValue.toFloat()
             RadarEntry(value)
         }
 
@@ -173,6 +194,23 @@ class CharacterDetailsFragment : DetailsFragment() {
 
         override fun getFormattedValue(value: Float): String {
             return mValues[value.toInt()]
+        }
+    }
+
+    private fun setupTypeSpinner(preSelection: CharacterType?, types: List<CharacterType>) {
+        setupSpinner(preSelection?.title, types.map { it.title }, _binding.editGroup.typeSpinner) { index ->
+            _viewModel.onTypeSelected(types[index])
+        }
+    }
+
+    private fun setupRaceSpinner(preSelection: Race?, races: List<Race>) {
+        setupSpinner(preSelection?.name, races.map { it.name }, _binding.editGroup.spinnerRace) { index ->
+            _viewModel.onRaceSelected(races[index])
+        }
+    }
+    private fun setupWorldSpinner(preSelection: World?, worlds: List<World?>) {
+        setupSpinner(preSelection?.name ?: "", worlds.mapNotNull { it?.name }, _binding.editGroup.worldSpinner) {
+            _viewModel.onWorldSelected(worlds[it])
         }
     }
 

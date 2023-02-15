@@ -27,17 +27,14 @@ class AbilityDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
 
-    data class WorldSelection(var selected: World?, var values: List<World?>)
-    data class AttributeSelection(var selected: AbilityAttribute?, var values: List<AbilityAttribute>)
-
     var ability = MutableLiveData(givenAbility)
 
-    private var _worlds = MutableLiveData<WorldSelection>()
-    val worlds: LiveData<WorldSelection>
+    private var _worlds = MutableLiveData<NullableSelection<World>>()
+    val worlds: LiveData<NullableSelection<World>>
         get() = _worlds
 
-    private var _attributes = MutableLiveData<AttributeSelection>()
-    val attributes: LiveData<AttributeSelection>
+    private var _attributes = MutableLiveData<Selection<AbilityAttribute>>()
+    val attributes: LiveData<Selection<AbilityAttribute>>
         get() = _attributes
 
     init {
@@ -70,7 +67,7 @@ class AbilityDetailsViewModel(
     }
 
     private fun updateWorldSelection(worlds: List<World?>) {
-        _worlds.value = WorldSelection(ability.value?.world, worlds)
+        _worlds.value = NullableSelection(ability.value?.world, worlds)
     }
 
     private fun loadAttributes() {
@@ -83,7 +80,7 @@ class AbilityDetailsViewModel(
     private fun updateAttributeSelection(attributes: List<AbilityAttribute>) {
         val application = getApplication<Application>()
         val currentSelected = ability.value?.attribute?.let { AbilityAttribute.create(it, application) }
-        _attributes.value = AttributeSelection(currentSelected, attributes)
+        _attributes.value = Selection(currentSelected, attributes)
     }
 
     override fun onSave() {

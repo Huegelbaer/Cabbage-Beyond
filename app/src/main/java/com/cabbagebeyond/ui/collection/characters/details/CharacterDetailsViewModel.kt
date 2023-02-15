@@ -6,16 +6,24 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
 import com.cabbagebeyond.data.CharacterDataSource
-import com.cabbagebeyond.model.Character
-import com.cabbagebeyond.model.User
+import com.cabbagebeyond.data.RaceDataSource
+import com.cabbagebeyond.data.WorldDataSource
+import com.cabbagebeyond.model.*
 import com.cabbagebeyond.ui.DetailsViewModel
+import com.cabbagebeyond.ui.collection.characters.CharacterType
+import com.cabbagebeyond.ui.collection.talents.TalentRank
+import com.cabbagebeyond.ui.collection.talents.TalentType
 import com.cabbagebeyond.util.CollectionProperty
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class CharacterDetailsViewModel(
     givenCharacter: Character,
     isEditingActive: Boolean,
     private val _characterDataSource: CharacterDataSource,
+    private val _raceDataSource: RaceDataSource,
+    private val _worldDataSource: WorldDataSource,
     user: User,
     app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
@@ -29,6 +37,18 @@ class CharacterDetailsViewModel(
     private var _items = MutableLiveData<MutableList<Item>>()
     val items: LiveData<MutableList<Item>>
         get() = _items
+
+    private var _worlds = MutableLiveData<NullableSelection<World>>()
+    val worlds: LiveData<NullableSelection<World>>
+        get() = _worlds
+
+    private var _types = MutableLiveData<Selection<CharacterType>>()
+    val types: LiveData<Selection<CharacterType>>
+        get() = _types
+
+    private var _races = MutableLiveData<Selection<Race>>()
+    val races: LiveData<Selection<Race>>
+        get() = _races
 
     init {
         val itemList = mutableListOf<Item>()
@@ -63,6 +83,35 @@ class CharacterDetailsViewModel(
             CollectionProperty("name", R.string.character_name, ""),
             CollectionProperty("description", R.string.character_description, "")
         )
+
+        loadTypes()
+        loadRaces()
+        loadWorlds()
+    }
+
+    private fun loadTypes() {
+        val application = getApplication<Application>()
+        val types = Character.Type.values().map { CharacterType.create(it, application) }
+        val currentSelected = character.value?.type?.let { CharacterType.create(it, application) }
+        _types.value = Selection(currentSelected, types)
+    }
+
+    private fun loadRaces() {
+        viewModelScope.launch {
+            val races = _raceDataSource.getRaces().getOrDefault(listOf()).toMutableList()
+            withContext(Dispatchers.Main) {
+                _races.value = Selection(character.value?.race, races)
+            }
+        }
+    }
+    private fun loadWorlds() {
+        viewModelScope.launch {
+            val worlds: MutableList<World?> = _worldDataSource.getWorlds().getOrDefault(listOf()).toMutableList()
+            worlds.add(0, null)
+            withContext(Dispatchers.Main) {
+                _worlds.value = NullableSelection(character.value?.world, worlds)
+            }
+        }
     }
 
     fun expandHeader(headerItem: HeaderItem) {
@@ -95,6 +144,18 @@ class CharacterDetailsViewModel(
                 message.value = R.string.save_failed
             }
         }
+    }
+
+    fun onRaceSelected(race: Race) {
+        character.value?.race = race
+    }
+
+    fun onTypeSelected(type: CharacterType) {
+        character.value?.type = type.type
+    }
+
+    fun onWorldSelected(world: World?) {
+        character.value?.world = world
     }
 
     fun show(listItem: ListItem) {

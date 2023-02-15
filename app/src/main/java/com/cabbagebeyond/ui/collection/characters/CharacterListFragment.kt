@@ -48,6 +48,16 @@ class CharacterListFragment : CollectionListFragment<Character>() {
             adapter = _adapter
         }
 
+        _binding.floatingActionButton.setOnClickListener {
+            _viewModel.addCharacter()
+        }
+
+        _viewModel.userCanAddNewContent.observe(viewLifecycleOwner) { canAddContent ->
+            canAddContent?.let {
+                _binding.floatingActionButton.visibility = if (it) View.VISIBLE else View.GONE
+            }
+        }
+
         setupViewModelObservers()
 
         setHasOptionsMenu(true)
@@ -93,7 +103,7 @@ class CharacterListFragment : CollectionListFragment<Character>() {
 
         _viewModel.selectedItem.observe(viewLifecycleOwner) {
             it?.let {
-                showCharacterDetails(it.first)
+                showCharacterDetails(it.first, it.second)
             }
         }
 
@@ -129,7 +139,7 @@ class CharacterListFragment : CollectionListFragment<Character>() {
 
     private fun showFilterDialog(
         races: CollectionListViewModel.FilterData<Race>,
-        types: CollectionListViewModel.FilterData<CharacterListViewModel.CharacterType>,
+        types: CollectionListViewModel.FilterData<CharacterType>,
         worlds: CollectionListViewModel.FilterData<World>
     ) {
 
@@ -159,10 +169,11 @@ class CharacterListFragment : CollectionListFragment<Character>() {
         dialog.show(requireActivity().supportFragmentManager, "character_dialog_filter")
     }
 
-    private fun showCharacterDetails(character: Character) {
+    private fun showCharacterDetails(character: Character, startEditing: Boolean) {
         findNavController().navigate(
             CharacterListFragmentDirections.actionCharactersListToDetails(
-                character
+                character,
+                startEditing
             )
         )
         _viewModel.onNavigationCompleted()

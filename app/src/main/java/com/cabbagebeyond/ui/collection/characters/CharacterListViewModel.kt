@@ -12,6 +12,7 @@ import com.cabbagebeyond.model.User
 import com.cabbagebeyond.model.World
 import com.cabbagebeyond.ui.collection.CollectionListViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 
 class CharacterListViewModel(
     user: User,
@@ -22,8 +23,6 @@ class CharacterListViewModel(
     enum class SortType {
         NAME, RACE, TYPE, WORLD, NONE
     }
-
-    class CharacterType(var type: Character.Type, var title: String)
 
     object Filter {
         var selectedRace: Race? = null
@@ -172,4 +171,36 @@ class CharacterListViewModel(
     fun onInteractionCompleted() {
         _interaction.value = null
     }
+
+    fun addCharacter() {
+        val newEquipment = Character(
+            "",
+            null,
+            "",
+            0,
+            "W4",
+            "W4",
+            "W4",
+            "W4",
+            "W4",
+            "W4",
+            "W4",
+            "W4",
+            "W4",
+            0,
+            0,
+            "",
+            listOf(),
+            listOf(),
+            listOf(),
+            listOf(),
+            listOf(),
+            Character.Type.PLAYER,
+            "",
+            null,
+            UUID.randomUUID().toString()
+        )
+        onCreateNewItem(newEquipment)
+    }
+
 }

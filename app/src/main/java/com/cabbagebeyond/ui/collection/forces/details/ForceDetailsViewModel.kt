@@ -27,17 +27,14 @@ class ForceDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
 
-    data class RankSelection(var selected: ForceRank?, var values: List<ForceRank>)
-    data class WorldSelection(var selected: World?, var values: List<World?>)
-
     var force = MutableLiveData(givenForce)
 
-    private var _worlds = MutableLiveData<WorldSelection>()
-    val worlds: LiveData<WorldSelection>
+    private var _worlds = MutableLiveData<NullableSelection<World>>()
+    val worlds: LiveData<NullableSelection<World>>
         get() = _worlds
 
-    private var _ranks = MutableLiveData<RankSelection>()
-    val ranks: LiveData<RankSelection>
+    private var _ranks = MutableLiveData<Selection<ForceRank>>()
+    val ranks: LiveData<Selection<ForceRank>>
         get() = _ranks
 
     init {
@@ -70,7 +67,7 @@ class ForceDetailsViewModel(
     private fun updateRankSelection(ranks: List<ForceRank>) {
         val application = getApplication<Application>()
         val currentSelected = force.value?.rangRequirement?.let { ForceRank.create(it, application) }
-        _ranks.value = RankSelection(currentSelected, ranks)
+        _ranks.value = Selection(currentSelected, ranks)
     }
 
     private fun loadWorlds() {
@@ -84,7 +81,7 @@ class ForceDetailsViewModel(
     }
 
     private fun updateWorldSelection(worlds: List<World?>) {
-        _worlds.value = WorldSelection(force.value?.world, worlds)
+        _worlds.value = NullableSelection(force.value?.world, worlds)
     }
 
     override fun onSave() {

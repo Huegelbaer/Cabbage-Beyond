@@ -25,22 +25,18 @@ class TalentDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
 
-    data class RankSelection(var selected: TalentRank?, var values: List<TalentRank>)
-    data class TypeSelection(var selected: TalentType?, var values: List<TalentType>)
-    data class WorldSelection(var selected: World?, var values: List<World?>)
-
     var talent = MutableLiveData(givenTalent)
 
-    private var _worlds = MutableLiveData<WorldSelection>()
-    val worlds: LiveData<WorldSelection>
+    private var _worlds = MutableLiveData<NullableSelection<World>>()
+    val worlds: LiveData<NullableSelection<World>>
         get() = _worlds
 
-    private var _types = MutableLiveData<TypeSelection>()
-    val types: LiveData<TypeSelection>
+    private var _types = MutableLiveData<Selection<TalentType>>()
+    val types: LiveData<Selection<TalentType>>
         get() = _types
 
-    private var _ranks = MutableLiveData<RankSelection>()
-    val ranks: LiveData<RankSelection>
+    private var _ranks = MutableLiveData<Selection<TalentRank>>()
+    val ranks: LiveData<Selection<TalentRank>>
         get() = _ranks
 
     init {
@@ -73,7 +69,7 @@ class TalentDetailsViewModel(
     private fun updateRankSelection(ranks: List<TalentRank>) {
         val application = getApplication<Application>()
         val currentSelected = talent.value?.rangRequirement?.let { TalentRank.create(it, application) }
-        _ranks.value = RankSelection(currentSelected, ranks)
+        _ranks.value = Selection(currentSelected, ranks)
     }
 
     private fun loadTypes() {
@@ -85,7 +81,7 @@ class TalentDetailsViewModel(
     private fun updateTypeSelection(types: List<TalentType>) {
         val application = getApplication<Application>()
         val currentSelected = talent.value?.type?.let { TalentType.create(it, application) }
-        _types.value = TypeSelection(currentSelected, types)
+        _types.value = Selection(currentSelected, types)
     }
 
     private fun loadWorlds() {
@@ -99,7 +95,7 @@ class TalentDetailsViewModel(
     }
 
     private fun updateWorldSelection(worlds: List<World?>) {
-        _worlds.value = WorldSelection(talent.value?.world, worlds)
+        _worlds.value = NullableSelection(talent.value?.world, worlds)
     }
 
     override fun onSave() {

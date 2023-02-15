@@ -26,17 +26,14 @@ class EquipmentDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
 
-    data class TypeSelection(var selected: EquipmentType?, var values: List<EquipmentType>)
-    data class WorldSelection(var selected: World?, var values: List<World?>)
-
     var equipment = MutableLiveData(givenEquipment)
 
-    private var _worlds = MutableLiveData<WorldSelection>()
-    val worlds: LiveData<WorldSelection>
+    private var _worlds = MutableLiveData<NullableSelection<World>>()
+    val worlds: LiveData<NullableSelection<World>>
         get() = _worlds
 
-    private var _types = MutableLiveData<TypeSelection>()
-    val types: LiveData<TypeSelection>
+    private var _types = MutableLiveData<Selection<EquipmentType>>()
+    val types: LiveData<Selection<EquipmentType>>
         get() = _types
 
     init {
@@ -69,7 +66,7 @@ class EquipmentDetailsViewModel(
     private fun updateTypeSelection(types: List<EquipmentType>) {
         val application = getApplication<Application>()
         val currentSelected = equipment.value?.type?.let { EquipmentType.create(it, application) }
-        _types.value = TypeSelection(currentSelected, types)
+        _types.value = Selection(currentSelected, types)
     }
 
     private fun loadWorlds() {
@@ -84,7 +81,7 @@ class EquipmentDetailsViewModel(
     }
 
     private fun updateWorldSelection(worlds: List<World?>) {
-        _worlds.value = WorldSelection(equipment.value?.world, worlds)
+        _worlds.value = NullableSelection(equipment.value?.world, worlds)
     }
 
     override fun onSave() {

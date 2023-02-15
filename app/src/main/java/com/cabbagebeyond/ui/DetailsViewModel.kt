@@ -7,10 +7,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.User
+import com.cabbagebeyond.model.World
 import com.cabbagebeyond.util.Feature
 import com.cabbagebeyond.util.CollectionProperty
 
 open class DetailsViewModel(user: User, isEditingActive: Boolean, app: Application) : AndroidViewModel(app) {
+
+    data class Selection<T>(var selected: T?, var values: List<T>)
+    data class NullableSelection<T>(var selected: T?, var values: List<T?>)
 
     val userCanEdit = user.features.contains(Feature.CONFIGURE_APP.name)
 

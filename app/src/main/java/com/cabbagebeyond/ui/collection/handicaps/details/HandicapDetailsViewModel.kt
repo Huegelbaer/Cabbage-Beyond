@@ -26,17 +26,14 @@ class HandicapDetailsViewModel(
     app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
 
-    data class TypeSelection(var selected: HandicapType?, var values: List<HandicapType>)
-    data class WorldSelection(var selected: World?, var values: List<World?>)
-
     var handicap = MutableLiveData(givenHandicap)
 
-    private var _worlds = MutableLiveData<WorldSelection>()
-    val worlds: LiveData<WorldSelection>
+    private var _worlds = MutableLiveData<NullableSelection<World>>()
+    val worlds: LiveData<NullableSelection<World>>
         get() = _worlds
 
-    private var _types = MutableLiveData<TypeSelection>()
-    val types: LiveData<TypeSelection>
+    private var _types = MutableLiveData<Selection<HandicapType>>()
+    val types: LiveData<Selection<HandicapType>>
         get() = _types
 
     init {
@@ -67,7 +64,7 @@ class HandicapDetailsViewModel(
     private fun updateTypeSelection(types: List<HandicapType>) {
         val application = getApplication<Application>()
         val currentSelected = handicap.value?.type?.let { HandicapType.create(it, application) }
-        _types.value = TypeSelection(currentSelected, types)
+        _types.value = Selection(currentSelected, types)
     }
 
     private fun loadWorlds() {
@@ -81,7 +78,7 @@ class HandicapDetailsViewModel(
     }
 
     private fun updateWorldSelection(worlds: List<World?>) {
-        _worlds.value = WorldSelection(handicap.value?.world, worlds)
+        _worlds.value = NullableSelection(handicap.value?.world, worlds)
     }
 
     override fun onSave() {
