@@ -11,7 +11,8 @@ import com.cabbagebeyond.databinding.FragmentCharacterDetailsListItemBinding
 class CharacterDetailsAdapter(
     private val expandHeader: ((headerItem: HeaderItem) -> Unit),
     private val collapseHeader: ((headerItem: HeaderItem) -> Unit),
-    private val showItem: ((listItem: ListItem) -> Unit)
+    private val showItem: ((listItem: ListItem) -> Unit),
+    private val removeItem: ((listItem: ListItem) -> Unit)
 ) : ListAdapter<Item, RecyclerView.ViewHolder>(DiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {

@@ -136,6 +136,30 @@ class CharacterDetailsViewModel(
         _items.value = list
     }
 
+    fun addListItem(listItem: ListItem) {
+        val list = _items.value ?: return
+        when (listItem.content) {
+            is Talent -> character.value?.talents?.add(listItem.content as Talent)
+            is Handicap -> character.value?.handicaps?.add(listItem.content as Handicap)
+            is Force -> character.value?.forces?.add(listItem.content as Force)
+            is Equipment -> character.value?.equipments?.add(listItem.content as Equipment)
+        }
+        list.remove(listItem)
+        _items.value = list
+    }
+
+    fun removeListItem(listItem: ListItem) {
+        val list = _items.value ?: return
+        when (listItem.content) {
+            is Talent -> character.value?.talents?.remove(listItem.content)
+            is Handicap -> character.value?.handicaps?.remove(listItem.content)
+            is Force -> character.value?.forces?.remove(listItem.content)
+            is Equipment -> character.value?.equipments?.remove(listItem.content)
+        }
+        list.remove(listItem)
+        _items.value = list
+    }
+
     override fun onSave() {
         super.onSave()
         character.value?.let {
