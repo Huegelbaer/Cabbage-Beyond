@@ -5,9 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.CharacterDataSource
-import com.cabbagebeyond.data.RaceDataSource
-import com.cabbagebeyond.data.WorldDataSource
+import com.cabbagebeyond.data.*
 import com.cabbagebeyond.model.*
 import com.cabbagebeyond.ui.DetailsViewModel
 import com.cabbagebeyond.ui.collection.characters.CharacterType
@@ -22,8 +20,12 @@ class CharacterDetailsViewModel(
     private val _characterDataSource: CharacterDataSource,
     private val _raceDataSource: RaceDataSource,
     private val _worldDataSource: WorldDataSource,
+    private val _talentDataSource: TalentDataSource,
+    private val _handicapDataSource: HandicapDataSource,
+    private val _forceDataSource: ForceDataSource,
+    private val _equipmentDataSource: EquipmentDataSource,
     user: User,
-    app: Application
+    private val app: Application
 ) : DetailsViewModel(user, isEditingActive, app) {
 
     sealed class Item(val title: String)
@@ -48,45 +50,24 @@ class CharacterDetailsViewModel(
     val races: LiveData<Selection<Race>>
         get() = _races
 
+    private var _allTalents = MutableLiveData<List<Talent>>()
+    val allTalents: LiveData<List<Talent>>
+        get() = _allTalents
+
+    private var _allHandicaps = MutableLiveData<List<Handicap>>()
+    val allHandicaps: LiveData<List<Handicap>>
+        get() = _allHandicaps
+
+    private var _allForces = MutableLiveData<List<Force>>()
+    val allForces: LiveData<List<Force>>
+        get() = _allForces
+
+    private var _allEquipments = MutableLiveData<List<Equipment>>()
+    val allEquipments: LiveData<List<Equipment>>
+        get() = _allEquipments
+
     init {
-        val itemList = mutableListOf<Item>()
-
-        val talents = givenCharacter.talents.map {
-                ListItem(it.name, it)
-            }.toMutableList()
-        val talentItem = HeaderItem(
-            app.resources.getString(R.string.character_details_talent_header, talents.size),
-            R.drawable.ic_thumb_up, talents
-        )
-        itemList.add(talentItem)
-
-        val handicaps = givenCharacter.handicaps.map {
-            ListItem(it.name, it)
-        }.toMutableList()
-        val handicapItem = HeaderItem(app.resources.getString(R.string.character_details_handicap_header, handicaps.size),
-            R.drawable.ic_thumb_down, handicaps
-        )
-        itemList.add(handicapItem)
-
-        val forces = givenCharacter.forces.map {
-            ListItem(it.name, it)
-        }.toMutableList()
-        val forceItem = HeaderItem(
-            app.resources.getString(R.string.character_details_forces_header, forces.size),
-            R.drawable.ic_local_library, forces
-        )
-        itemList.add(forceItem)
-
-        val equipments = givenCharacter.equipments.map {
-            ListItem(it.name, it)
-        }.toMutableList()
-        val equipmentItem = HeaderItem(
-            app.resources.getString(R.string.character_details_equipment_header, equipments.size),
-            R.drawable.ic_security, equipments
-        )
-        itemList.add(equipmentItem)
-
-        _items.value = itemList
+        updateItemList()
 
         properties = arrayOf(
             CollectionProperty("name", R.string.character_name, ""),
@@ -96,6 +77,55 @@ class CharacterDetailsViewModel(
         loadTypes()
         loadRaces()
         loadWorlds()
+
+        loadAllTalents()
+        loadAllHandicaps()
+        loadAllForces()
+        loadAllEquipments()
+    }
+
+    private fun updateItemList() {
+        val character = character.value ?: return
+        val resources = app.resources
+        val itemList = mutableListOf<Item>()
+
+        val talents = character.talents.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        val talentItem = HeaderItem(
+            resources.getString(R.string.character_details_talent_header, talents.size),
+            R.drawable.ic_thumb_up, talents
+        )
+        itemList.add(talentItem)
+
+        val handicaps = character.handicaps.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        val handicapItem = HeaderItem(
+            resources.getString(R.string.character_details_handicap_header, handicaps.size),
+            R.drawable.ic_thumb_down, handicaps
+        )
+        itemList.add(handicapItem)
+
+        val forces = character.forces.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        val forceItem = HeaderItem(
+            resources.getString(R.string.character_details_forces_header, forces.size),
+            R.drawable.ic_local_library, forces
+        )
+        itemList.add(forceItem)
+
+        val equipments = character.equipments.map {
+            ListItem(it.name, it)
+        }.toMutableList()
+        val equipmentItem = HeaderItem(
+            resources.getString(R.string.character_details_equipment_header, equipments.size),
+            R.drawable.ic_security, equipments
+        )
+        itemList.add(equipmentItem)
+
+        _items.value = itemList
     }
 
     private fun loadTypes() {
@@ -123,6 +153,42 @@ class CharacterDetailsViewModel(
         }
     }
 
+    private fun loadAllTalents() {
+        viewModelScope.launch {
+            val talents: List<Talent> = _talentDataSource.getTalents().getOrDefault(listOf())
+            withContext(Dispatchers.Main) {
+                _allTalents.value = talents
+            }
+        }
+    }
+
+    private fun loadAllHandicaps() {
+        viewModelScope.launch {
+            val handicaps: List<Handicap> = _handicapDataSource.getHandicaps().getOrDefault(listOf())
+            withContext(Dispatchers.Main) {
+                _allHandicaps.value = handicaps
+            }
+        }
+    }
+
+    private fun loadAllForces() {
+        viewModelScope.launch {
+            val forces: List<Force> = _forceDataSource.getForces().getOrDefault(listOf())
+            withContext(Dispatchers.Main) {
+                _allForces.value = forces
+            }
+        }
+    }
+
+    private fun loadAllEquipments() {
+        viewModelScope.launch {
+            val equipment: List<Equipment> = _equipmentDataSource.getEquipments().getOrDefault(listOf())
+            withContext(Dispatchers.Main) {
+                _allEquipments.value = equipment
+            }
+        }
+    }
+
     fun expandHeader(headerItem: HeaderItem) {
         val list = _items.value ?: return
         val position = list.indexOf(headerItem) + 1
@@ -136,28 +202,20 @@ class CharacterDetailsViewModel(
         _items.value = list
     }
 
-    fun addListItem(listItem: ListItem) {
-        val list = _items.value ?: return
-        when (listItem.content) {
-            is Talent -> character.value?.talents?.add(listItem.content as Talent)
-            is Handicap -> character.value?.handicaps?.add(listItem.content as Handicap)
-            is Force -> character.value?.forces?.add(listItem.content as Force)
-            is Equipment -> character.value?.equipments?.add(listItem.content as Equipment)
-        }
-        list.remove(listItem)
-        _items.value = list
+    fun updateTalents(selectedTalents: MutableList<Talent>) {
+        character.value?.talents = selectedTalents
     }
 
-    fun removeListItem(listItem: ListItem) {
-        val list = _items.value ?: return
-        when (listItem.content) {
-            is Talent -> character.value?.talents?.remove(listItem.content)
-            is Handicap -> character.value?.handicaps?.remove(listItem.content)
-            is Force -> character.value?.forces?.remove(listItem.content)
-            is Equipment -> character.value?.equipments?.remove(listItem.content)
-        }
-        list.remove(listItem)
-        _items.value = list
+    fun updateHandicaps(selectedHandicaps: MutableList<Handicap>) {
+        character.value?.handicaps = selectedHandicaps
+    }
+
+    fun updateForces(selectedForces: MutableList<Force>) {
+        character.value?.forces = selectedForces
+    }
+
+    fun updateEquipments(selectedEquipments: MutableList<Equipment>) {
+        character.value?.equipments = selectedEquipments
     }
 
     override fun onSave() {
@@ -165,16 +223,18 @@ class CharacterDetailsViewModel(
         character.value?.let {
             save(it)
         }
+        updateItemList()
+
     }
 
     private fun save(toSafe: Character) {
         viewModelScope.launch {
             val result = _characterDataSource.saveCharacter(toSafe)
             if (result.isSuccess) {
-                message.value = R.string.save_completed
                 character.value = toSafe
+                onSaveSucceeded()
             } else {
-                message.value = R.string.save_failed
+                onSaveFailed()
             }
         }
     }

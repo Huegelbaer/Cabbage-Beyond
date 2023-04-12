@@ -67,6 +67,9 @@ dependencies {
     // Cool charts
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
+    // Multi selection
+    implementation 'com.github.telichada:SearchableMultiSelectSpinner:2.0'
+
     // OCR
     implementation "com.google.android.gms:play-services-mlkit-text-recognition:$mlkitVersion"
 

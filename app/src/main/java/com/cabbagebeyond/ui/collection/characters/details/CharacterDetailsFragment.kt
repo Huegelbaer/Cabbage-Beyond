@@ -8,15 +8,15 @@ import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.cabbagebeyond.R
-import com.cabbagebeyond.data.CharacterDataSource
-import com.cabbagebeyond.data.RaceDataSource
-import com.cabbagebeyond.data.WorldDataSource
+import com.cabbagebeyond.data.*
 import com.cabbagebeyond.databinding.FragmentCharacterDetailsBinding
-import com.cabbagebeyond.model.Race
-import com.cabbagebeyond.model.World
+import com.cabbagebeyond.model.*
 import com.cabbagebeyond.services.UserService
 import com.cabbagebeyond.ui.DetailsFragment
 import com.cabbagebeyond.ui.collection.characters.CharacterType
+import com.devstune.searchablemultiselectspinner.SearchableItem
+import com.devstune.searchablemultiselectspinner.SearchableMultiSelectSpinner
+import com.devstune.searchablemultiselectspinner.SelectionCompleteListener
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.RadarData
@@ -50,9 +50,23 @@ class CharacterDetailsFragment : DetailsFragment() {
 
         val dataSource: CharacterDataSource by inject()
         val raceDataSource: RaceDataSource by inject()
+        val talentDataSource: TalentDataSource by inject()
+        val handicapDataSource: HandicapDataSource by inject()
+        val forceDataSource: ForceDataSource by inject()
+        val equipmentDataSource: EquipmentDataSource by inject()
         val worldDataSource: WorldDataSource by inject()
         viewModel = CharacterDetailsViewModel(
-            character, isEditingActive, dataSource, raceDataSource, worldDataSource, UserService.currentUser, requireActivity().application
+            character,
+            isEditingActive,
+            dataSource,
+            raceDataSource,
+            worldDataSource,
+            talentDataSource,
+            handicapDataSource,
+            forceDataSource,
+            equipmentDataSource,
+            UserService.currentUser,
+            requireActivity().application
         )
 
         _binding.viewModel = _viewModel
@@ -64,6 +78,8 @@ class CharacterDetailsFragment : DetailsFragment() {
             _viewModel.collapseHeader(it)
         }, {
             _viewModel.show(it)
+        }, {
+         //   _viewModel.removeListItem(it)
         })
         _binding.readGroup.list.apply {
             layoutManager = LinearLayoutManager(requireContext())
@@ -85,6 +101,7 @@ class CharacterDetailsFragment : DetailsFragment() {
         _viewModel.isEditing.observe(viewLifecycleOwner) {
             it?.let { isEditing ->
                 toggleVisibility(_binding.readGroup.root, _binding.editGroup.root, isEditing)
+                _binding.invalidateAll()
             }
         }
 
@@ -104,6 +121,30 @@ class CharacterDetailsFragment : DetailsFragment() {
 
         _viewModel.worlds.observe(viewLifecycleOwner) {
             setupWorldSpinner(it.selected, it.values)
+        }
+
+        _binding.editGroup.editTalents.setOnClickListener {
+            _viewModel.allTalents.value?.let { talents ->
+                manageTalents(talents, character.talents)
+            }
+        }
+
+        _binding.editGroup.editHandicaps.setOnClickListener {
+            _viewModel.allHandicaps.value?.let { handicaps ->
+                manageHandicaps(handicaps, character.handicaps)
+            }
+        }
+
+        _binding.editGroup.editForces.setOnClickListener {
+            _viewModel.allForces.value?.let { forces ->
+                manageForces(forces, character.forces)
+            }
+        }
+
+        _binding.editGroup.editEquipments.setOnClickListener {
+            _viewModel.allEquipments.value?.let { equipments ->
+                manageEquipments(equipments, character.equipments)
+            }
         }
 
         setupChart()
@@ -212,6 +253,71 @@ class CharacterDetailsFragment : DetailsFragment() {
         setupSpinner(preSelection?.name ?: "", worlds.mapNotNull { it?.name }, _binding.editGroup.worldSpinner) {
             _viewModel.onWorldSelected(worlds[it])
         }
+    }
+
+    private fun manageTalents(allTalents: List<Talent>, selectedTalents: List<Talent>) {
+        val allItems = allTalents.map { talent ->
+            SearchableItem(talent.name, talent.id)
+                .apply { isSelected = selectedTalents.contains(talent) }
+        }.toMutableList()
+        SearchableMultiSelectSpinner.show(requireContext(), "Select Items", "Done", allItems, object :
+            SelectionCompleteListener {
+            override fun onCompleteSelection(selectedItems: ArrayList<SearchableItem>) {
+                val selectedIds = selectedItems.map { it.code }
+                val talents = allTalents.filter { selectedIds.contains(it.id) }.toMutableList()
+                _viewModel.updateTalents(talents)
+                _binding.invalidateAll()
+            }
+
+        })
+    }
+
+    private fun manageHandicaps(allHandicaps: List<Handicap>, selectedHandicaps: List<Handicap>) {
+        val allItems = allHandicaps.map { handicap ->
+            SearchableItem(handicap.name, handicap.id)
+                .apply { isSelected = selectedHandicaps.contains(handicap) }
+        }.toMutableList()
+        SearchableMultiSelectSpinner.show(requireContext(), "Select Items", "Done", allItems, object :
+            SelectionCompleteListener {
+            override fun onCompleteSelection(selectedItems: ArrayList<SearchableItem>) {
+                val selectedIds = selectedItems.map { it.code }
+                val handicaps = allHandicaps.filter { selectedIds.contains(it.id) }.toMutableList()
+                _viewModel.updateHandicaps(handicaps)
+                _binding.invalidateAll()
+            }
+        })
+    }
+
+    private fun manageForces(allForces: List<Force>, selectedForces: List<Force>) {
+        val allItems = allForces.map { force ->
+            SearchableItem(force.name, force.id)
+                .apply { isSelected = selectedForces.contains(force) }
+        }.toMutableList()
+        SearchableMultiSelectSpinner.show(requireContext(), "Select Items", "Done", allItems, object :
+            SelectionCompleteListener {
+            override fun onCompleteSelection(selectedItems: ArrayList<SearchableItem>) {
+                val selectedIds = selectedItems.map { it.code }
+                val forces = allForces.filter { selectedIds.contains(it.id) }.toMutableList()
+                _viewModel.updateForces(forces)
+                _binding.invalidateAll()
+            }
+        })
+    }
+
+    private fun manageEquipments(allEquipments: List<Equipment>, selectedEquipments: List<Equipment>) {
+        val allItems = allEquipments.map { equipment ->
+            SearchableItem(equipment.name, equipment.id)
+                .apply { isSelected = selectedEquipments.contains(equipment) }
+        }.toMutableList()
+        SearchableMultiSelectSpinner.show(requireContext(), "Select Items", "Done", allItems, object :
+            SelectionCompleteListener {
+            override fun onCompleteSelection(selectedItems: ArrayList<SearchableItem>) {
+                val selectedIds = selectedItems.map { it.code }
+                val equipments = allEquipments.filter { selectedIds.contains(it.id) }.toMutableList()
+                _viewModel.updateEquipments(equipments)
+                _binding.invalidateAll()
+            }
+        })
     }
 
     override fun navigateToOcr() {

@@ -10,6 +10,7 @@
         <variable
             name="character"
             type="com.cabbagebeyond.model.Character" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -403,6 +404,49 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline_half_width"
             app:layout_constraintTop_toBottomOf="@+id/edit_intellect" />
+
+        <Button
+            android:id="@+id/edit_talents"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/character_details_talent_header(character.talents.size())}"
+            android:layout_marginTop="@dimen/default_margin"
+            app:layout_constraintTop_toBottomOf="@+id/description_value"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline_half_width"
+            app:layout_constraintBottom_toTopOf="@+id/edit_forces" />
+
+
+        <Button
+            android:id="@+id/edit_handicaps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/character_details_handicap_header(character.handicaps.size())}"
+            app:layout_constraintTop_toTopOf="@+id/edit_talents"
+            app:layout_constraintStart_toEndOf="@id/guideline_half_width"
+            app:layout_constraintEnd_toEndOf="parent"/>
+
+
+        <Button
+            android:id="@+id/edit_forces"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/character_details_forces_header(character.forces.size())}"
+            app:layout_constraintTop_toBottomOf="@+id/edit_talents"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline_half_width"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+
+        <Button
+            android:id="@+id/edit_equipments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{@string/character_details_equipment_header(character.equipments.size())}"
+            app:layout_constraintTop_toTopOf="@+id/edit_forces"
+            app:layout_constraintStart_toEndOf="@id/guideline_half_width"
+            app:layout_constraintEnd_toEndOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
