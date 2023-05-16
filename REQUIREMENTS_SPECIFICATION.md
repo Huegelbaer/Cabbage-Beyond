@@ -24,16 +24,26 @@ Users (both game masters and players) can create and manage their characters wit
 To use the app, users are required to have a registered account. The account creation process is not available within the app itself but must be done through the project's backend. This approach ensures that unauthorized individuals cannot access the data and helps maintain the security and integrity of the app.
 
 ## Minimizing Access
-The application's backend is provided through Firebase. As the application is intended for a small user base, the free version of Firebase will be utilized. Firebase offers a limited quota without incurring costs. To conserve the quota, the app should minimize the number of database accesses. This can be achieved by implementing efficient data retrieval and storage strategies, caching frequently accessed data, and optimizing database queries. These measures will help ensure that the app operates within the limits of the Firebase free tier and avoids unnecessary resource consumption. 
+The application's backend is provided through Firebase. As the application is intended for a small user base, the free version of Firebase will be utilized. Firebase offers a limited quota without incurring costs. To conserve the quota, the app should minimize the number of database accesses. This can be achieved by implementing efficient data retrieval and storage strategies, caching frequently accessed data, and optimizing database queries. These measures will help ensure that the app operates within the limits of the Firebase free tier and avoids unnecessary resource consumption.
+
 ## Usability
 The app should provide a responsive user interface, ensuring that it quickly responds to user interactions and commands. Users should experience smooth navigation and minimal latency when accessing different features and functionalities. Additionally, the app should support offline functionality, allowing users to access and view content even without an internet connection. This ensures that users can continue to use the app and access important information, such as character sheets and game rules, regardless of their online status.
 
 # User Interfaces
 The app will feature lists for game worlds, equipment, characters, talents, skills, handicaps, and races. The structure of these lists will be consistent, primarily differing in the cards displayed within them. Users will have the ability to filter, sort, and search within the lists, enabling efficient navigation and exploration of the available content. These functionalities enhance the user experience by allowing users to quickly find and access specific items of interest within the app.
+
+<img src="/docs/mockups/list_view.png" width=300/>
+
 Upon clicking on an item in the list, the corresponding detail view will open, providing users with more comprehensive information about the selected item. The detail view will present additional details, such as descriptions, attributes, and any related information associated with the item. It allows users to access in-depth information and gain a better understanding of the selected item within the context of the game.
 For regular users, the detail view serves as a read-only interface where they can view the detailed information of an item without the ability to make changes. Regular users can explore and gather information about game worlds, equipment, talents, skills, handicaps, races, and other relevant content.
+
+<img src="/docs/mockups/details_view.png" width=300/>
+
 On the other hand, an admin user has additional privileges. When an admin user accesses the detail view, they have the option to enter the editing mode. In the editing mode, the admin user can modify and update the content of the item. This allows admins to make changes to any entry, including those created by other users and admins.
 However, it's important to note that regular users are limited to editing only their own characters. This ensures that each player has control over their own character's details, such as attributes, abilities, and inventory. 
+
+<img src="/docs/mockups/details_view_with_edit_button.png" width=300/>
+<img src="/docs/mockups/edit_view.png" width=300/>
 
 # Assumptions and Constraints
 In consideration of the limitations of Firebase's free tier, the following assumptions and constraints are made for the development of the app. By taking these assumptions and constraints into account during the development process, the app can efficiently utilize Firebase resources, provide offline capabilities, and ensure a smooth user experience for both game masters and players.
