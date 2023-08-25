@@ -16,6 +16,7 @@ data class AbilityEntity(
     @ColumnInfo(name = "world")
     var world: String? = null,
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(index = true)
     var id: String = UUID.randomUUID().toString(),
 ) {
     enum class Attribute {

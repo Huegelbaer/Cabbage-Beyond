@@ -37,7 +37,7 @@ import com.cabbagebeyond.data.local.relations.*
         SessionPlayersCrossRef::class,
         SessionStoryCrossRef::class,
                ],
-    version = 16,
+    version = 17,
     exportSchema = false
 )
 @TypeConverters(

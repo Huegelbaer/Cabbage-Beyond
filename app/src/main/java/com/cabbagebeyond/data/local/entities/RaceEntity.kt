@@ -14,6 +14,6 @@ data class RaceEntity(
     @ColumnInfo(name = "world")
     var world: String,
     @PrimaryKey(autoGenerate = false)
-    @ColumnInfo(name = "id")
+    @ColumnInfo(name = "id", index = true)
     val id: String = UUID.randomUUID().toString()
 )
