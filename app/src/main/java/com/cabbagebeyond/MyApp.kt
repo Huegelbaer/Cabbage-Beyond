@@ -20,18 +20,18 @@ class MyApp : Application() {
          * use Koin Library as a service locator
          */
         val myModule = module {
-            single { AbilityRepository(database.abilityDao(), AbilityService()) }
-            single { CharacterRepository(database.characterDao(), CharacterService()) }
-            single { EquipmentRepository(database.equipmentDao(), EquipmentService()) }
-            single { ForceRepository(database.forceDao(), ForceService()) }
-            single { HandicapRepository(database.handicapDao(), HandicapService()) }
-            single { RaceRepository(database.raceDao(), RaceService()) }
-            single { RoleRepository(database.roleDao(), RoleService()) }
-            single { SessionRepository(database.sessionDao(), SessionService()) }
-            single { StoryRepository(database.storyDao(), StoryService()) }
-            single { TalentRepository(database.talentDao(), TalentService()) }
-            single { UserRepository(database.userDao(), UserService()) }
-            single { WorldRepository(database.worldDao(), WorldService()) }
+            single { AbilityRepository(database.abilityDao(), AbilityService()) as AbilityDataSource }
+            single { CharacterRepository(database.characterDao(), CharacterService()) as CharacterDataSource }
+            single { EquipmentRepository(database.equipmentDao(), EquipmentService()) as EquipmentDataSource }
+            single { ForceRepository(database.forceDao(), ForceService()) as ForceDataSource }
+            single { HandicapRepository(database.handicapDao(), HandicapService()) as HandicapDataSource}
+            single { RaceRepository(database.raceDao(), RaceService()) as RaceDataSource }
+            single { RoleRepository(database.roleDao(), RoleService()) as RoleDataSource }
+            single { SessionRepository(database.sessionDao(), SessionService()) as SessionDataSource }
+            single { StoryRepository(database.storyDao(), StoryService()) as StoryDataSource }
+            single { TalentRepository(database.talentDao(), TalentService()) as TalentDataSource }
+            single { UserRepository(database.userDao(), UserService()) as UserDataSource }
+            single { WorldRepository(database.worldDao(), WorldService()) as WorldDataSource }
         }
 
         startKoin {
