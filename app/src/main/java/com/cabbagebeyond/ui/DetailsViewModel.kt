@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.map
 import com.cabbagebeyond.R
 import com.cabbagebeyond.model.User
 import com.cabbagebeyond.util.Feature
@@ -18,7 +18,7 @@ open class DetailsViewModel(user: User, isEditingActive: Boolean, app: Applicati
     val isEditing: LiveData<Boolean>
         get() = _isEditing
 
-    val fabImage: LiveData<Int> = Transformations.map(_isEditing) {
+    val fabImage: LiveData<Int> = _isEditing.map {
         if (it) {
             R.drawable.ic_save
         } else {

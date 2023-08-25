@@ -12,5 +12,6 @@ data class RoleEntity(
     @ColumnInfo(name = "features")
     var features: List<String> = listOf(),
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(index = true)
     var id: String = UUID.randomUUID().toString()
 )
