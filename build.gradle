@@ -32,7 +32,7 @@ ext {
     koinVersion = '3.1.2'
     lifecycleVersion = '2.5.1'
     navigationVersion = '2.5.3'
-    mlkitVersion = '18.0.2'
-    work_version = '2.7.1'
-    room_version = "2.4.3"
+    mlkitVersion = '19.0.0'
+    work_version = '2.8.1'
+    room_version = "2.5.2"
 }
