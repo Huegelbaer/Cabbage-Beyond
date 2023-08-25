@@ -21,6 +21,7 @@ data class TalentEntity(
     @ColumnInfo(name = "world")
     var world: String,
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(index = true)
     val id: String = UUID.randomUUID().toString()
 ) {
     enum class Type {

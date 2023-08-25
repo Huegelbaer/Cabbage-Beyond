@@ -16,5 +16,6 @@ data class UserEntity(
     @ColumnInfo(name = "roles")
     var roleIds: List<String> = listOf(),
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(index = true)
     val id: String = UUID.randomUUID().toString()
 )

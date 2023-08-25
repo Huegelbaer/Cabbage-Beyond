@@ -24,5 +24,6 @@ data class SessionEntity(
     @ColumnInfo(name = "rule_set")
     var rulebook: String = "",
     @PrimaryKey(autoGenerate = false)
+    @ColumnInfo(index = true)
     val id: String= UUID.randomUUID().toString()
 )
